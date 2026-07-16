@@ -7,8 +7,6 @@ This directory contains all feature requirement specs for the BBS application.
 ```
 features/
 ├── README.md                  # This file (index)
-├── _template.md               # Spec template
-├── _edgecases-template.md     # Edge cases template
 ├── {feature-slug}/
 │   ├── spec.md                # Feature specification (required)
 │   ├── edgecases.md           # Edge cases & decisions (required)
@@ -16,6 +14,10 @@ features/
 │   ├── schema.md              # DB schema changes (optional)
 │   └── notes.md               # Open questions, decisions (optional)
 ```
+
+Templates are in `.pi/templates/`:
+- `spec-template.md` — Main specification template
+- `edgecases-template.md` — Edge cases template
 
 ## Naming Convention
 
