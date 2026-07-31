@@ -17,6 +17,12 @@ date: 2026-07-31
 
 Membuat dokumen spesifikasi fitur (feature brief) yang **jelas, terstruktur, dan siap pakai oleh engineer** untuk implementasi. Agent hanya menulis dokumen di `features/{feature-slug}/`, tidak mengubah kode di `api_nest/` atau `bbs/`.
 
+### Jenis Brief yang Dibuat
+
+1. **New Feature** — fitur baru yang belum ada sebelumnya
+2. **Feature Changes** — perubahan/modifikasi pada fitur yang sudah ada (contoh: enable/disable field, ubah filter logic, tambah parameter)
+3. **Bug Fixing** — perbaikan bug dengan penjelasan root cause, repro steps, dan solusi
+
 ### Prinsip Utama
 
 1. **No code changes** — jangan edit, refactor, atau meminta perubahan di `api_nest/` atau `bbs/`
