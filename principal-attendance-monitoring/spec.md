@@ -302,3 +302,19 @@ if (options.masterLevelId) {
 - **Existing component:** `DetailDiciplineStudent` (FE admin) — side panel detail student discipline
 - **Existing route:** `/class-in-year/:id/attendance` — detail attendance per class
 - **Navigation:** Tambah nav items di `_nav.jsx` teacher portal — `Attendance Monitoring` + `Discipline`
+
+---
+
+## Catatan untuk Engineer
+
+Setelah selesai implementasi, commit & push perubahan dari folder `features/`:
+
+```bash
+cd features/
+git add principal-attendance-monitoring/
+git commit -m "add principal-attendance-monitoring: <deskripsi perubahan>"
+git pull --rebase
+git push
+```
+
+> **Note:** `features/` adalah git repo terpisah — jangan commit dari root project.

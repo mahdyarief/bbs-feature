@@ -177,6 +177,18 @@ Presentasi dalam format opsi (A/B/C) + **Decision: TBD** untuk didiskusikan deng
 - Jika ada API contract detail, buat `api-contract.md`
 - Jika ada schema change signifikan, buat `schema.md`
 
+### Step 5: Commit & Push
+
+Setelah spec selesai direview dan final:
+
+1. **Pastikan berada di folder `features/`** — git repo ini terpisah dari `api_nest/` dan `bbs/`
+2. **Stage file** yang relevan: `git add {feature-slug}/`
+3. **Commit** dengan pesan yang jelas: `git commit -m "add {feature-slug}: {deskripsi singkat}"`
+4. **Pull** jika ada perubahan remote: `git pull --rebase`
+5. **Push** ke remote: `git push`
+
+> **Catatan:** Folder `features/` adalah git repo sendiri (`origin/main`). Jangan commit dari folder root project (`api_nest/` atau `bbs/`). Selalu `cd features/` dulu sebelum commit & push.
+
 ---
 
 ## 6. Kualitas Feature Brief
