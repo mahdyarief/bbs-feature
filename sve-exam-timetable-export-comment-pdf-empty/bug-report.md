@@ -41,6 +41,23 @@ Namun ketika fitur **"Export Comment as a PDF"** dijalankan, **data yang ter-exp
 
 ## Root Cause Analysis
 
+### Apakah Session Penyebabnya? — TIDAK
+
+**Ekspektasi:** PDF berisi data history lengkap, termasuk kolom session.
+
+**Temuan:** Kolom "session" di PDF **bukan** diambil dari kolom session yang diisi user di SVE list. Di `SveExamTimeTableHIstoriesPDFModal.jsx` **line 84**:
+
+```jsx
+session: ay?.year,   // ay = academicYears?.[sve?.academicYearId]
+```
+
+`session` diisi dari `academicYear.year` (misal "2026/2027"), **bukan** dari kolom session yang di-set user. Entity `SveExamType` (`sve-exam-type.entity.ts`) bahkan **tidak memiliki kolom `session`** — yang ada hanya `week`, `examDay`, `examDate`, `examTimeFrom/To`.
+
+**Kesimpulan:**
+- Session yang diisi user **tidak pernah dipakai** sebagai kolom session di PDF ini
+- Kolom session di PDF kosong karena `sve`/`ay` resolve ke `undefined` akibat chain lookup yang gagal (root cause di bawah), bukan karena session kosong
+- **Tiket/history record valid** — data sudah ter-create di DB (`sve_exam_type_history`). Yang gagal hanyalah **lookup parent di frontend**, bukan pembuatan data
+
 ### Lapisan 1 (PRIMARY) — Typo Parameter API: `relationsObje` → `relationsObj`
 
 **File:** `/Users/arielwirawan/Documents/Gawe/bbs/client/src/views/sves/exam-timetable/SveExamTimeTableHIstoriesPDFModal.jsx` **line 60**
@@ -173,3 +190,30 @@ Export ini hanya mencakup **comment/change-request history rows**. Kolom-kolomny
 - Perlu koordinasi dengan FE Engineer (perbaikan modal + utilFunctions) dan BE Engineer (fix filter overwrite)
 - "FYE" hanyalah display label (dipetakan ke "Final Year Examination" di `SveExamTimeTablePDFLayout.js` line 14) — tidak ada filter FYE terpisah di path ini; filter hanya `academicYearId`
 - PDF 100% client-side (pdfmake) — tidak ada intervensi backend di pembuatan PDF
+
+## Reference Files (Dibaca)
+
+### Backend — `api_nest/`
+
+| File | Keterangan |
+|------|------------|
+| `src/modules/sve-exam-type-history/sve-exam-type-history.service.ts` | `findAll()` line 45-83 — filter overwrite `masterSveExamTypeId` by `academicYearId` (line 55-67) |
+| `src/modules/sve-exam-type-history/entities/sve-exam-type-history.entity.ts` | Kolom: `comment`, `commentedBy`, `reason`, `sveExamTypeId` — relasi `@ManyToOne` ke `SveExamType` |
+| `src/modules/sve-exam-type/entities/sve-exam-type.entity.ts` | Kolom: `week`, `examDay`, `examDate`, `examTimeFrom/To`, `componentName`, `sveId`, `masterSveExamTypeId`, teacher `setterId`/`expertId`/`vetterId` — **TIDAK ada kolom `session`** |
+| `src/common/dto/page-options.dto.ts` | Properti `relationsObj` line 87-100 — nama benar di backend |
+| `src/helpers/find-options-helper.ts` | Line 57-67 — relasi fallback ke default `{}` jika `relationsObj` kosong |
+
+### Frontend — `bbs/`
+
+| File | Keterangan |
+|------|------------|
+| `client/src/views/sves/exam-timetable/SveExamTimeTableHIstoriesPDFModal.jsx` | **Typo `relationsObje`** line 60; lookup store line 70-76; `session: ay?.year` line 84 |
+| `client/src/views/sves/exam-timetable/SveExamTimetable.jsx` | Tombol "Export Comment PDF" line 210-219; query table paginated line 456-459 |
+| `client/src/actions/api/sveExamTypeHistory.js` | API call `GET /v1/sveExamTypeHistories` line 17-23 |
+| `client/src/utils/utilFunctions.js` | `generateSveCommentHistories()` line 775 — builder HTML table |
+| `client/src/utils/resourceMapper.js` | Baca dari Redux store |
+| `client/src/actions/makeApiRequest.js` | Dispatch `body.data` + `body.included` ke reducer line 112-154 |
+
+### Scope Export PDF
+
+Export **TIDAK** termasuk teacher name (setter/expert/vetter) maupun exam datetime. Keduanya ada di `SveExamType` dan tampil di tabel timetable, **bukan** di PDF comment ini.
