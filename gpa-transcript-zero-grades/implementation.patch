@@ -1,0 +1,161 @@
+# Implementation Patch — GPA Transcript Zero Grades Fix (Revised)
+
+## Root Cause (verified against DB, 2026-08-05)
+
+- `syllabus` table: 166 records, **ALL with `academic_year_id = NULL`** (use `effective_from`/`effective_to` instead)
+- `threshold` table: 418 records — **332 WITH `academic_year_id` (79.4%)**, only 86 NULL (20.6%)
+- Helper `secondary-gpa-report.helper.ts:213` runs `Syllabus.findOne({ academicYearId })` → **always returns null** (syllabus is 100% NULL)
+- The guard at line 239-243 (`syllabus && boundaries`) therefore always fails → `calculatePUM` never runs → grades default to '0'
+- The `Threshold.findOne({ academicYearId })` lookup is also wrong, but it is NOT the primary blocker
+- **Known data gap:** some subjects have a valid ACTIVE threshold but no syllabus record at all — the old guard silently dropped these to '0' even when `avgValue` was valid
+
+**Fix strategy:** replace both direct-FK lookups with `effective_from`/`effective_to` range lookups. Reuse the existing `SyllabusService.findEffectiveForSubjectYear` (syllabus.service.ts:499); add the equivalent on `ThresholdService`. Relax the guard to **threshold-only** so a valid threshold converts grades even when no syllabus matches. No DB migration.
+
+---
+
+## File 1: src/modules/threshold/threshold.service.ts
+
+Add `findEffectiveForSubjectYear` to `ThresholdService` after `findBySubjectId` (line 278):
+
+```typescript
+async findEffectiveForSubjectYear(
+  subjectId: number,
+  academicYearId: number,
+  thresholdType?: ThresholdTypeEnum,
+): Promise<Threshold | null> {
+  const academicYear = await AcademicYear.getRepository().findOne({
+    where: { id: academicYearId },
+    select: { year: true },
+  });
+  const effectiveYear = academicYear?.year
+    ? parseInt(academicYear.year.split('/')[0], 10)
+    : academicYearId;
+  if (Number.isNaN(effectiveYear)) {
+    return null;
+  }
+
+  const qb = Threshold.createQueryBuilder('threshold')
+    .where('threshold.subjectId = :subjectId', { subjectId })
+    .andWhere('threshold.effectiveFrom <= :effectiveYear', { effectiveYear })
+    .andWhere('threshold.effectiveTo >= :effectiveYear', { effectiveYear })
+    .andWhere('threshold.statusType = :statusType', {
+      statusType: IThresholdStatusType.ACTIVE,
+    });
+  if (thresholdType) {
+    qb.andWhere('threshold.thresholdType = :thresholdType', {
+      thresholdType,
+    });
+  }
+  return qb.orderBy('threshold.createdAt', 'DESC').getOne();
+}
+```
+
+### Notes
+- **No new typeorm imports** — the query-builder API is fully static (`In`, `LessThanOrEqual`, `MoreThanOrEqual` not needed)
+- `AcademicYear` already imported (line 28); `ThresholdTypeEnum` imported (line 17); `IThresholdStatusType` imported (line 16)
+- Uses static entity patterns (`AcademicYear.getRepository()`, `Threshold.createQueryBuilder`) consistent with the rest of the class — `ThresholdService` has NO DataSource injection
+- `ORDER BY createdAt DESC` makes overlapping active-threshold matches deterministic (EC-01 → option B)
+- Mirrors the existing `SyllabusService.findEffectiveForSubjectYear` (syllabus.service.ts:499-530): same `year.split('/')[0]` extraction, same NaN → null guard, same fallback to `academicYearId` when no AcademicYear record
+
+---
+
+## File 2: src/helpers/reports/secondary-gpa-report.helper.ts
+
+### 2a. Add inline service instantiation (after line 33, next to the existing `secondaryGradeService`):
+
+```typescript
+const thresholdService = new ThresholdService();
+const syllabusComponentService = new SyllabusComponentService(thresholdService);
+const syllabusService = new SyllabusService(
+  syllabusComponentService,
+  Threshold.getRepository().manager.connection,
+);
+```
+
+Add imports:
+
+```typescript
+import { ThresholdService } from 'src/modules/threshold/threshold.service';
+import { SyllabusService } from 'src/modules/syllabus/syllabus.service';
+import { SyllabusComponentService } from 'src/modules/syllabus-component/syllabus-component.service';
+```
+
+This mirrors the established inline pattern in `cambridge-report.helper.ts:207-214` — the helper is a standalone function with no DI container.
+
+### 2b. Replace lines 204-232 (the `activeYear` debug block + both `findOne` lookups):
+
+```typescript
+const thresholdType = [15, 16, 17].includes(
+  subjectYearBanding.subjectYear.classYear.masterLevelId,
+)
+  ? ThresholdTypeEnum.AS_PRELIM // JC
+  : ThresholdTypeEnum.IGCSE_ALEVEL; // Sec
+
+// Range-based lookups (effectiveFrom/effectiveTo) — direct academicYearId FK lookups
+// always miss: ALL 166 syllabi have academic_year_id = NULL.
+// The syllabus lookup is BEST-EFFORT: it only supplies gradeSchema (see 2c).
+const syllabus = await syllabusService.findEffectiveForSubjectYear(
+  subjectYearBanding.subjectYear.subjectId,
+  classYear.academicYearId,
+  thresholdType,
+);
+const threshold = await thresholdService.findEffectiveForSubjectYear(
+  subjectYearBanding.subjectYear.subjectId,
+  classYear.academicYearId,
+  thresholdType,
+);
+```
+
+### 2c. Guard + `calculatePUM` call site (lines 237-260):
+
+```typescript
+const boundaries = threshold?.avgValue;
+
+if (
+  subjectAssessmentGrade &&
+  subjectAssessmentGrade.score >= 0 &&
+  boundaries &&
+  Object.keys(boundaries).length > 0
+) {
+  const usEquivalent = calculatePUM(
+    subjectAssessmentGrade.score,
+    boundaries,
+    thresholdType,
+    syllabus?.gradeSchema,
+  );
+
+  subjectFinalMark = Math.max(
+    subjectAssessmentGrade.score || 0,
+    usEquivalent || 0,
+    0,
+  );
+}
+```
+
+### Key changes vs. the buggy code
+
+| Before | After |
+|--------|-------|
+| `Syllabus.findOne({ academicYearId })` — always null | `syllabusService.findEffectiveForSubjectYear(subjectId, academicYearId, thresholdType)` — method already exists (syllabus.service.ts:499) |
+| `Threshold.findOne({ academicYearId })` — misses NULL-ay records | `thresholdService.findEffectiveForSubjectYear(...)` — new method (File 1) |
+| Dead debug code (`activeYear` split on `[1]`, console.logs) | Removed |
+| Guard `syllabus && boundaries` — **syllabus is mandatory**; valid threshold with no syllabus → grade '0' | Guard `boundaries && Object.keys(boundaries).length > 0` — **threshold is sufficient**; syllabus is optional, contributes only `gradeSchema` |
+| `syllabus?.gradeSchema` passed to `calculatePUM` | **Kept** — when the syllabus resolves, the schema filters grade keys (A–C, A*–E); when it is null, `gradeSchema` is `undefined` and `getPassingGradeEntries` falls back to `GRADE_ORDER` filtered by the keys in `avgValue` (cambridge-grading.ts:53-69) |
+
+### Removed after this change
+- Imports no longer needed: `Syllabus` (line 25), `Threshold` entity (line 24) — verify no other usage before removing
+
+---
+
+## Prerequisites / Risks
+
+- `thresholdService` / `syllabusService` availability — solved by 2a (inline instantiation, proven pattern)
+- The two lookups query by `subjectId`, not `syllabusCode` — `findEffectiveForSubjectYear` on both services filters by `subjectId` (the helper's `subjectYearBanding.subjectYear.subjectId`). This is strictly better than the old `syllabusCode` join
+- `thresholdType` now filters the syllabus lookup too — AS students get ASLEVEL syllabi, IGCSE/A-Level get IGCSE+ALEVEL (matches syllabus.service.ts:521-529)
+- **Threshold-without-syllabus is now a supported path** — conversion runs on `avgValue` alone via the `GRADE_ORDER` fallback; the only thing lost is schema narrowing (A–C, A*–E). Grades widen to all valid keys present in `avgValue`
+
+## Notes
+- **No database migration required**
+- Threshold records with `academic_year_id = NULL` (86 records) are handled — the query never touches `academicYearId`
+- `avgValue` must contain valid grade keys for `calculatePUM` to map scores (spec Business Rule 4)
+- Error handling: when no threshold matches, grade still defaults to '0' (unchanged). **NEW behavior:** when threshold matches but syllabus does not, the grade now converts (was '0' before this fix)
