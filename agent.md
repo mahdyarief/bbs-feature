@@ -299,7 +299,44 @@ target_release: TBD
 
 ---
 
-## 10. Referensi
+## 10. Database Access — `db-access-tools/`
+
+Setiap kali user meminta akses ke database binabangsa, **selalu gunakan tools di folder `db-access-tools/`**.
+
+| Aspek | Detail |
+|-------|--------|
+| Path | `/Users/arielwirawan/Documents/Gawe/db-access-tools/` |
+| Koneksi | Konfigurasi di `db-access-tools/.env` dan `db-access-tools/env.env` |
+| Module | `db-access-tools/db/` — berisi script Python untuk koneksi, query, schema, dll |
+| Docs | `db-access-tools/docs/` — overview database, enum mappings, import rules |
+| Schema | `db-access-tools/SCHEMA_OVERVIEW.md` — ringkasan skema database |
+| Result | `db-access-tools/result/` — output query (JSON, CSV) |
+
+### Cara Pakai
+
+1. **Baca dokumentasi dulu**: `db-access-tools/docs/database_overview.md` dan `db-access-tools/SCHEMA_OVERVIEW.md` untuk memahami struktur database
+2. **Cek koneksi**: lihat `db-access-tools/.env` untuk kredensial
+3. **Jalankan query**: gunakan module di `db-access-tools/db/` (Python) untuk menjalankan query, dump schema, atau generate ERD
+4. **Hasil output**: disimpan di `db-access-tools/result/`
+
+### Struktur Module `db/`
+
+| File | Fungsi |
+|------|--------|
+| `connection.py` | Koneksi ke database |
+| `query.py` / `data.py` | Eksekusi query & ambil data |
+| `schema.py` / `ddl.py` | Inspect skema database |
+| `dump.py` | Dump data/schema |
+| `erd.py` | Generate Entity Relationship Diagram |
+| `diff_schema.py` | Bandingkan skema |
+| `sql_gen.py` | Generate SQL |
+| `agg.py` | Agregasi data |
+
+> **Catatan:** Jangan pernah hardcode kredensial database. Selalu baca dari file `.env` di folder `db-access-tools/`.
+
+---
+
+## 11. Referensi
 
 - **Template spec**: `_templates/spec-template.md`
 - **Template edge cases**: `_templates/edgecases-template.md`
