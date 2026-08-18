@@ -1,9 +1,10 @@
 ---
 title: FTP Evaluation — Prorate Threshold Mark untuk Student Partial-Year
-status: draft
+status: approved
 author: BBS Team
 date: 2026-08-18
 depends_on: ftp-evaluation-skip-empty-term (skip empty term enhancement)
+decision: Opsi A — Prorate berdasarkan jumlah term dengan data
 ---
 
 # FTP Evaluation — Prorate Threshold Mark untuk Student Partial-Year
@@ -45,9 +46,11 @@ Score = Σ (per evaluation table) Σ (per term with data) getConductPoint(sumBad
 
 ---
 
-## Usulan Formulasi Prorate
+## Formulasi Prorate — Keputusan: Opsi A
 
-### Opsi A: Prorate berdasarkan jumlah term dengan data (Recommended)
+**Opsi yang dipilih: Opsi A — Prorate berdasarkan jumlah term dengan data.** Opsi B dan C tidak dipilih.
+
+### Opsi A: Prorate berdasarkan jumlah term dengan data ✅ DIPILIH
 
 Threshold disesuaikan proporsional dengan jumlah term yang dimiliki student relatif terhadap full-year (4 terms).
 
@@ -76,34 +79,9 @@ const meetingThreshold = Math.ceil(25 * prorateRatio);
 - Threshold EXCEEDING prorate: ≥21
 - → Student dengan score 20 akan mendapat **MEETING_EXPECTATIONS** (adil, bukan selalu BELOW)
 
-### Opsi B: Prorate berdasarkan entry term
-
-Threshold dihitung dari term berapa student mulai masuk (bukan jumlah term dengan data).
-
-```typescript
-const entryTerm = 3; // student masuk term 3
-const termsAvailable = totalTerms - entryTerm + 1; // 3,4 = 2 terms
-const prorateRatio = termsAvailable / totalTerms;
-```
-
-**Kelebihan:** Lebih eksplisit, cocok jika field `entry_term` ditambahkan ke skema.
-**Kekurangan:** Memerlukan field baru atau derive dari data; secara matematis identik dengan Opsi A jika `termsAvailable = activeTerms`.
-
-### Opsi C: Normalisasi score ke skala full-year
-
-Score dinormalisasi ke skala 48 (full-year max) sebelum dibandingkan dengan threshold absolut.
-
-```typescript
-const normalizedScore = Math.round((rawScore / (activeTerms * 12)) * 48);
-// normalizedScore kemudian dibandingkan dengan threshold 42/25 seperti biasa
-```
-
-**Kelebihan:** Threshold `getEvaluationMark` tidak perlu diubah.
-**Kekurangan:** Score yang ditampilkan di report bukan score mentah — bisa membingungkan. Perlu keputusan apakah `student_ftp_conduct_evaluation.score` menyimpan raw atau normalized.
-
 ---
 
-## Rekomendasi: Opsi A
+## Keputusan: Opsi A ✅
 
 **Alasan:**
 1. **Minimal perubahan** — hanya `getEvaluationMark` perlu menerima parameter tambahan (`activeTerms`).
@@ -261,8 +239,8 @@ Dari `notes.md`: student 103033 masuk term 3, academic year 2025/2026.
 
 ---
 
-## Pertanyaan untuk Tim
+## Keputusan Implementasi
 
-1. **Rounding:** `Math.ceil` atau `Math.round`? (Rekomendasi: `Math.ceil` — sedikit lebih ketat)
-2. **Fallback `activeTerms = 0`:** gunakan `FULL_YEAR_TERMS (4)` atau return `BELOW_EXPECTATIONS` langsung? (Rekomendasi: fallback ke 4, karena case ini sudah ditangani skip-empty-term — tidak dibuat eval row)
-3. **Apakah prorate perlu ditampilkan di report PDF?** (misal footnote: "Threshold disesuaikan untuk student yang masuk di term 3") — saat ini tidak ada rencana UI change
+1. **Rounding:** `Math.ceil` dipilih — threshold sedikit lebih ketat agar student harus usaha lebih untuk reach kategori.
+2. **Fallback `activeTerms = 0`:** gunakan `FULL_YEAR_TERMS (4)` — case ini sudah ditangani skip-empty-term (tidak dibuat eval row), jadi fallback aman.
+3. **UI/Report PDF:** Tidak ada rencana menampilkan prorate di report — threshold tetap internal logic, score dan mark ditampilkan seperti biasa.
