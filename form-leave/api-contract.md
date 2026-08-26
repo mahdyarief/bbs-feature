@@ -3,6 +3,7 @@
 > Status: DRAFT — mengikuti konvensi `api_nest` (NestJS 10, `@Controller({ version: '1' })`, response wrapper `{ data }`).
 > Semua endpoint memerlukan JWT Bearer token (global `JwtAuthGuard`). Permission di-enforce via `@CheckPermissions` dengan subject `ModulesTypeEnum.TEACHER_LEAVE` (baru, perlu ditambahkan ke `src/types/enums` + ability di `src/modules/casl/casl-ability.factory.ts`).
 > **Base path:** global prefix `api` → URL lengkap `/api/v1/teacher-leaves`.
+> **Dual portal:** endpoint yang sama dikonsumsi dua portal — Teacher Portal (scope `req.user.id`, milik guru) dan Admin Portal (scope campus, admin punya permission `TEACHER_LEAVE_MANAGE` untuk perbantuan perubahan atas nama guru).
 
 ## Konvensi Response
 

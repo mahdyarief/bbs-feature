@@ -3,6 +3,7 @@
 > Status: DRAFT — mengikuti konvensi `api_nest` (NestJS 10, `@Controller({ version: '1' })`, response wrapper `{ data }`).
 > Semua endpoint memerlukan JWT Bearer token (global `JwtAuthGuard`). Permission di-enforce via `@CheckPermissions` dengan subject `ModulesTypeEnum.LESSON_PLAN` (baru, perlu ditambahkan ke `src/types/enums` + ability di `src/modules/casl/casl-ability.factory.ts`).
 > **Base path:** global prefix `api` → URL lengkap `/api/v1/lesson-plans`.
+> **Dual portal:** endpoint yang sama dikonsumsi dua portal — Teacher Portal (scope `req.user.id`, milik guru) dan Admin Portal (scope campus, admin punya permission `LESSON_PLAN_MANAGE` untuk perbantuan perubahan atas nama guru).
 
 ## Konvensi Response
 

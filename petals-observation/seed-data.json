@@ -1,0 +1,20 @@
+[
+  { "id": 1, "dimension": "P", "label": "Teacher communicates learning objectives with the class.", "maxMark": 4, "sortOrder": 1, "activeStatus": "ACTIVE" },
+  { "id": 2, "dimension": "P", "label": "Teacher selects appropriate learning strategies, learning activities and resources.", "maxMark": 4, "sortOrder": 2, "activeStatus": "ACTIVE" },
+  { "id": 3, "dimension": "P", "label": "Teacher develops a workable/appropriate time schedule.", "maxMark": 4, "sortOrder": 3, "activeStatus": "ACTIVE" },
+  { "id": 4, "dimension": "E", "label": "Teacher uses appropriate resources (ICT, media, etc.) effectively.", "maxMark": 4, "sortOrder": 1, "activeStatus": "ACTIVE" },
+  { "id": 5, "dimension": "E", "label": "Teacher provides opportunities for real-life application.", "maxMark": 4, "sortOrder": 2, "activeStatus": "ACTIVE" },
+  { "id": 6, "dimension": "E", "label": "Teacher makes relevant connections to students' previous experiences.", "maxMark": 4, "sortOrder": 3, "activeStatus": "ACTIVE" },
+  { "id": 7, "dimension": "T", "label": "Teacher is responsive to feedback and includes students' ideas.", "maxMark": 4, "sortOrder": 1, "activeStatus": "ACTIVE" },
+  { "id": 8, "dimension": "T", "label": "Teacher arranges collaborative opportunities and manages them.", "maxMark": 4, "sortOrder": 2, "activeStatus": "ACTIVE" },
+  { "id": 9, "dimension": "T", "label": "Teacher sets and enforces rules/routines effectively.", "maxMark": 4, "sortOrder": 3, "activeStatus": "ACTIVE" },
+  { "id": 10, "dimension": "T", "label": "Teacher establishes a supportive learning environment.", "maxMark": 4, "sortOrder": 4, "activeStatus": "ACTIVE" },
+  { "id": 11, "dimension": "T", "label": "Teacher uses voice and language appropriately.", "maxMark": 4, "sortOrder": 5, "activeStatus": "ACTIVE" },
+  { "id": 12, "dimension": "A", "label": "Teacher allows flexibility and choice in tasks.", "maxMark": 4, "sortOrder": 1, "activeStatus": "ACTIVE" },
+  { "id": 13, "dimension": "A", "label": "Students are able to ask well-thought questions.", "maxMark": 4, "sortOrder": 2, "activeStatus": "ACTIVE" },
+  { "id": 14, "dimension": "A", "label": "Teacher encourages constructive criticism.", "maxMark": 4, "sortOrder": 3, "activeStatus": "ACTIVE" },
+  { "id": 15, "dimension": "A", "label": "Teacher provides enough wait time for students to respond.", "maxMark": 4, "sortOrder": 4, "activeStatus": "ACTIVE" },
+  { "id": 16, "dimension": "A", "label": "Teacher provides timely, specific and meaningful feedback.", "maxMark": 4, "sortOrder": 5, "activeStatus": "ACTIVE" },
+  { "id": 17, "dimension": "L", "label": "The content of the lesson is relevant to requirements.", "maxMark": 4, "sortOrder": 1, "activeStatus": "ACTIVE" },
+  { "id": 18, "dimension": "L", "label": "Students are able to comprehend the lesson content.", "maxMark": 4, "sortOrder": 2, "activeStatus": "ACTIVE" }
+]

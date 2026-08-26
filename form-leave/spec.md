@@ -15,12 +15,17 @@ Fitur **Form Leave** memungkinkan guru mengajukan izin/cuti (leave) melalui form
 
 ## Problem / Motivation
 
-- Teacher web legacy memiliki halaman `teacher_file_leave_form.php` (menu sidebar "Teacher File Leave Form") yang di-render PHP server-side tanpa API terstruktur — endpoint penyimpanan tidak terpapar (handler JS tidak terikat saat halaman diakses langsung, semua kandidat `/services/*.php` mengembalikan 404).
-- Smartbag (`bbs` + `api_nest`) belum punya modul leave/izin guru sama sekali — audit `api_nest/src/modules/` tidak menemukan modul `leave` atau `teacher-leave`.
+- Teacher web legacy memiliki halaman `teacher_file_leave_form.php` (menu sidebar "Teacher File Leave Form") yang di-render PHP server-side tanpa API terstruktur. **Temuan analisis:** endpoint penyimpanan sebenarnya **ada** — `POST /ais/asd/services/savestatusLeave.php` (menyimpan status cuti; nama endpoint mengindikasikan ada konsep status). Analisis awal mengklaim "semua `/services/*.php` 404" — ini **salah**, karena endpoint tersebut berhasil ditemukan dari aplikasi legacy.
+- **Ada 2 varian form leave** di legacy (perlu di-replicate kedua-duanya):
+  - **Teacher POV**: `teacher_file_leave_form.php` (fields `date_from`, `date_to`, `position`, `department`, `leavetype_id`, `reason`, `filesname`) — yang dianalisis di brief.
+  - **Admin/Principal POV**: `home.php?vmenu=form_leave_teacher` — fields berbeda: `user_id`, `fullname`, `campus`, `campus_name`, `campus_code`, `user_type`, `HOD`, `as_code` + textarea `commentsleave` → POST `form_param` ke `savestatusLeave.php`. Ini varian yang dipakai Principal/Admin untuk melihat & mengelola leave semua guru.
+- **Principal POV**: `ais/principals/teacher_file_leave_form.php` (22096 bytes — versi principal dari form yang sama) + halaman **"View All Request"** (`home.php?vmenu=form_leave_teacher&vname=Form Leave Teacher`, 4116 bytes) yang menampilkan SEMUA pengajuan leave (bukan hanya milik sendiri).
+- Smartbag (`bbs` + `api_nest`) belum punya modul leave/izin guru sama sekali — audit `api_nest/src/modules/` tidak menemukan modul `leave` atau `teacher-leave`; `ModulesTypeEnum` (acl-module-type.ts) belum punya `TEACHER_LEAVE`.
 - Perlu form digital yang reusable, terintegrasi dengan auth JWT (`req.user.id`), permission CASL, dan modul `file` untuk upload PDF, sehingga data izin guru tercatat rapi dan bisa dipakai untuk reporting.
 
 ## Referensi Analisis (dari teacher web)
 
+### Teacher POV (form pengajuan guru)
 | Item | Nilai |
 |------|-------|
 | Halaman legacy | `teacher_file_leave_form.php` (200 OK, 23KB) |
@@ -34,6 +39,16 @@ Fitur **Form Leave** memungkinkan guru mengajukan izin/cuti (leave) melalui form
 | Submission List | Panel kanan, empty state "No Submission Entry" |
 | Upload | "Attach Document (PDF Only)" — `input[type=file]` |
 
+### Admin/Principal POV (pengelolaan leave lintas guru)
+| Item | Nilai |
+|------|-------|
+| Halaman admin | `home.php?vmenu=form_leave_teacher` (97KB) — varian Admin |
+| Fields admin | `user_id`, `fullname`, `campus`, `campus_name`, `campus_code`, `user_type`, `HOD`, `as_code` + textarea `commentsleave` |
+| Form POST | `form_param` → **`POST /ais/asd/services/savestatusLeave.php`** (simpan status cuti) |
+| Halaman principal | `ais/principals/teacher_file_leave_form.php` (22096 bytes) |
+| View All Request | `home.php?vmenu=form_leave_teacher&vname=Form Leave Teacher` (4116 bytes) — daftar semua pengajuan |
+| Implikasi | Nama `savestatusLeave` + field `HOD`/`as_code` mengindikasikan ada **status/approval** (HOD/Principal meninjau) — perlu dikonfirmasi ke stakeholder |
+
 ## Scope
 
 ### In Scope
@@ -43,13 +58,14 @@ Fitur **Form Leave** memungkinkan guru mengajukan izin/cuti (leave) melalui form
 - Validasi: `dateTo >= dateFrom`, `leaveType` wajib, `reason` wajib, PDF-only untuk lampiran.
 - Soft delete via `activeStatus` (pola modul `lesson`).
 - Permission CASL baru: `ModulesTypeEnum.TEACHER_LEAVE`.
-- Frontend: halaman Form Leave di `client-teacher` (form + submission list dalam satu view, tab "Teacher Leave").
+- Frontend Teacher Portal: halaman Form Leave di `client-teacher` (form + submission list dalam satu view, tab "Teacher Leave") — pengguna utama (guru).
+- Frontend Admin Portal (`client/`) — mirroring: admin dapat melihat submission list semua guru (per campus) dan membantu mengajukan/menghapus leave atas nama guru.
 
 ### Out of Scope
-- Workflow approval (HOD/Principal approve/reject) — teacher web hanya menyimpan, tidak ada approval flow.
+- Workflow approval (HOD/Principal approve/reject) — **fase 1 TANPA approval penuh** (create + list + soft delete). **Catatan penting:** endpoint legacy `savestatusLeave.php` + field `HOD`/`as_code` di varian Admin mengindikasikan ada konsep status/approval di sisi Principal/Admin — perlu **konfirmasi ke stakeholder** sebelum menentukan apakah approval flow masuk fase 1 atau enhancement. Jika ada, ini diimplementasikan sebagai modul terpisah (pending/approved/rejected + notifikasi), bukan di dalam form guru.
 - Auto-integrasi ke Attendance (cuti otomatis menandai absen) — enhancement.
 - Edit pengajuan yang sudah submit (teacher web tidak punya; hanya create + list).
-- Role Principal/HOD untuk melihat semua leave — hanya milik sendiri (fase 1).
+- Role Principal/HOD melihat semua leave di Teacher Portal — hanya milik sendiri (fase 1); akses lintas guru dilakukan via **Admin Portal (mirroring)** DAN **Principal POV** ("View All Request" di `home.php?vmenu=form_leave_teacher` — referensi untuk fitur lintas guru di fase lanjutan).
 
 ## User Stories
 
@@ -119,9 +135,22 @@ So that I can correct mistakes before the leave date.
 7. **Referensi view existing**: `src/views/form-class/leaps/` (Leaps.jsx list/DataTable, LeapsForm.jsx create/edit) sebagai blueprint; `src/views/lessonBuilder/` untuk pola form.
 
 ### Affected Portals
-- [ ] Admin (client/)
+- [x] Admin (client/) — mirroring; admin dapat membantu pengajuan/perubahan atas nama guru
 - [ ] Student (client-student/)
-- [x] Teacher (client-teacher/)
+- [x] Teacher (client-teacher/) — pengguna utama (guru)
+
+### Dual Portal (Mirroring)
+
+Implementasi dilakukan di **dua portal** dengan satu set API yang sama:
+
+| Portal | Lokasi | Peran |
+|--------|--------|-------|
+| Teacher Portal | `bbs/client-teacher/src/views/formLeave/` | **Pengguna utama** — guru mengajukan leave miliknya sendiri (create, list, soft delete). |
+| Admin Portal | `bbs/client/src/views/formLeave/` | **Mirroring** — admin melihat submission leave semua guru (per campus) dan dapat membantu mengajukan/menghapus leave atas nama guru. |
+
+Aturan akses backend:
+- Teacher Portal: data di-scope ke `req.user.id` (milik guru) — lihat Business Rules.
+- Admin Portal: admin punya permission tambahan `TEACHER_LEAVE_MANAGE` sehingga dapat mengakses data lintas guru per campus (mirroring + perbantuan).
 
 ## API Changes
 
@@ -193,8 +222,14 @@ Detail request/response: lihat `api-contract.md`.
 - Service: `teacher-leave.service.ts` — query builder + relations employee; owner check di service.
 - Migration: `src/database/migrations/` via `npm run migration:generate`.
 
-### Frontend (`bbs/client-teacher`)
+### Frontend Teacher Portal (`bbs/client-teacher`)
 - View: `src/views/formLeave/` — `FormLeave.jsx` (form + submission list), komponen sub-form jika perlu.
 - Routing: `src/routes.js` — `React.lazy(() => import("./views/formLeave/FormLeave"))`.
 - Redux: `src/actions/fromApi.js` tambah `getTeacherLeaves`, `createTeacherLeave`, `deleteTeacherLeave`; reducer pakai `createSimpleReducer.js`.
 - Role: semua teacher yang login bisa akses (tidak dibatasi role khusus).
+
+### Frontend Admin Portal (`bbs/client/`) — Mirroring
+- View: `src/views/formLeave/` — `FormLeave.jsx` (list semua guru + form perbantuan).
+- Routing: `src/routes.js` — `React.lazy(() => import("./views/formLeave/FormLeave"))` (prefix `/admin/` atau sesuai konvensi).
+- Redux: `src/actions/fromApi.js` tambah endpoint admin (`getTeacherLeaves`, `createTeacherLeave`, `deleteTeacherLeave` dengan scope campus).
+- Role: admin dengan permission `TEACHER_LEAVE_MANAGE` — bisa melihat semua leave per campus, membuat/menghapus atas nama guru (dengan kolom `teacherId` eksplisit di body/query).

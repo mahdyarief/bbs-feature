@@ -15,9 +15,10 @@ Fitur Lesson Plan memungkinkan guru membuat, melihat, menyalin (copy), dan menge
 
 Direplikasi dari teacher web: `https://teachers.binabangsaschool.com/new_lesson_plan/` (referensi: `teachers_tool/` di workspace).
 
-**Target implementasi:**
-- Backend: `api_nest/src/modules/lesson-plan/` (NestJS 10 + TypeORM 0.3.10 + PostgreSQL)
-- Frontend: `bbs/client-teacher/src/views/lessonPlan/` (React + Redux, JavaScript)
+**Target implementasi (dua portal):**
+- Backend: `api_nest/src/modules/lesson-plan/` (NestJS 10 + TypeORM 0.3.10 + PostgreSQL) — satu set API, dikonsumsi oleh kedua portal.
+- Frontend Teacher Portal: `bbs/client-teacher/src/views/lessonPlan/` (React + Redux, JavaScript) — pengguna utama (guru).
+- Frontend Admin Portal: `bbs/client/src/views/lessonPlan/` (React + Redux, JavaScript) — mirroring; admin dapat membantu membuat/mengubah lesson plan atas nama guru.
 
 ## Problem / Motivation
 
@@ -51,7 +52,8 @@ Temuan dari bedah teacher web (`teachers_tool/`):
 ### In Scope
 
 - **Backend (`api_nest`)**: modul `lesson-plan` baru dengan 3 entitas (`LessonPlan`, `LessonPlanDetail`, `LessonPlanComment`) + CRUD + copy + library query + comments + no-submission list.
-- **Frontend (`client-teacher`)**: halaman Lesson Plan (list + filter), form create/edit, halaman detail + comments, Lesson Plan Library, modal Copy, halaman No Submission.
+- **Frontend Teacher Portal (`client-teacher`)**: halaman Lesson Plan (list + filter), form create/edit, halaman detail + comments, Lesson Plan Library, modal Copy, halaman No Submission.
+- **Frontend Admin Portal (`client/`) — mirroring**: halaman serupa di portal admin; admin dapat melihat lesson plan semua guru (per campus), membuat/mengedit/menghapus atas nama guru, dan memberi komentar HOD/Principal.
 - Fitur Copy lesson plan (antar AY & antar class).
 - Integrasi data: daftar kelas yang diampu guru per AY, referensi dokumen SOW, Academic Year + Week.
 
@@ -60,7 +62,7 @@ Temuan dari bedah teacher web (`teachers_tool/`):
 - Manajemen SOW itu sendiri (fitur terpisah, modul `sow` sudah ada — dependency saja).
 - HBL resources attachment (endpoint `list_HBLresources.php` di teacher web — referensi saja, ditandai TODO).
 - Approval workflow (lesson plan tidak butuh approve; hanya comment).
-- Portal Student & Admin (hanya Teacher Portal).
+- Portal Student (hanya Teacher + Admin Portal).
 - Migrasi data dari PHP legacy (tidak ada data awal; greenfield).
 
 ## User Stories
@@ -95,9 +97,22 @@ Saya ingin melihat daftar guru yang belum submit lesson plan untuk term/week ter
 ## UI / UX Changes
 
 ### Affected Portals
-- [ ] Admin (client/)
+- [x] Admin (client/) — mirroring; admin dapat membantu perubahan atas nama guru
 - [ ] Student (client-student/)
-- [x] Teacher (client-teacher/)
+- [x] Teacher (client-teacher/) — pengguna utama (guru)
+
+### Dual Portal (Mirroring)
+
+Implementasi dilakukan di **dua portal** dengan satu set API yang sama:
+
+| Portal | Lokasi | Peran |
+|--------|--------|-------|
+| Teacher Portal | `bbs/client-teacher/src/views/lessonPlan/` | **Pengguna utama** — guru mengelola lesson plan miliknya sendiri (create, edit, copy, detail, komentar). |
+| Admin Portal | `bbs/client/src/views/lessonPlan/` | **Mirroring** — admin melihat lesson plan semua guru (per campus) dan dapat melakukan **perbantuan perubahan** (membuat/mengedit/menghapus/komentar) atas nama guru. |
+
+Aturan akses backend:
+- Teacher Portal: data di-scope ke `req.user.id` (milik guru) — lihat Business Rules.
+- Admin Portal: admin punya permission tambahan `LESSON_PLAN_MANAGE` sehingga dapat mengakses data lintas guru per campus (mirroring + perbantuan).
 
 ### Struktur Halaman (client-teacher)
 
@@ -246,6 +261,8 @@ Semua komponen di bawah di-import dari `bbs-client-common`:
 | GET | `/v1/lesson-plans/:id/comments` | List comments | Teacher/HOD/Principal |
 
 Detail lengkap (request/response DTO, contoh payload) ada di `api-contract.md`.
+
+> **Dual portal:** Endpoint yang sama dipakai dua portal. Di Teacher Portal, scope data dibatasi `req.user.id` (milik guru). Di Admin Portal, admin dapat akses lintas guru (scope per campus) — permission tambahan `LESSON_PLAN_MANAGE` untuk admin.
 
 ### Endpoint Existing yang Dipakai (dependency)
 

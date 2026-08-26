@@ -25,6 +25,7 @@ Modul baru butuh entri baru di `src/types/enums` (`ModulesTypeEnum.LESSON_PLAN`)
 | D-02 | Copy dari library memakai `teacherId = req.user.id` (EC-02 opsi A) | TBD |
 | D-03 | Soft delete via `activeStatus` (bukan `deletedAt`) | Mengikuti pola modul `lesson` |
 | D-04 | Nama modul `lesson-plan` (hyphen) untuk membedakan dari `lesson` (LESSON_BUILDER) | Disetujui |
+| D-05 | **Dual portal**: implementasi di Teacher Portal (`client-teacher`, pengguna utama) + Admin Portal (`client/`, mirroring — admin bantu perubahan atas nama guru, permission `LESSON_PLAN_MANAGE`) | Disetujui — lihat spec.md "Dual Portal (Mirroring)" |
 
 ## Enhancement Ideas (di luar scope fase 1)
 
