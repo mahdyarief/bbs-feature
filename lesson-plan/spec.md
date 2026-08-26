@@ -214,11 +214,16 @@ Semua komponen di bawah di-import dari `bbs-client-common`:
 
 **7. Visual reference (screenshot teacher web)**
 
-- `teachers_tool/screenshots/new_lesson_plan.png` — halaman utama Lesson Plan (filter + DataTable).
-- `teachers_tool/screenshots/lesson_plan_library.png` — Library viewer (filter + table).
-- `teachers_tool/html/new_lesson_plan.html` — struktur HTML lengkap halaman utama.
-- `teachers_tool/html/lp_create2.html` — form create.
-- `teachers_tool/html/lp_details.html` — detail + comment area.
+   **Halaman utama Lesson Plan (filter + DataTable):**
+   ![Lesson Plan - Main Page](screenshots/new_lesson_plan.png)
+
+   **Lesson Plan Library (filter + table):**
+   ![Lesson Plan - Library](screenshots/lesson_plan_library.png)
+
+   **Referensi HTML tambahan:**
+   - `teachers_tool/html/new_lesson_plan.html` — struktur HTML lengkap halaman utama.
+   - `teachers_tool/html/lp_create2.html` — form create.
+   - `teachers_tool/html/lp_details.html` — detail + comment area.
 
 ## API Changes
 
