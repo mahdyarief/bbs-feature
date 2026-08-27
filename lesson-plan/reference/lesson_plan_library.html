@@ -1,0 +1,132 @@
+<html><head>
+	<title>Viewer Lesson Plan</title>
+ 
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../../../library/materialize/css/font-awesome.css" type="text/css" rel="stylesheet">
+	<link href="../../../library/materialize/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+	<!--<link href="css/style.css" type="text/css" rel="stylesheet">-->
+	<link rel="stylesheet" href="../../../library/template_asset/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- data tables jquery-->
+	<link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	
+	
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="js/viewer.js?v=1787711928" type="text/javascript"></script>
+</head>
+<body class="body">
+<div class="container-fluid">
+<h2>Library Pantai Indah Kapuk Secondary</h2>	<h3><i class="fa fa-search" aria-hidden="true">
+</i> Filter</h3>
+<input type="hidden" value="4" id="campus_id">
+	<div id="search">
+	<div style="float:left" class="form-group col-xs-6 col-md-2">
+			<label>Academic Year</label>
+			<br>
+			<div id="div_room">
+				<select id="ls_ay" class="form-control"> 
+								 <option value="27" name="ay" selected="">2026/2027</option>
+				 
+				 
+				 				 <option value="26" name="ay">2025/2026</option>
+				 
+				 
+				 				 <option value="25" name="ay">2024/2025</option>
+				 
+				 
+				 				  
+				</select>
+			</div>
+		</div>
+		<input type="hidden" id="ls_room" value="all">
+		<input type="hidden" id="campus" value="4">
+		<div style="float:left" class="form-group col-xs-6 col-md-2">
+			<label>Subject</label>
+			<br>
+			<div id="div_subject">
+				<select id="ls_subject" class="form-control"><option value="all" selected="">All</option><option value="270">Chemistry ( Sec4Exp) </option></select>
+			</div>
+		</div>
+		<div style="float:left" class="form-group col-xs-6 col-md-2">
+			<label>Term</label>
+			<br>
+			<div id="div_term">
+				<select id="ls_term" class="form-control">
+					<option value="all" name="term" selected="">All</option>
+					<option value="1" name="term">Term 1</option>
+					<option value="2" name="term">Term 2</option>
+					<option value="3" name="term">Term 3</option>
+					<option value="4" name="term">Term 4</option>
+				</select>
+			</div>
+		</div>
+		<div style="float:left" class="form-group col-xs-6 col-md-2">
+			<label>Week</label>
+			<br>
+			<div id="div_week">
+				<select id="ls_week" class="form-control">
+					<option value="all" name="week" selected="">All</option>
+				</select>
+			</div>
+		</div>
+		 
+		<div class="form-group col-xs-12 col-md-2">
+			<br>
+			<div id="btn_search" class="button btn btn-primary">View</div>
+			 
+		</div>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<br>
+	
+	<div class="row">
+		<div class="col-xs-12 col-md-12">
+			<div id="div_viewer"><div id="dataTable_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="dataTable_length"><label>Show <select name="dataTable_length" aria-controls="dataTable" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="dataTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="dataTable"></label></div><table id="dataTable" class="table table-striped dataTable no-footer" role="grid" aria-describedby="dataTable_info"><thead><tr class="tr" role="row"><th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="No: activate to sort column descending" style="width: 22px;">No</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Teacher: activate to sort column ascending" style="width: 264px;">Teacher</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Level: activate to sort column ascending" style="width: 244px;">Level</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Subject: activate to sort column ascending" style="width: 264px;">Subject</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Term: activate to sort column ascending" style="width: 56px;">Term</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Week: activate to sort column ascending" style="width: 56px;">Week</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="AY: activate to sort column ascending" style="width: 56px;">AY</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Date Upload: activate to sort column ascending" style="width: 147px;">Date Upload</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 137px;">Action</th></tr></thead><tbody><tr class="tr odd" role="row"><td style="width:30px; text-align:center;" class="sorting_1">1</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Unity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 4</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-10 07:52:16</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=102260" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_102260" recid="102260" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr even" role="row"><td style="width:30px; text-align:center;" class="sorting_1">2</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Unity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 2</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-07-31 10:25:21</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=101472" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_101472" recid="101472" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr odd" role="row"><td style="width:30px; text-align:center;" class="sorting_1">3</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Serenity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 6</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-23 20:20:31</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=103044" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_103044" recid="103044" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr even" role="row"><td style="width:30px; text-align:center;" class="sorting_1">4</td><td style="width:275px;">Diana Sari Scheib </td><td style="width:255px;">Secondary 4 Wisdom</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 4</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-16 17:59:42</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=102225" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_102225" recid="102225" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr odd" role="row"><td style="width:30px; text-align:center;" class="sorting_1">5</td><td style="width:275px;">Dusmant Bastarayi</td><td style="width:255px;">Secondary 4 Teamwork</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 2</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-07-16 14:54:49</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=100902" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_100902" recid="100902" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr even" role="row"><td style="width:30px; text-align:center;" class="sorting_1">6</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Serenity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 5</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-21 09:28:33</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=102928" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_102928" recid="102928" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr odd" role="row"><td style="width:30px; text-align:center;" class="sorting_1">7</td><td style="width:275px;">Dusmant Bastarayi</td><td style="width:255px;">Secondary 4 Teamwork</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 3</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-02 16:36:33</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=102036" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_102036" recid="102036" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr even" role="row"><td style="width:30px; text-align:center;" class="sorting_1">8</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Unity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 1</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-07-16 13:30:10</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=100802" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_100802" recid="100802" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr odd" role="row"><td style="width:30px; text-align:center;" class="sorting_1">9</td><td style="width:275px;">Dusmant Bastarayi</td><td style="width:255px;">Secondary 4 Teamwork</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 5</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-18 09:41:05</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=102820" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_102820" recid="102820" data-toggle="modal" data-target="#myModal">Copy</button></td></tr><tr class="tr even" role="row"><td style="width:30px; text-align:center;" class="sorting_1">10</td><td style="width:275px;">Herlina Susanti</td><td style="width:255px;">Secondary 4 Unity</td><td style="width:275px;">Chemistry</td><td style="width:70px; text-align:center;">Term 1</td><td style="width:70px; text-align:center;">Week 3</td><td style="width:70px; text-align:center;">27</td><td style="width:160px; text-align:center;">2026-08-03 06:59:25</td><td style="width:150px; text-align:center;"><a class="btn btn-default" href="details.php?lpid=101920" target="blank">Details</a>&nbsp;<button class="btn btn-primary" id="modalcopy_101920" recid="101920" data-toggle="modal" data-target="#myModal">Copy</button></td></tr></tbody></table><div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 24 entries</div><div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><a class="paginate_button previous disabled" aria-controls="dataTable" data-dt-idx="0" tabindex="-1" id="dataTable_previous">Previous</a><span><a class="paginate_button current" aria-controls="dataTable" data-dt-idx="1" tabindex="0">1</a><a class="paginate_button " aria-controls="dataTable" data-dt-idx="2" tabindex="0">2</a><a class="paginate_button " aria-controls="dataTable" data-dt-idx="3" tabindex="0">3</a></span><a class="paginate_button next" aria-controls="dataTable" data-dt-idx="4" tabindex="0" id="dataTable_next">Next</a></div></div></div>
+		</div>
+	</div>
+</div> 
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Copy Lesson Plan</h4>
+      </div>
+      <div class="modal-body">
+	  
+	  <table style="width:100%;">
+	  <tbody><tr>
+	  <td width="20%">
+        Copy to AY </td><td>   
+		
+		<select id="ay_copy" class="form-control col-lg-6">
+			<option value="27" selected="">2026/2027 </option>
+		</select></td></tr>
+	<tr>
+	<td>
+	 Copy to Class   </td><td>  
+		
+		<select id="class_copy" class="form-control col-lg-6">
+			<option value="38103">SAMPLE-CHE</option>
+		</select>
+	</td></tr>
+	</tbody></table>
+      </div>
+      <div class="modal-footer">
+	  <div id="footercopy"></div>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+
+	
+ </body></html>

@@ -1,0 +1,171 @@
+<html><head>
+	<title>Lesson Plan</title>	
+	<link href="../../../library/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+ 
+	<link rel="stylesheet" href="css/style.css?3">
+	 <link rel="stylesheet" href="../../../library/template_asset/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+	<script src="../../../library/template_asset/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../../../library/template_asset/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<script>
+	function valueselect(myval,classsub)
+		{
+			
+      window.location = "index.php?ay="+myval+"&classsub="+classsub;
+		}
+		
+	$(document).on('change', '[id="ay"]', function(){	
+			var recid = $(this).val();
+			var classsub = $("#classsub").val();
+			valueselect(recid,classsub)
+	});
+	
+	$(document).on('change', '[id="classsub"]', function(){	
+			var classsub = $(this).val();
+			var ay = $("#ay").val();
+			valueselect(ay,classsub)
+	});
+		
+			$(document).ready(function () {
+		$('#dtOrderExample').DataTable({
+		"order": [[ 3, "desc" ]]
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+		
+		$(function(){
+	 
+ 
+	$(document).on('click', '[id^="modalcopy_"]', function(){
+	 
+
+		var recid = $(this).attr('recid');
+		 $("#footercopy").html('<button type="button" class="btn btn-default" data-dismiss="modal">Close</button> <button type="button" id="copy" recid="'+recid+'" class="btn btn-primary"  >Copy</button>');
+		})
+		
+		
+		
+		$(document).on('click', '[id="copy"]', function(){
+			
+			
+		var recid = $(this).attr('recid');
+		var ay_copy = $("#ay_copy").val();
+		var class_copy = $("#class_copy").val();
+		//alert(recid+'-'+ay_copy+'-'+class_copy)
+		
+		dataMap = {};
+		dataMap['recid'] = recid;
+		dataMap['ay_copy'] = ay_copy;
+		dataMap['class_copy'] = class_copy;
+		
+		
+		$.post('get_copy.php', dataMap, function(data){
+		
+		 alert('copy success')
+		 location.reload(); 
+		 
+		})
+		
+		
+		  
+		})
+	})
+	</script>
+		<style>
+	table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+	</style>
+</head><body>
+<input type="hidden" id="user_id" value="21046">
+<input type="hidden" id="camp_id" value="4">
+<div class="container">
+
+	<select id="ay">
+		<option value="27" selected="">2026/2027 </option>
+		<option value="26">2025/2026 </option>
+		<option value="25">2024/2025 </option>
+		<option value="24">2023/2024 </option>
+		<option value="23">2022/2023 </option>
+		</select>
+
+			<select id="classsub">
+			<option value="0" selected="">All Class</option> 
+							<option value="38103">SAMPLE-CHE</option>
+						</select>
+<form enctype="multipart/form-data" method="post" action="lesson_form.php">
+
+<table>
+	<tbody><tr>
+      <td colspan="5">
+	  
+		  
+	  <a href="create2.php" target="_blank" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Create Lesson Plan</a> 
+	  	  </td>
+    </tr>
+    </tbody></table>
+<div id="dtOrderExample_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer"><div class="row"><div class="col-sm-6"><div class="dataTables_length bs-select" id="dtOrderExample_length"><label>Show <select name="dtOrderExample_length" aria-controls="dtOrderExample" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-6"><div id="dtOrderExample_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="dtOrderExample"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="dtOrderExample" class="table table-striped table-bordered table-sm dataTable no-footer" cellspacing="0" role="grid" aria-describedby="dtOrderExample_info">
+ 
+	<thead>
+	<tr role="row"><th class="sorting" tabindex="0" aria-controls="dtOrderExample" rowspan="1" colspan="1" aria-label="Term: activate to sort column ascending" style="width: 168px;">Term</th><th class="sorting" tabindex="0" aria-controls="dtOrderExample" rowspan="1" colspan="1" aria-label="Week: activate to sort column ascending" style="width: 178px;">Week</th><th class="sorting" tabindex="0" aria-controls="dtOrderExample" rowspan="1" colspan="1" aria-label="Level: activate to sort column ascending" style="width: 177px;">Level</th><th class="sorting_desc" tabindex="0" aria-controls="dtOrderExample" rowspan="1" colspan="1" aria-sort="descending" aria-label="Subject: activate to sort column ascending" style="width: 222px;">Subject</th><th class="sorting" tabindex="0" aria-controls="dtOrderExample" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 199px;">Action</th></tr>
+	 </thead>
+  <tbody>
+    
+    
+	  <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>
+</table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="dtOrderExample_info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="dtOrderExample_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="dtOrderExample_previous"><a href="#" aria-controls="dtOrderExample" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button next disabled" id="dtOrderExample_next"><a href="#" aria-controls="dtOrderExample" data-dt-idx="1" tabindex="0">Next</a></li></ul></div></div></div></div>
+ 
+</form>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Copy Lesson Plan</h4>
+      </div>
+      <div class="modal-body">
+	  
+	  <table style="width:100%;">
+	  <tbody><tr>
+	  <td width="20%">
+        Copy to AY </td><td>  : 
+		
+		<select id="ay_copy"> 
+			<option value="27" selected="">2026/2027 </option>
+		</select></td></tr>
+	<tr>
+	<td>
+	 Copy to Class   </td><td> : 
+		
+		<select id="class_copy">
+			<option value="38103">SAMPLE-CHE</option>
+		</select>
+	</td></tr>
+	</tbody></table>
+      </div>
+      <div class="modal-footer">
+	  <div id="footercopy"></div>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+</body></html>

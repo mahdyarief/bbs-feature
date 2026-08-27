@@ -13,7 +13,7 @@ target_release: TBD
 
 Fitur Lesson Plan memungkinkan guru membuat, melihat, menyalin (copy), dan mengelola rencana pembelajaran (lesson plan) per **term + week** untuk kelas yang diampu. Lesson plan terhubung ke **SOW (Scheme of Work)** sebagai referensi untuk mengisi Main Objectives (guru menyalin manual dari dokumen SOW), dan bisa dikomentari oleh **HOD** dan **Principal**. Semua guru di satu campus bisa melihat lesson plan guru lain melalui **Lesson Plan Library**.
 
-Direplikasi dari teacher web: `https://teachers.binabangsaschool.com/new_lesson_plan/` (referensi: `teachers_tool/` di workspace).
+Direplikasi dari teacher web: `https://teachers.binabangsaschool.com/new_lesson_plan/`.
 
 **Target implementasi (dua portal):**
 - Backend: `api_nest/src/modules/lesson-plan/` (NestJS 10 + TypeORM 0.3.10 + PostgreSQL) — satu set API, dikonsumsi oleh kedua portal.
@@ -30,7 +30,7 @@ Teacher web saat ini sudah punya fitur lesson plan lengkap, tapi belum ada di si
 
 ## Referensi Analisis (dari teacher web, 2026-08-26)
 
-Temuan dari bedah teacher web (`teachers_tool/`):
+Temuan dari bedah teacher web:
 
 | Aspek | Temuan |
 |-------|--------|
@@ -43,6 +43,8 @@ Temuan dari bedah teacher web (`teachers_tool/`):
 | Library API | `php/viewer.php` (POST: `classroom_id, classsubject_id, term, week, ay`), `php/classroom.php` (POST: `ay`), `php/subject.php` (POST: `classroom_id, ay`) |
 | Copy | Modal "Copy Lesson Plan" → POST `get_copy.php` dengan `{recid, ay_copy, class_copy}` |
 | Detail principal | `details_p.php?lpid=` — varian detail dengan comment area principal |
+| Principal Viewer | `viewer_lesson_plan_principal/app_index.php` (id 515) — entry point utama Principal untuk melihat lesson plan, daftar indeks sebelum masuk ke `details_p.php` |
+| Preschool variant | `new_lesson_plan_preschool/index_asd.php` (id 94) — varian lesson plan untuk jenjang Preschool (terpisah dari Secondary) |
 | No submission | `teachers/new_viewer_lesson_plan_principal/no_submitted.php` — list guru yang belum submit |
 | Hidden ids | `user_id=21046`, `staff_id=40`, `camp_id=4` (contoh session teacher) |
 | Week ranges | Term 1-4 dengan rentang week dinamis (JS `selectterm.js`: term 1 → week 1-10, dst per kalender akademik) |
@@ -61,6 +63,7 @@ Temuan dari bedah teacher web (`teachers_tool/`):
 
 - Manajemen SOW itu sendiri (fitur terpisah, modul `sow` sudah ada — dependency saja).
 - HBL resources attachment (endpoint `list_HBLresources.php` di teacher web — referensi saja, ditandai TODO).
+- Lesson Plan Preschool (`new_lesson_plan_preschool/index_asd.php` di legacy) — varian terpisah untuk jenjang Preschool, tidak tercakup di fase 1 (fokus Secondary).
 - Approval workflow (lesson plan tidak butuh approve; hanya comment).
 - Portal Student (hanya Teacher + Admin Portal).
 - Migrasi data dari PHP legacy (tidak ada data awal; greenfield).
@@ -236,9 +239,9 @@ Semua komponen di bawah di-import dari `bbs-client-common`:
    ![Lesson Plan - Library](screenshots/lesson_plan_library.png)
 
    **Referensi HTML tambahan:**
-   - `teachers_tool/html/new_lesson_plan.html` — struktur HTML lengkap halaman utama.
-   - `teachers_tool/html/lp_create2.html` — form create.
-   - `teachers_tool/html/lp_details.html` — detail + comment area.
+   - `reference/new_lesson_plan.html` — struktur HTML lengkap halaman utama.
+   - `reference/lesson_plan_library.html` — struktur HTML lengkap Library viewer.
+   - `06_fetch_lp_details.py` — script fetch detail (tidak ada capture HTML terpisah untuk form create dan detail).
 
 ## API Changes
 
