@@ -1,0 +1,1292 @@
+<!DOCTYPE html><html lang="en"><head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="icon" href="https://zone.binabangsaschool.com/library/images/logo_bbs.png">  
+    <title>AB - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="../../library/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../library/template_asset/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../../library/template/css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- Custom styles for this template--> 
+	 <style>
+	.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+	.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+	.autocomplete-selected { background: #F0F0F0; }
+	.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+	.autocomplete-group { padding: 2px 5px; }
+	.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+  </style>
+  
+</head>
+
+<body id="page-top nav-fixed">
+<input type="hidden" id="current_ay" value="27">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.php">
+                <div class="sidebar-brand-icon ">
+                    <img class="img-profile rounded-circle" style="max-height:30px;height:30px;width:30px;" src="../../library/template_asset/img/logo_bbs.jpg">
+                </div>
+                <div class="sidebar-brand-text mx-3">AB <sup>2.0</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="home.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            			<li class="nav-item" style="display:none;">
+				<a class="nav-link" href="https://teachers.binabangsaschool.com/Conference/login/authlog?auth=8ba45d9f13200e79d55386f3f948992a" target="blank_">
+					<i style="" class="fa fa-certificate text-white"></i>
+					<span>Conference
+					</span>
+				</a>
+			</li>
+			
+						<li class="nav-item" style="display:none;">
+							<a class="nav-link" id="link_javascript" target="blank_" href="https://zone.binabangsaschool.com/ais/asd/moderate_component_prelim_new.php">
+								<i class="fas fa-fw fa-calculator"></i>
+								<span>Moderation  <span class="badge badge-danger badge-counter">new</span></span></a>
+						</li>
+			
+						<li class="nav-item" style="display:none;">
+							<a class="nav-link" id="link_javascript" target="blank_" href="gpa_calculation_view.php">
+								<i class="fas fa-fw fa-calculator"></i>
+								<span>GPA Calculation  <span class="badge badge-danger badge-counter">new</span></span></a>
+						</li>
+			             
+  			<li class="nav-item" style="display:none;">
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#teachers_induction" aria-expanded="true" aria-controls="teachers_induction">
+				<i class="fas fa-fw fa-folder"></i>
+				<span>Induction</span>
+				</a>
+				<div id="teachers_induction" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+					<div class="bg-white py-2 collapse-inner rounded">
+						<a class="collapse-item" href="https://student.binabangsaschool.com/inductions/students/sso_teacher_trainee_preview_asd/aa4336f1a02226ed79cf7c7310553aea" target="_BLANK">
+							<span>Preview Course</span>
+						</a>
+													<a class="collapse-item" target="_BLANK" id="link_javascript" href="https://student.binabangsaschool.com/classes/index_induction.php">
+								<span>Facilitator Course</span>
+							</a>
+												<a class="collapse-item" target="_BLANK" id="link_javascript" href="https://student.binabangsaschool.com/classes/index_induction_review.php">
+							<span>Review</span>
+						</a>
+					</div>
+				</div>
+			</li>
+             
+
+           
+			  <li class="nav-item" id="accordionSidebar11">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages11" aria-expanded="true" aria-controls="collapsePages11">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Smartbook">Smartbook </span>
+							</a>
+							<div id="collapsePages11" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar11">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_1163" recid="1163" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teacher Stats - Smartbook">Teacher Stats - S.. </a><a class="collapse-item" href="#" id="clickmenu_1160" recid="1160" data-toggle="tooltip" data-placement="right" title="" data-original-title="Smartbook User Login">Smartbook User Lo.. </a><a class="collapse-item" href="#" id="clickmenu_1164" recid="1164" data-toggle="tooltip" data-placement="right" title="" data-original-title="Worksheet Stats - Smartbook">Worksheet Stats -.. </a><a class="collapse-item" href="#" id="clickmenu_1165" recid="1165" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Stats - Smartbook">Subject Stats - S.. </a><a class="collapse-item" href="#" id="clickmenu_1166" recid="1166" data-toggle="tooltip" data-placement="right" title="" data-original-title="Smartbook Member">Smartbook Member </a></div>
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar2">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="true" aria-controls="collapsePages2">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis">Analysis </span>
+							</a>
+							<div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar2">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2914" recid="2914" data-toggle="tooltip" data-placement="right" title="" data-original-title="Primary Checkpoint Analysis">Primary Checkpoin.. </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar21" data-toggle="collapse" data-target="#collapsePages21" aria-expanded="true" aria-controls="collapsePages21">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 Analysis">Term1 Analysis</span>
+							</a>
+							<div id="collapsePages21" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar21">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_211" recid="211" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 Analysis">Term1 Analysis </a><a class="collapse-item" href="#" id="clickmenu_212" recid="212" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 Raw Marks">Term1 Raw Marks </a><a class="collapse-item" href="#" id="clickmenu_213" recid="213" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 Statistics">Term1 Statistics </a><a class="collapse-item" href="#" id="clickmenu_214" recid="214" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 CA Raw Maks">Term1 CA Raw Maks </a><a class="collapse-item" href="#" id="clickmenu_215" recid="215" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term1 CA Statistics">Term1 CA Statisti.. </a><a class="collapse-item" href="#" id="clickmenu_217" recid="217" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 5 Year Analysis">Last 5 Year Analy.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar22" data-toggle="collapse" data-target="#collapsePages22" aria-expanded="true" aria-controls="collapsePages22">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Term3 Analysis">Term3 Analysis</span>
+							</a>
+							<div id="collapsePages22" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar22">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_221" recid="221" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term3 Analysis">Term3 Analysis </a><a class="collapse-item" href="#" id="clickmenu_222" recid="222" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term3 Raw Marks">Term3 Raw Marks </a><a class="collapse-item" href="#" id="clickmenu_223" recid="223" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term3 Statistics">Term3 Statistics </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar23" data-toggle="collapse" data-target="#collapsePages23" aria-expanded="true" aria-controls="collapsePages23">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Analysis">MYE Analysis</span>
+							</a>
+							<div id="collapsePages23" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar23">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_232" recid="232" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Analysis">MYE Analysis </a><a class="collapse-item" href="#" id="clickmenu_233" recid="233" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Raw Mark">MYE Raw Mark </a><a class="collapse-item" href="#" id="clickmenu_231" recid="231" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Statistic">MYE Statistic </a><a class="collapse-item" href="#" id="clickmenu_234" recid="234" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Mark Distribution">MYE Mark Distribu.. </a><a class="collapse-item" href="#" id="clickmenu_236" recid="236" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE Chinese Level Analysis">MYE Chinese Level.. </a><a class="collapse-item" href="#" id="clickmenu_235" recid="235" data-toggle="tooltip" data-placement="right" title="" data-original-title="MYE SEF Data">MYE SEF Data </a><a class="collapse-item" href="#" id="clickmenu_237" recid="237" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 5 Year MYE">Last 5 Year MYE </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar24" data-toggle="collapse" data-target="#collapsePages24" aria-expanded="true" aria-controls="collapsePages24">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="AS Analysis">AS Analysis</span>
+							</a>
+							<div id="collapsePages24" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar24">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_243" recid="243" data-toggle="tooltip" data-placement="right" title="" data-original-title="Compare MSG">Compare MSG </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar241" data-toggle="collapse" data-target="#collapsePages241" aria-expanded="true" aria-controls="collapsePages241">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Prelim Analysis">Prelim Analysis</span>
+							</a>
+							<div id="collapsePages241" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar241">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2413" recid="2413" data-toggle="tooltip" data-placement="right" title="" data-original-title="Component">Component </a><a class="collapse-item" href="#" id="clickmenu_2411" recid="2411" data-toggle="tooltip" data-placement="right" title="" data-original-title="Campus">Campus </a><a class="collapse-item" href="#" id="clickmenu_2412" recid="2412" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Benchmark">Subject Benchmark </a><a class="collapse-item" href="#" id="clickmenu_24124" recid="24124" data-toggle="tooltip" data-placement="right" title="" data-original-title="MSG Compare">MSG Compare </a><a class="collapse-item" href="#" id="clickmenu_2415" recid="2415" data-toggle="tooltip" data-placement="right" title="" data-original-title="AS Prelim Statistics">AS Prelim Statist.. </a><a class="collapse-item" href="#" id="clickmenu_2416" recid="2416" data-toggle="tooltip" data-placement="right" title="" data-original-title="AS Prelim Raw Marks">AS Prelim Raw Mar.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar242" data-toggle="collapse" data-target="#collapsePages242" aria-expanded="true" aria-controls="collapsePages242">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Actual Analysis">Actual Analysis</span>
+							</a>
+							<div id="collapsePages242" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar242">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2421" recid="2421" data-toggle="tooltip" data-placement="right" title="" data-original-title="By Campus - AS Actual">By Campus - AS Ac.. </a><a class="collapse-item" href="#" id="clickmenu_2422" recid="2422" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Benchmark - AS Actual">Subject Benchmark.. </a><a class="collapse-item" href="#" id="clickmenu_2423" recid="2423" data-toggle="tooltip" data-placement="right" title="" data-original-title="Component - AS Actual">Component - AS Ac.. </a></div>
+							</div>
+							
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar25" data-toggle="collapse" data-target="#collapsePages25" aria-expanded="true" aria-controls="collapsePages25">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="A LEVEL Analysis">A LEVEL Analysis</span>
+							</a>
+							<div id="collapsePages25" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar25">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_253" recid="253" data-toggle="tooltip" data-placement="right" title="" data-original-title="Compare MSG">Compare MSG </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar251" data-toggle="collapse" data-target="#collapsePages251" aria-expanded="true" aria-controls="collapsePages251">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Prelim Analysis">Prelim Analysis</span>
+							</a>
+							<div id="collapsePages251" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar251">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2511" recid="2511" data-toggle="tooltip" data-placement="right" title="" data-original-title="Statistics">Statistics </a><a class="collapse-item" href="#" id="clickmenu_2512" recid="2512" data-toggle="tooltip" data-placement="right" title="" data-original-title="Campus">Campus </a><a class="collapse-item" href="#" id="clickmenu_2513" recid="2513" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Benchmark">Subject Benchmark </a><a class="collapse-item" href="#" id="clickmenu_2514" recid="2514" data-toggle="tooltip" data-placement="right" title="" data-original-title="By Component">By Component </a><a class="collapse-item" href="#" id="clickmenu_2516" recid="2516" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis New Alevel ">Analysis New Alev.. </a><a class="collapse-item" href="#" id="clickmenu_2515" recid="2515" data-toggle="tooltip" data-placement="right" title="" data-original-title="Statisctics Per Paper">Statisctics Per P.. </a><a class="collapse-item" href="#" id="clickmenu_2517" recid="2517" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 3 Year Analysis Prelim Alevel">Last 3 Year Analy.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar252" data-toggle="collapse" data-target="#collapsePages252" aria-expanded="true" aria-controls="collapsePages252">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Actual Analysis">Actual Analysis</span>
+							</a>
+							<div id="collapsePages252" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar252">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2521" recid="2521" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis Campus">Analysis Campus </a><a class="collapse-item" href="#" id="clickmenu_2522" recid="2522" data-toggle="tooltip" data-placement="right" title="" data-original-title="By Subject Benchmark">By Subject Benchm.. </a><a class="collapse-item" href="#" id="clickmenu_2524" recid="2524" data-toggle="tooltip" data-placement="right" title="" data-original-title="Predicted vs Awarded">Predicted vs Awar.. </a><a class="collapse-item" href="#" id="clickmenu_2525" recid="2525" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis New Alevel Actual ">Analysis New Alev.. </a><a class="collapse-item" href="#" id="clickmenu_2526" recid="2526" data-toggle="tooltip" data-placement="right" title="" data-original-title=" Last 3 Year Analysis Actual Alevel"> Last 3 Year Anal.. </a></div>
+							</div>
+							
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar26" data-toggle="collapse" data-target="#collapsePages26" aria-expanded="true" aria-controls="collapsePages26">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="IGCSE Results Analysis">IGCSE Results Ana..</span>
+							</a>
+							<div id="collapsePages26" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar26">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_263" recid="263" data-toggle="tooltip" data-placement="right" title="" data-original-title="Compare MSG">Compare MSG </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar261" data-toggle="collapse" data-target="#collapsePages261" aria-expanded="true" aria-controls="collapsePages261">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Prelim Analysis">Prelim Analysis</span>
+							</a>
+							<div id="collapsePages261" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar261">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2612" recid="2612" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Benchmark">Subject Benchmark </a><a class="collapse-item" href="#" id="clickmenu_2611" recid="2611" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis Campus">Analysis Campus </a><a class="collapse-item" href="#" id="clickmenu_2613" recid="2613" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis Component">Analysis Componen.. </a><a class="collapse-item" href="#" id="clickmenu_2614" recid="2614" data-toggle="tooltip" data-placement="right" title="" data-original-title="Statistics">Statistics </a><a class="collapse-item" href="#" id="clickmenu_2615" recid="2615" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis New IGCSE ">Analysis New IGCS.. </a><a class="collapse-item" href="#" id="clickmenu_2616" recid="2616" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 3 Year Analysis Prelim IGCSE">Last 3 Year Analy.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar262" data-toggle="collapse" data-target="#collapsePages262" aria-expanded="true" aria-controls="collapsePages262">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Actual Analysis">Actual Analysis</span>
+							</a>
+							<div id="collapsePages262" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar262">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2621" recid="2621" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis By Campus">Analysis By Campu.. </a><a class="collapse-item" href="#" id="clickmenu_2622" recid="2622" data-toggle="tooltip" data-placement="right" title="" data-original-title="By Subject Benchmark">By Subject Benchm.. </a><a class="collapse-item" href="#" id="clickmenu_2625" recid="2625" data-toggle="tooltip" data-placement="right" title="" data-original-title="Analysis New IGCSE Actual ">Analysis New IGCS.. </a><a class="collapse-item" href="#" id="clickmenu_2624" recid="2624" data-toggle="tooltip" data-placement="right" title="" data-original-title="IGCSE Predicted vs Awarded">IGCSE Predicted v.. </a><a class="collapse-item" href="#" id="clickmenu_26245" recid="26245" data-toggle="tooltip" data-placement="right" title="" data-original-title="IGCSE Analisys Predicted vs Awarded By Campus">IGCSE Analisys Pr.. </a><a class="collapse-item" href="#" id="clickmenu_2627" recid="2627" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 3 Year IGCSE Actual ">Last 3 Year IGCSE.. </a></div>
+							</div>
+							
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar27" data-toggle="collapse" data-target="#collapsePages27" aria-expanded="true" aria-controls="collapsePages27">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="FYE Analysis">FYE Analysis</span>
+							</a>
+							<div id="collapsePages27" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar27">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_273" recid="273" data-toggle="tooltip" data-placement="right" title="" data-original-title="Raw Marks">Raw Marks </a><a class="collapse-item" href="#" id="clickmenu_274" recid="274" data-toggle="tooltip" data-placement="right" title="" data-original-title="Marks Distribution">Marks Distributio.. </a><a class="collapse-item" href="#" id="clickmenu_276" recid="276" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYE-MYE Comparison">FYE-MYE Compariso.. </a><a class="collapse-item" href="#" id="clickmenu_277" recid="277" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYE-MYE Value Add">FYE-MYE Value Add </a><a class="collapse-item" href="#" id="clickmenu_271" recid="271" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYE Statistics">FYE Statistics </a><a class="collapse-item" href="#" id="clickmenu_272" recid="272" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYE Analysis">FYE Analysis </a><a class="collapse-item" href="#" id="clickmenu_278" recid="278" data-toggle="tooltip" data-placement="right" title="" data-original-title="Chinese Level Analysis">Chinese Level Ana.. </a><a class="collapse-item" href="#" id="clickmenu_279" recid="279" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 5 Year FYE">Last 5 Year FYE </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar29" data-toggle="collapse" data-target="#collapsePages29" aria-expanded="true" aria-controls="collapsePages29">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance Analysis">Attendance Analys..</span>
+							</a>
+							<div id="collapsePages29" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar29">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_291" recid="291" data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance Analysis">Attendance Analys.. </a><a class="collapse-item" href="#" id="clickmenu_292" recid="292" data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance Report">Attendance Report </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar2910" data-toggle="collapse" data-target="#collapsePages2910" aria-expanded="true" aria-controls="collapsePages2910">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SA1 Analysis">SA1 Analysis</span>
+							</a>
+							<div id="collapsePages2910" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar2910">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_2911" recid="2911" data-toggle="tooltip" data-placement="right" title="" data-original-title="SA1 Analysis">SA1 Analysis </a><a class="collapse-item" href="#" id="clickmenu_2912" recid="2912" data-toggle="tooltip" data-placement="right" title="" data-original-title="SA1 Statistics">SA1 Statistics </a><a class="collapse-item" href="#" id="clickmenu_2913" recid="2913" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 5 year SA1">Last 5 year SA1 </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar28" data-toggle="collapse" data-target="#collapsePages28" aria-expanded="true" aria-controls="collapsePages28">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="FYA Analysis">FYA Analysis</span>
+							</a>
+							<div id="collapsePages28" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar28">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_283" recid="283" data-toggle="tooltip" data-placement="right" title="" data-original-title="Raw Marks">Raw Marks </a><a class="collapse-item" href="#" id="clickmenu_281" recid="281" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYA Statistics">FYA Statistics </a><a class="collapse-item" href="#" id="clickmenu_282" recid="282" data-toggle="tooltip" data-placement="right" title="" data-original-title="FYA Analysis">FYA Analysis </a><a class="collapse-item" href="#" id="clickmenu_284" recid="284" data-toggle="tooltip" data-placement="right" title="" data-original-title="Last 5 Year FYA">Last 5 Year FYA </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar20" data-toggle="collapse" data-target="#collapsePages20" aria-expanded="true" aria-controls="collapsePages20">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Term2 Analysis">Term2 Analysis</span>
+							</a>
+							<div id="collapsePages20" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar20">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_201" recid="201" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term2 Analysis">Term2 Analysis </a><a class="collapse-item" href="#" id="clickmenu_203" recid="203" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term2 Statistics">Term2 Statistics </a><a class="collapse-item" href="#" id="clickmenu_205" recid="205" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term2 CA Statistics">Term2 CA Statisti.. </a><a class="collapse-item" href="#" id="clickmenu_204" recid="204" data-toggle="tooltip" data-placement="right" title="" data-original-title="Term2 CA Raw Maks">Term2 CA Raw Maks </a></div>
+							</div>
+							
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar3">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="true" aria-controls="collapsePages3">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Staff">Staff </span>
+							</a>
+							<div id="collapsePages3" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar3">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_31" recid="31" data-toggle="tooltip" data-placement="right" title="" data-original-title="HOD List">HOD List </a><a class="collapse-item" href="#" id="clickmenu_30" recid="30" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teacher CV">Teacher CV </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_33" recid="33" data-toggle="tooltip" data-placement="right" title="" data-original-title="Audit Data Analysis">Audit Data Analys.. </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_34" recid="34" data-toggle="tooltip" data-placement="right" title="" data-original-title="Audit Grade Distribution">Audit Grade Distr.. </a><a class="collapse-item" href="#" id="clickmenu_35" recid="35" data-toggle="tooltip" data-placement="right" title="" data-original-title="Forecast">Forecast </a><a class="collapse-item" href="#" id="clickmenu_36" recid="36" data-toggle="tooltip" data-placement="right" title="" data-original-title="Applicants">Applicants </a><a class="collapse-item" href="#" id="clickmenu_37" recid="37" data-toggle="tooltip" data-placement="right" title="" data-original-title="Search Applicants Information">Search Applicants.. </a><a class="collapse-item" href="forecast_teachers_intens.php" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teacher Intent">Teacher Intent </a><a class="collapse-item" href="#" id="clickmenu_38" recid="38" data-toggle="tooltip" data-placement="right" title="" data-original-title="Campus HOD/Committee">Campus HOD/Commit.. </a><a class="collapse-item" href="#" id="clickmenu_39" recid="39" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teacher Information">Teacher Informati.. </a><a class="collapse-item" href="#" id="clickmenu_30" recid="30" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teacher Card">Teacher Card </a><a class="collapse-item" href="#" id="clickmenu_311" recid="311" data-toggle="tooltip" data-placement="right" title="" data-original-title="Forecast Summary">Forecast Summary </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar32" data-toggle="collapse" data-target="#collapsePages32" aria-expanded="true" aria-controls="collapsePages32">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal">Appraisal</span>
+							</a>
+							<div id="collapsePages32" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar32">
+									<div class="bg-white py-2 collapse-inner rounded" style="display:none;">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" style="display:none;" href="#" id="clickmenu_322" recid="322" data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal Summary Report">Appraisal Summary.. </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_325" recid="325" data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal Data Analysis">Appraisal Data An.. </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_326" recid="326" data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal Raw Data">Appraisal Raw Dat.. </a></div>  
+							<a class="nav-link collapsed" style="display:none;" href="#" id="accordionSidebar323" data-toggle="collapse" data-target="#collapsePages323" aria-expanded="true" aria-controls="collapsePages323">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal Report Chart">Appraisal Report ..</span>
+							</a>
+							<div id="collapsePages323" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar323">
+									<div class="bg-white py-2 collapse-inner rounded" style="display:none;">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3231" recid="3231" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teachers">Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3232" recid="3232" data-toggle="tooltip" data-placement="right" title="" data-original-title="HOD">HOD </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3233" recid="3233" data-toggle="tooltip" data-placement="right" title="" data-original-title="Music Teachers">Music Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3234" recid="3234" data-toggle="tooltip" data-placement="right" title="" data-original-title="Chinese Teachers">Chinese Teachers </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" style="display:none;" href="#" id="accordionSidebar324" data-toggle="collapse" data-target="#collapsePages324" aria-expanded="true" aria-controls="collapsePages324">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal For A Grader">Appraisal For A G..</span>
+							</a>
+							<div id="collapsePages324" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar324">
+									<div class="bg-white py-2 collapse-inner rounded" style="display:none;">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3241" recid="3241" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teachers">Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3242" recid="3242" data-toggle="tooltip" data-placement="right" title="" data-original-title="HOD">HOD </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar321" data-toggle="collapse" data-target="#collapsePages321" aria-expanded="true" aria-controls="collapsePages321">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Appraisal/PETALS/Audit Per Group">Appraisal/PETALS/..</span>
+							</a>
+							<div id="collapsePages321" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar321">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="../../staff/asd_staff_app_new.php" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="New Appraisal Teachers">New Appraisal Tea.. </a><a class="collapse-item" href="../../staff/asd_staff_app_hod_new.php" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="New Appraisal HOD">New Appraisal HOD </a><a class="collapse-item" href="../../staff/asd_staff_app_principal_new.php" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="New Appraisal Principal">New Appraisal Pri.. </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3211" recid="3211" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teachers">Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3212" recid="3212" data-toggle="tooltip" data-placement="right" title="" data-original-title="HOD">HOD </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3213" recid="3213" data-toggle="tooltip" data-placement="right" title="" data-original-title="Music Teachers">Music Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3214" recid="3214" data-toggle="tooltip" data-placement="right" title="" data-original-title="Chinese Teachers">Chinese Teachers </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3215" recid="3215" data-toggle="tooltip" data-placement="right" title="" data-original-title="Preschool Teachers">Preschool Teacher.. </a><a class="collapse-item" style="display:none;" href="#" id="clickmenu_3217" recid="3217" data-toggle="tooltip" data-placement="right" title="" data-original-title="E-PETALS">E-PETALS </a></div>
+							</div>
+							
+							</div>
+							
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar6">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages6" aria-expanded="true" aria-controls="collapsePages6">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="LEAPS">LEAPS </span>
+							</a>
+							<div id="collapsePages6" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar6">
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar61" data-toggle="collapse" data-target="#collapsePages61" aria-expanded="true" aria-controls="collapsePages61">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Primary">Primary</span>
+							</a>
+							<div id="collapsePages61" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar61">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_611" recid="611" data-toggle="tooltip" data-placement="right" title="" data-original-title="Leaps Entry">Leaps Entry </a><a class="collapse-item" href="#" id="clickmenu_612" recid="612" data-toggle="tooltip" data-placement="right" title="" data-original-title="Leaps Report">Leaps Report </a><a class="collapse-item" href="#" id="clickmenu_613" recid="613" data-toggle="tooltip" data-placement="right" title="" data-original-title="Viewer Leaps">Viewer Leaps </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar62" data-toggle="collapse" data-target="#collapsePages62" aria-expanded="true" aria-controls="collapsePages62">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Secondary">Secondary</span>
+							</a>
+							<div id="collapsePages62" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar62">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_621" recid="621" data-toggle="tooltip" data-placement="right" title="" data-original-title="Leaps Entry">Leaps Entry </a><a class="collapse-item" href="#" id="clickmenu_622" recid="622" data-toggle="tooltip" data-placement="right" title="" data-original-title="Leaps Report">Leaps Report </a><a class="collapse-item" href="#" id="clickmenu_623" recid="623" data-toggle="tooltip" data-placement="right" title="" data-original-title="Viewer Leaps">Viewer Leaps </a></div>
+							</div>
+							
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar5">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages5" aria-expanded="true" aria-controls="collapsePages5">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Others">Others </span>
+							</a>
+							<div id="collapsePages5" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar5">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_524" recid="524" data-toggle="tooltip" data-placement="right" title="" data-original-title="Preview Prelim A2/IGCSE">Preview Prelim A2.. </a><a class="collapse-item" href="#" id="clickmenu_520" recid="520" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Folder">Subject Folder </a><a class="collapse-item" href="#" id="clickmenu_519" recid="519" data-toggle="tooltip" data-placement="right" title="" data-original-title="Summary Total Ais">Summary Total Ais </a><a class="collapse-item" href="#" id="clickmenu_518" recid="518" data-toggle="tooltip" data-placement="right" title="" data-original-title="Summary Period Viewer">Summary Period Vi.. </a><a class="collapse-item" href="#" id="clickmenu_517" recid="517" data-toggle="tooltip" data-placement="right" title="" data-original-title="Google Drive Viewer">Google Drive View.. </a><a class="collapse-item" href="#" id="clickmenu_516" recid="516" data-toggle="tooltip" data-placement="right" title="" data-original-title="Prelim Component Grade">Prelim Component .. </a><a class="collapse-item" href="#" id="clickmenu_513" recid="513" data-toggle="tooltip" data-placement="right" title="" data-original-title="Document Management">Document Manageme.. </a><a class="collapse-item" href="#" id="clickmenu_512" recid="512" data-toggle="tooltip" data-placement="right" title="" data-original-title="CA1 Below 40 Viewer">CA1 Below 40 View.. </a><a class="collapse-item" href="#" id="clickmenu_511" recid="511" data-toggle="tooltip" data-placement="right" title="" data-original-title="Upload Files">Upload Files </a><a class="collapse-item" href="#" id="clickmenu_510" recid="510" data-toggle="tooltip" data-placement="right" title="" data-original-title="Apps Downloaded">Apps Downloaded </a><a class="collapse-item" href="#" id="clickmenu_50" recid="50" data-toggle="tooltip" data-placement="right" title="" data-original-title="File Request/Submit">File Request/Subm.. </a><a class="collapse-item" href="#" id="clickmenu_515" recid="515" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lesson Plan">Lesson Plan </a><a class="collapse-item" href="../alumni_asd/index.php" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="UATS">UATS </a><a class="collapse-item" href="#" id="clickmenu_56" recid="56" data-toggle="tooltip" data-placement="right" title="" data-original-title="SEF">SEF </a><a class="collapse-item" href="#" id="clickmenu_55" recid="55" data-toggle="tooltip" data-placement="right" title="" data-original-title="Document Archive">Document Archive </a><a class="collapse-item" href="#" id="clickmenu_54" recid="54" data-toggle="tooltip" data-placement="right" title="" data-original-title="Events(SD)">Events(SD) </a><a class="collapse-item" href="#" id="clickmenu_53" recid="53" data-toggle="tooltip" data-placement="right" title="" data-original-title="SD Structure">SD Structure </a><a class="collapse-item" href="#" id="clickmenu_51" recid="51" data-toggle="tooltip" data-placement="right" title="" data-original-title="Calendar">Calendar </a></div>  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar52" data-toggle="collapse" data-target="#collapsePages52" aria-expanded="true" aria-controls="collapsePages52">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Prospect &amp; Drop">Prospect &amp; Drop</span>
+							</a>
+							<div id="collapsePages52" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar52">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_522" recid="522" data-toggle="tooltip" data-placement="right" title="" data-original-title="Actual Student Summary">Actual Student Su.. </a><a class="collapse-item" href="#" id="clickmenu_521" recid="521" data-toggle="tooltip" data-placement="right" title="" data-original-title="Target Drop &amp; Prospect">Target Drop &amp; Pro.. </a><a class="collapse-item" href="#" id="clickmenu_523" recid="523" data-toggle="tooltip" data-placement="right" title="" data-original-title="Marketting Activity">Marketting Activi.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar58" data-toggle="collapse" data-target="#collapsePages58" aria-expanded="true" aria-controls="collapsePages58">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE">SVE</span>
+							</a>
+							<div id="collapsePages58" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar58">
+									  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar581" data-toggle="collapse" data-target="#collapsePages581" aria-expanded="true" aria-controls="collapsePages581">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE Checklist Summary">SVE Checklist Sum..</span>
+							</a>
+							<div id="collapsePages581" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar581">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_5811" recid="5811" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE Checklist Summary Setter">SVE Checklist Sum.. </a><a class="collapse-item" href="#" id="clickmenu_5812" recid="5812" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE Checklist Summary Vetter">SVE Checklist Sum.. </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar587" data-toggle="collapse" data-target="#collapsePages587" aria-expanded="true" aria-controls="collapsePages587">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE Assignment">SVE Assignment</span>
+							</a>
+							<div id="collapsePages587" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar587">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_5871" recid="5871" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE AS Prelim">SVE AS Prelim </a><a class="collapse-item" href="#" id="clickmenu_5872" recid="5872" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE MYE">SVE MYE </a><a class="collapse-item" href="#" id="clickmenu_5873" recid="5873" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE A2 Prelim">SVE A2 Prelim </a><a class="collapse-item" href="#" id="clickmenu_5874" recid="5874" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE FYE">SVE FYE </a><a class="collapse-item" href="#" id="clickmenu_5875" recid="5875" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE BMT1">SVE BMT1 </a><a class="collapse-item" href="#" id="clickmenu_5876" recid="5876" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE BMT2">SVE BMT2 </a><a class="collapse-item" href="#" id="clickmenu_5877" recid="5877" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE AS Prelim Next AY">SVE AS Prelim Nex.. </a><a class="collapse-item" href="#" id="clickmenu_5878" recid="5878" data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE IGCSE">SVE IGCSE </a></div>
+							</div>
+							  
+							<a class="nav-link collapsed" href="#" id="accordionSidebar588" data-toggle="collapse" data-target="#collapsePages588" aria-expanded="true" aria-controls="collapsePages588">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SVE Preview">SVE Preview</span>
+							</a>
+							<div id="collapsePages588" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar588">
+									<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_5881" recid="5881" data-toggle="tooltip" data-placement="right" title="" data-original-title="AS Prelim">AS Prelim </a></div>
+							</div>
+							
+							</div>
+							
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar4">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="true" aria-controls="collapsePages4">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SRMS">SRMS </span>
+							</a>
+							<div id="collapsePages4" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar4">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_42" recid="42" data-toggle="tooltip" data-placement="right" title="" data-original-title="Report Viewer">Report Viewer </a><a class="collapse-item" href="#" id="clickmenu_47" recid="47" data-toggle="tooltip" data-placement="right" title="" data-original-title="Average Prelim Viewer">Average Prelim Vi.. </a><a class="collapse-item" href="#" id="clickmenu_48" recid="48" data-toggle="tooltip" data-placement="right" title="" data-original-title="Completion Certificate ">Completion Certif.. </a><a class="collapse-item" href="#" id="clickmenu_49" recid="49" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Medal Awards">Subject Medal Awa.. </a><a class="collapse-item" href="#" id="clickmenu_44" recid="44" data-toggle="tooltip" data-placement="right" title="" data-original-title="AS LEVEL Result">AS LEVEL Result </a><a class="collapse-item" href="#" id="clickmenu_45" recid="45" data-toggle="tooltip" data-placement="right" title="" data-original-title="Threshold A LEVEL/IGCSE Prelim">Threshold A LEVEL.. </a><a class="collapse-item" href="#" id="clickmenu_41" recid="41" data-toggle="tooltip" data-placement="right" title="" data-original-title="Cohort Ranking">Cohort Ranking </a><a class="collapse-item" href="#" id="clickmenu_43" recid="43" data-toggle="tooltip" data-placement="right" title="" data-original-title="A LEVEL/IGCSE Prelim Result ">A LEVEL/IGCSE Pre.. </a><a class="collapse-item" href="#" id="clickmenu_46" recid="46" data-toggle="tooltip" data-placement="right" title="" data-original-title="Threshold AS Prelim">Threshold AS Prel.. </a></div>
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar9">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages9" aria-expanded="true" aria-controls="collapsePages9">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="SOW">SOW </span>
+							</a>
+							<div id="collapsePages9" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar9">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_97" recid="97" data-toggle="tooltip" data-placement="right" title="" data-original-title="Upload Paper HBL">Upload Paper HBL </a><a class="collapse-item" href="#" id="clickmenu_99" recid="99" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Folder">Subject Folder </a><a class="collapse-item" href="#" id="clickmenu_91" recid="91" data-toggle="tooltip" data-placement="right" title="" data-original-title="Upload SOW (By Cohort)">Upload SOW (By Co.. </a><a class="collapse-item" href="#" id="clickmenu_92" recid="92" data-toggle="tooltip" data-placement="right" title="" data-original-title="Upload SOW (By Subject)">Upload SOW (By Su.. </a><a class="collapse-item" href="#" id="clickmenu_93" recid="93" data-toggle="tooltip" data-placement="right" title="" data-original-title="Upload SOW Preschool">Upload SOW Presch.. </a><a class="collapse-item" href="#" id="clickmenu_94" recid="94" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lesson Plan Preschool">Lesson Plan Presc.. </a><a class="collapse-item" href="#" id="clickmenu_95" recid="95" data-toggle="tooltip" data-placement="right" title="" data-original-title="Subject Handbook Upload">Subject Handbook .. </a><a class="collapse-item" href="#" id="clickmenu_98" recid="98" data-toggle="tooltip" data-placement="right" title="" data-original-title="SOW Checker">SOW Checker </a><a class="collapse-item" href="#" id="clickmenu_981" recid="981" data-toggle="tooltip" data-placement="right" title="" data-original-title="SOW Checker PDF">SOW Checker PDF </a></div>
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar10">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages10" aria-expanded="true" aria-controls="collapsePages10">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance">Attendance </span>
+							</a>
+							<div id="collapsePages10" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar10">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_103" recid="103" data-toggle="tooltip" data-placement="right" title="" data-original-title="Student Health Log">Student Health Lo.. </a><a class="collapse-item" href="#" id="clickmenu_102" recid="102" data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance ASD">Attendance ASD </a><a class="collapse-item" href="#" id="clickmenu_101" recid="101" data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance Report">Attendance Report </a><a class="collapse-item" href="#" id="clickmenu_104" recid="104" data-toggle="tooltip" data-placement="right" title="" data-original-title="Attendance Teachers">Attendance Teache.. </a></div>
+							</div>
+							</li>
+							  <li class="nav-item" id="accordionSidebar8">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages8" aria-expanded="true" aria-controls="collapsePages8">
+								<i class="fas fa-fw fa-folder"></i>
+								<span data-toggle="tooltip" data-placement="right" title="" data-original-title="Zoom">Zoom </span>
+							</a>
+							<div id="collapsePages8" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar8">
+							<div class="bg-white py-2 collapse-inner rounded">
+					 		 	<h6 class="collapse-header"> SUB MENU:  </h6><a class="collapse-item" href="#" id="clickmenu_81" recid="81" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lecture Zoom Classes">Lecture Zoom Clas.. </a><a class="collapse-item" href="#" id="clickmenu_82" recid="82" data-toggle="tooltip" data-placement="right" title="" data-original-title=" Class Zoom Viewer"> Class Zoom Viewe.. </a></div>
+							</div>
+							</li>
+										
+					  
+			 
+			 
+			 
+			  <li class="nav-item">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#docmana" aria-expanded="true" aria-controls="docmana">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>Document Management</span>
+							</a>
+							<div id="docmana" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">Document Management:</h6>
+										 									 	
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/document_management/" target="blank"><span>Document Management</span></a>
+									 									 
+								</div>
+							</div>
+			</li>
+
+			
+			 
+			 			 
+			 			  
+				 
+					<li class="nav-item">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#elearning" aria-expanded="true" aria-controls="elearning">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>SV List Editor</span>
+							</a>
+							<div id="elearning" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">Sub Menu:</h6> 
+									<a class="collapse-item" id="link_javascript" href="../../exam/co_assign_sve.php" target="blank">Secondary</a>
+								</div>
+							</div>
+					</li>
+			 			 
+			 
+				 
+			  
+				  
+				 <li class="nav-item">
+					<a class="nav-link collapsed" href="https://zone.binabangsaschool.com/elibrary/search.php" data-target="#elearning" aria-expanded="true" aria-controls="elibrary" target="_BLANK">
+						<i class="fas fa-book"></i>
+						<span>E-Library</span>
+					</a>
+				</li>
+				<li class="nav-item" style="display:none;">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#elearning" aria-expanded="true" aria-controls="elearning">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>E-Learning</span>
+							</a>
+							<div id="elearning" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">Elearning Sub Menu:</h6>
+									<a class="collapse-item" id="link_javascript" href="https://zone.binabangsaschool.com/ais/principals/view_log_elearning_asd.php" target="bbsres">Log E-Learning Pri &amp; Sec</a>
+
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/elearning_viewer_asd.php" target="bbsres">E-learning Viewer Pri &amp; Sec</a>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/principals/view_stats_elearning_asd.php" target="bbsres">E-learning Stats  Pri &amp; Sec</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/asd/elearning_festival/viewer_courses_pri.php" ay="27" month="9" target="bbsres">E-learning Festival Primary</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/asd/elearning_festival/viewer_courses.php" ay="27" month="9" target="bbsres">E-learning Festival Sec</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/principals/view_student_log_elearning_asd.php" target="bbsres">Log Last Login Student</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/principals/view_teachers_log_elearning_asd.php" target="bbsres">Log Last Login Teacher</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/elearning_preschool_asd.php" target="bbsres">E-learning Preschool</a> 
+									<a class="collapse-item" href="elearning_survey_chart.php" target="bbsres">E-learning Survey</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/teacher_score_asd.php" target="bbsres">HBL PETALS</a> 
+									<a class="collapse-item" href="../../staff/epetals_summary_asd.php" target="bbsres">E-PETALS Report</a> 
+									<a class="collapse-item" href="epetal_chart.php" target="bbsres">STATISTIC PETALS</a> 
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/principals/view_hbl_daily_asd.php" target="bbsres">HBL Daily Reports</a> 
+									<a class="collapse-item" href="#" id="leftmenu" menu="../../ais/teachers/goals/category.php" target="bbsres">Goals Category</a> 
+									 
+								</div>
+							</div>
+				</li> 
+			 
+						<li class="nav-item">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#aismenu" aria-expanded="true" aria-controls="aismenu">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>AIS</span>
+							</a>
+							<div id="aismenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">AIS Sub Menu:</h6>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/cca_list.php" target="bbsres">CCA</a>
+									<a class="collapse-item scrollup" href="https://zone.binabangsaschool.com/ais/teachers/subject_list.php" target="bbsres">Subjects</a>
+									<a class="collapse-item scrollup" href="https://zone.binabangsaschool.com/ais/teachers/subject_list_ay.php" target="bbsres">Subjects AY</a> 
+									<a class="collapse-item scrollup" href="https://zone.binabangsaschool.com/ais/teachers/view_ais_summary_asd.php" target="blank_">Summary Data Per Level</a>  
+									<a class="collapse-item scrollup" href="https://zone.binabangsaschool.com/ais/teachers/trainnig_staff.php" target="bbsres">Training Staff</a> 
+									<a class="collapse-item scrollup" href="https://zone.binabangsaschool.com/ais/asd/home.php?vmenu=camp_dept&amp;vname=Campus Department" target="bbsres">Campus Department</a> 
+								</div>
+							</div>
+						</li> 
+				  
+					<li class="nav-item" style="display:none;">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#disciplinemenu" aria-expanded="true" aria-controls="disciplinemenu">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>Discipline Viewer</span>
+							</a>
+							<div id="disciplinemenu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">Discipline Sub Menu:</h6>
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline/pri_category_sec_view_asd.php" target="bbsres"> KJ-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_kj/sec_category_sec_view_asd.php" target="bbsres"> KJ-S</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline/asd_pikp.php" target="blank_"> PIK-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline/category_sec_view_asd.php" target="bbsres"> PIK-S</a>   
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_bdg/pri_category_sec_view_asd.php" target="bbsres"> BDG-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_bdg/sec_category_sec_view_asd.php" target="bbsres"> BDG-S</a>   
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_smg/pri_category_sec_view_asd.php" target="bbsres"> SMG-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_smg/sec_category_sec_view_asd.php" target="bbsres"> SMG-S</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_mlg/pri_category_sec_view_asd.php" target="bbsres"> MLG-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_mlg/sec_category_sec_view_asd.php" target="bbsres"> MLG-S</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_bpn/pri_category_sec_view_asd.php" target="bbsres"> BPN-P</a> 
+									 <a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/discipline_bpn/sec_category_sec_view_asd.php" target="bbsres"> BPN-S</a> 
+								</div>
+							</div>
+						</li> 
+				   
+				   <!---- last menu -->
+				 
+					<!---- last menu -->
+				  	   
+		
+									<li class="nav-item">
+                <a class="nav-link" href="https://zone.binabangsaschool.com/sve/index.php/">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>SV New</span></a>
+            </li>
+			             
+
+	  		 
+	  			<li class="nav-item" style="display:none;">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#teachers_trainee" aria-expanded="true" aria-controls="teachers_trainee">
+					<i class="fas fa-fw fa-folder"></i>
+					<span>Teachers Learning Portal</span>
+					</a>
+					<div id="teachers_trainee" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							
+							<a class="collapse-item" href="https://zone.binabangsaschool.com/ais_gen/teachers/sso_subject_trainee_principle/ded2d63a838126dd4a4d68fc256658a2" target="_BLANK" id="btn_view_trainee_teacher">
+								<span>Courses Available</span>
+							</a>
+							<a class="collapse-item" href="//student.binabangsaschool.com/inductions/students/sso_teacher_trainee_principle/aa4336f1a02226ed79cf7c7310553aea" target="_blank">
+								<span>Enrolled Courses</span>
+							</a>
+
+							<a class="collapse-item" data-fancybox="" href="https://www.youtube.com/watch?v=2zi3e9fLL-c&amp;autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0&amp;modestbranding=1" unhref="https://drive.google.com/file/d/1Hn2FCJIZuLQffa90bjRVwGiU3IOcUuk2/preview?usp=sharing&amp;autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0">
+								<span>Introduction</span>
+							</a>
+						</div>
+					</div>
+				</li>
+		    						
+						 <li class="nav-item">
+                <a class="nav-link" href="https://teachers.binabangsaschool.com/link_principals_asd.php?avsdjasgdjahdhas=Mjc=&amp;links=aHR0cHM6Ly90ZWFjaGVycy5iaW5hYmFuZ3Nhc2Nob29sLmNvbS9hcHRpdHVlX2Fzc2VzbWVudC5waHA=" target="blank_">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Aptitue Assesment View</span> </a>
+            </li>
+		 
+			  
+						<li class="nav-item">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#lockunlock" aria-expanded="true" aria-controls="lockunlock">
+								<i class="fas fa-fw fa-folder"></i>
+								<span>Lock &amp; Unlock </span>
+							</a>
+							<div id="lockunlock" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+								<div class="bg-white py-2 collapse-inner rounded">
+									<h6 class="collapse-header">Sub Menu:</h6>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/view_lock.php?dev=asd" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lock Mark">Lock Mark</a>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/view_lock_cca.php?dev=asd" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lock Mark">Lock CCA</a>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/view_lock_remarks.php?dev=asd" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lock Mark">Lock Remarks</a>
+									<a class="collapse-item" href="https://zone.binabangsaschool.com/ais/teachers/view_lock_prelim.php?dev=asd" target="blank_" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lock Mark">Lock Prelim</a>
+			 
+								
+								</div>
+							</div>
+			</li> 
+			
+			  
+			 <li class="nav-item">
+                <a class="nav-link" href="logout.php">
+                    <i class="fas fa-fw fa-power-off"></i>
+                    <span>Sign Out</span></a>
+            </li>
+  
+	   
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message 
+            <div class="sidebar-card">
+                <img class="sidebar-card-illustration mb-2" src="../../library/template/img/undraw_rocket.svg" alt="">
+                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+            </div>
+			-->
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+					 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" id="searchmenutags" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" autocomplete="off">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+					
+					
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                           
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+		-->
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="attendanceDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-calendar fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter"></span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="attendanceDropdown">
+                                <h6 class="dropdown-header">
+                                   Attendance Per campus
+                                </h6>
+                              
+							  				 		
+															<a class="dropdown-item d-flex align-items-center" href="#">
+																
+																<div class="font-weight-bold">
+																	<div class="text-truncate">No Notification</div> 
+																</div>
+															</a>		
+																						  
+                               
+                                <a class="dropdown-item text-center small text-gray-500" href="#"> </a>
+                            </div>
+                        </li>
+						
+						 <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                   Notification
+                                </h6>
+                               	
+															<a class="dropdown-item d-flex align-items-center" href="#">
+																
+																<div class="font-weight-bold">
+																	<div class="text-truncate">No Notification</div> 
+																</div>
+															</a>		
+													 
+							  
+                               
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Notification</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Alvin Miclat</span>
+                                <img class="img-profile rounded-circle" src="../../library/template_asset/img/logo_bbs.jpg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a class="dropdown-item" id="link_javascript" href="https://zone.binabangsaschool.com/ais_gen/staff/home?token=99f437d56c43aa49b37af39678cd04e7">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profiles
+                                </a>
+<!--
+                                
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+--> 
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+				
+		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800"></h1> 
+				</div> 
+		<iframe src="vmenu/form_leave_teacher.php" name="bbsres" id="bbsres" style="inoverflow:hidden;border: 0; width: 83%; height: 90%;display: block;position:absolute;"></iframe>                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright © BBS 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+<div id="myModal_email" class="modal fade " role="dialog">
+	<div class="modal-dialog  modal-md">
+
+    <!-- Modal content-->
+    <div id="modal_open_email" class="modal-content" style="padding:0 1.5% 0 1.5%;  ">
+    </div>
+
+  </div>
+</div>
+
+
+<div id="ModalComments" class="modal fade " role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Comments</h5>
+         
+      </div>
+      <div class="modal-body">
+      	<div class="row">
+            <div class="col-12">
+				Comments:  
+				<textarea name="commentsleave" id="commentsleave" labl="Comment AB" class="form-control" style="height:120px;" placeholder="Type Comment AB Here"> </textarea>
+				<input type="hidden" id="recleave" value="">
+				<input type="hidden" id="statleave" value="">
+            </div>
+      	</div>
+      </div>
+      <div class="modal-footer">
+	   <button class="btn btn-danger" type="button" data-dismiss="modal" id="cancelcommentleave">Cancel</button>
+		<button class="btn btn-secondary" type="button" data-dismiss="modal" id="submitcommentleave">Submit</button>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<div class="modal" tabindex="-1" id="modal_egpdocument">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Documents Exam Paper Guidelines</h5>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+      </div>
+      <div class="modal-body">
+      	<div class="row">
+            <div class="col-12" id="div_egpdocument">
+            </div>
+      	</div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../library/template/vendor/jquery/jquery.min.js"></script>
+	
+    <script src="../../library/template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="js/jquery.autocomplete.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="../../library/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../../library/template/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    
+	<script src="../../library/template_asset/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="js/loadingoverlay.js"></script>
+	<!-- fancy box -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+	<!-- fancy box -->
+    <script>
+	$(document).ready(function(){
+		$.LoadingOverlay("show");
+		setTimeout(function(){ $.LoadingOverlay("hide"); }, 1500);
+		//$("#sidebarToggle").click();
+		 $('[data-toggle="tooltip"]').tooltip();   
+		 $('#showmeeting').click();   
+		 $('#date_att').datepicker({
+		  autoclose: true,
+		  format: 'yyyy-mm-dd'
+		 })
+		 $('#tdate_att').datepicker({
+		  autoclose: true,
+		  format: 'yyyy-mm-dd'
+		 })
+		 $('.datepickers').datepicker({
+		  autoclose: true,
+		  format: 'yyyy-mm-dd'
+		 })
+		 getcalendar()
+		 
+		 function getcalendar(){
+			 //alert('asd')
+			 dataMap={};
+				$.post('../calendar/index_asd2.php', dataMap, function(data){
+				//	alert(data)
+					$('#showcalendar').html(data);
+				})
+		 }
+		 
+ 
+		 getcalendarcampus('2'); 
+		$(document).on('click', '[id^=showcalendarCampus_]', function(){
+			var campus = $(this).attr('rec');
+			getcalendarcampus(campus)
+		})
+		function getcalendarcampus(campus){
+			 dataMap={};
+			 dataMap['campus'] = campus; 
+				$.post('../calendar/index_campus.php', dataMap, function(data){
+			 
+					$('#showcalendarView').html(data);
+				})
+			
+		}
+	 
+		 
+		 
+		var arrayReturn = [];
+		$.ajax({
+		url: "getmenulist.php",
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+			for (var i = 0, len = data.length; i < len; i++) {
+				var id = (data[i].id).toString();
+				arrayReturn.push({'value' : id+'-'+data[i].name, 'data' : id, 'linkmenu' : data[i].linkmenu});
+			}
+			//send parse data to autocomplete function
+			loadSuggestions(arrayReturn);
+			console.log(arrayReturn);
+		}
+	});
+	function loadSuggestions(options) {
+		$('#searchmenutags').autocomplete({
+			lookup: options,
+			onSelect: function (suggestion) {
+				// alert(suggestion.value)
+				 var res = suggestion.value.split("-");
+			 
+				//$('#selected_option').html(suggestion.value);
+				clickthemenu(res[0])
+			}
+		});
+	} 
+	
+	
+	
+	function clickthemenu(id) {
+		//alert(id)
+		$("#clickmenu_"+id).click();
+		 
+	}	 
+	//$('#accordionSidebar'+).click();
+	//$('#accordionSidebar2').click();
+	$('#accordionSidebar').click();
+			
+	})
+	
+	
+	$(document).on('click', '[id^=clickmenu_]', function(){
+		var id_menu = $(this).attr('recid');
+		//alert(id_menu);
+		//location.replace('?rmenu='+id_menu)
+		window.location.href = '?rmenu='+id_menu;
+		
+	})
+	
+	
+	/*------------------------------------*/
+	 showlistzoomOngoiing();
+	$(document).on('change', '[id=campuszoom]', function(e){ showlistzoomOngoiing(); showlevelzoomlist(); showclasszoomlist();});
+	$(document).on('change', '[id=levelzoom]', function(e){ showlistzoomOngoiing(); showclasszoomlist();});
+	$(document).on('change', '[id=classzoom]', function(e){ showlistzoomOngoiing();}); 
+	
+	
+	function showlevelzoomlist(){ 
+		dataMap = {}; 
+		dataMap['campus'] = $("#campuszoom").val();  
+		$.post('view/showlevelzoomlist.php', dataMap, function(data){
+			$("#showlevelzoomlist").html(data); 
+		})
+	}
+	
+	function showclasszoomlist(){ 
+		dataMap = {}; 
+		dataMap['campus'] = $("#campuszoom").val(); 
+		dataMap['level'] = $("#levelzoom").val();  
+		$.post('view/showclasszoomlist.php', dataMap, function(data){
+			$("#showclasszoomlist").html(data); 
+		})
+	}
+	
+	function showlistzoomOngoiing(){ 
+		dataMap = {}; 
+		dataMap['campus'] = $("#campuszoom").val(); 
+		dataMap['level'] = $("#levelzoom").val(); 
+		dataMap['class'] = $("#classzoom").val(); 
+		$.post('view/showlistzoomOngoiing.php', dataMap, function(data){
+			$("#showlistzoomOngoiing").html(data); 
+		})
+	}
+	/*------------------------------------*/
+   
+
+	$(document).on('click', '[id=btn_view_trainee_teacher]', function(e){
+		e.preventDefault();
+		dataMap={}
+		url=$(this).attr('href')
+		$.post(url, dataMap, function(data){
+			$('.container-fluid').html(data)
+			$('html, body').animate({
+		        scrollTop: $(".container-fluid").offset().top-200
+		    }, 2000);
+		})
+	})
+
+
+	$(document).on('click touchstart', '[id=btn_co_teachingList]', function(e){
+		e.preventDefault();
+		dataMap={}
+		url=$(this).attr('href')
+		$.post(url, dataMap, function(data){
+			$('.container-fluid').html(data)
+			$('html, body').animate({
+		        scrollTop: $(".container-fluid").offset().top-200
+		    }, 2000);
+		})
+	})
+
+	$(document).on('click', '[id=tombol_join_trainee]', function(e){
+		e.preventDefault();
+		$('#myModal_email').modal('show');
+		dataMap={}
+		dataMap['username']=$(this).attr('username')
+		dataMap['subject_name']=$(this).attr('subject_name')
+		url=$(this).attr('href')
+		$.post(url, dataMap, function(data){
+			$('#modal_open_email').html(data)
+		})
+	})
+
+	$(document).on('click', '.scrollup', function(e){
+		window.scrollTo(0, 0);
+
+	});
+	$(document).on('click', '[id=cancle_join_trainee]', function(e){
+		e.preventDefault();
+		$('#myModal_email').modal('hide');
+	})
+	$(document).on('click', '[id=execute_join_trainee]', function(e){
+		e.preventDefault();
+		subject_name=$(this).attr('subject')
+		//konfirmasi=confirm("Are You Sure Want to Enroll ("+subject_name+")?")
+		//if( konfirmasi == false){
+		//	return;
+		//}
+		dataMap={}
+		dataMap=$("#form_enroll_trainee_teacher").serialize()
+		url=$("#form_enroll_trainee_teacher").attr('action')
+		$.LoadingOverlay("show");
+		setTimeout(function(){
+			$.LoadingOverlay("hide");
+		 }, 120000);
+		$.post(url, dataMap, function(data){
+			json=$.parseJSON(data)
+			if(json.sts==1){
+				alert("Enrollment Successfull")
+				$('#btn_view_trainee_teacher').click()
+			}
+			else if(json.sts==2){
+				alert("Failed, You already Enrolled!")
+			}
+			else if(json.sts==0){
+				alert("Failed, Something wrong!")
+			}
+			$.LoadingOverlay("hide");
+
+			$('#myModal_email').modal('hide');
+		})
+	})
+
+	$(document).on('click', 'a[id=link_javascript]', function(e){
+		e.preventDefault();
+		$('#form_param').attr('action', $(this).attr('href'));
+		$('#form_param').submit();
+		
+	})
+
+ 
+
+	 $(document).on('change','[id^="changestatusReqLeave_"]',function(e){
+	   
+	   var isi = $(this).val(); 
+	   var rec = $(this).attr('rec')
+	   dataMap = {}; 
+	   
+	  if(['4', '5', '1', '2', '3'].indexOf(isi) >= 0){ 
+		   $('#ModalComments').modal('show');
+		   setTimeout(function(){
+			$.LoadingOverlay("hide");
+				$("#recleave").val(rec);
+				$("#statleave").val(isi); 
+			}, 1500);
+	  }else{
+		 
+		  $.LoadingOverlay("show"); 
+		    dataMap['comment'] = ''; 
+			dataMap['status'] = $(this).val(); 
+			dataMap['rec'] = $(this).attr('rec'); 
+			dataMap['tipe'] = '1';  			
+			$.post('services/savestatusLeave.php', dataMap, function(response){ 
+				  json = $.parseJSON(response);
+				  if(json.statuss=="1"){ 
+					 $.LoadingOverlay("hide");
+				  }else{
+					  
+				  }
+			})
+			 
+	  }
+		 
+			
+  });
+  
+  
+   $(document).on('click','[id="submitcommentleave"]',function(e){
+	  $.LoadingOverlay("show"); 
+		    dataMap['comment'] = $("#commentsleave").val(); 
+			dataMap['status'] = $("#statleave").val();
+			dataMap['rec'] = $("#recleave").val(); 
+			dataMap['tipe'] = '1';  			
+			$.post('services/savestatusLeave.php', dataMap, function(response){ 
+				  json = $.parseJSON(response);
+				  if(json.statuss=="1"){  
+					// location.reload();
+				  } 
+				  $.LoadingOverlay("hide");
+			})
+ });  
+ 
+     $(document).on('click','[id="cancelcommentleave"]',function(e){ 
+			location.reload(true);
+   }); 
+  
+  /*
+  $(document).on('change','[id^="commentsleave_"]',function(e){
+	 
+		  $.LoadingOverlay("show");
+		  dataMap = {}; 
+			dataMap['comment'] = $(this).val(); 
+			dataMap['field'] = 'comments_principal'; 
+			dataMap['rec'] = $(this).attr('rec');  
+			dataMap['tipe'] = '2';	
+			$.post('services/savestatusLeave.php', dataMap, function(response){ 
+				  json = $.parseJSON(response);
+				  if(json.statuss=="1"){ 
+					 $.LoadingOverlay("hide");
+				  }else{
+					  
+				  }
+			})
+		
+	 
+  });	*/
+  
+	$(document).on('click', 'a[id=btn-egpdocuments]', function(e){
+		e.preventDefault();
+		dataMap={}
+		$('#modal_egpdocument').modal('show');
+		$.post('//zone.binabangsaschool.com/ais_gen/documents/egp', dataMap, function(data){
+			$('#div_egpdocument').html(data)
+		})
+		
+	})
+	 
+	</script>
+    <script src="../../library/template/vendor/chart.js/Chart.js"></script>
+	
+   	 
+    <!-- Page level custom scripts -->
+	
+    <script src="../../library/template/js/demo/chart-area-demo.js"></script>
+    <script src="../../library/template/js/demo/chart-pie-demo.js"></script> 
+	<script src="js/post_chart_new.js?version=1788341846"></script>
+
+	
+	<form id="form_param" name="form_param" action="" method="POST" target="_blank">
+		<input type="hidden" name="user_id" value="NTg2">
+		<input type="hidden" name="fullname" value="QWx2aW4gTWljbGF0">
+		<input type="hidden" name="campus" value="MA==">
+		<input type="hidden" name="campus_name" value="">
+		<input type="hidden" name="campus_code" value="">
+		<input type="hidden" name="user_type" value="2">
+		<input type="hidden" name="HOD" value="0">
+		<input type="hidden" name="as_code" value="0">
+	</form>
+
+
+
+
+ 
+
+ 
+ <div class="autocomplete-suggestions" style="position: absolute; display: none; max-height: 300px; z-index: 9999;"></div></body></html>
