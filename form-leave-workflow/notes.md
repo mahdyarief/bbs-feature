@@ -74,6 +74,7 @@ Capture awal halaman Admin `home.php?vmenu=form_leave_teacher&vname=Form Leave T
 | D-09 | Reject wajib komentar (EC-10) | TBD |
 | D-10 | `adminComment` vs `principalComment` terpisah (mengikuti legacy `commentsleave` vs `comments_principal`) | Disetujui — berdasarkan bukti legacy `leave_form.html:1233-1246` |
 | D-11 | Record soft-delete tidak bisa diubah statusnya (EC-12) | TBD |
+| D-12 | Penamaan modul diselaraskan dengan implementasi smartbag existing (`/v1/leaves`, entity `Leave`, `employeeId`, `ModulesTypeEnum.LEAVE`, `LeaveStatusEnum`, `attachmentFileId` uuid, `LeaveTypeEnum` numeric). DRAFT spec fase 1/2 memakai nama konseptual `TeacherLeave`; brief fase 2 kini memakai nama aktual smartbag. | Disetujui — hasil audit smartbag (Sep 1) |
 
 ## Analisis Varian Form (dari ais_legacy — tambahan untuk fase 2)
 
@@ -88,7 +89,7 @@ Capture awal halaman Admin `home.php?vmenu=form_leave_teacher&vname=Form Leave T
 
 - **Notifikasi** ke guru saat status berubah (email/push/in-app) — priority tinggi setelah fase 2.
 - **Auto-integrasi ke Attendance** — cuti `APPROVED_BY_PRINCIPAL` otomatis menandai hari absen guru sebagai "Leave" (bukan absent tanpa keterangan).
-- **History table** (`teacher_leave_status_log`) — riwayat lengkap setiap perubahan status (siapa, dari status apa, ke status apa, kapan, komentar).
+- **History table** (`leave_status_log`) — riwayat lengkap setiap perubahan status (siapa, dari status apa, ke status apa, kapan, komentar).
 - **Bulk action** — approve/reject multiple records sekaligus.
 - **Role HOD** — tambahan layer approval di Departemen (setelah Admin, sebelum Principal).
 - **Restore soft-deleted record** — Admin bisa mengembalikan record yang dihapus oleh guru.

@@ -1,16 +1,18 @@
-# Schema — Form Leave Workflow (Teacher Leave Status)
+# Schema — Form Leave Workflow (Status Approval)
 
-> Status: DRAFT — **EXTEND** schema fase 1 (`form-leave/schema.md`); tabel `teacher_leave` ditambah kolom status approval via ALTER TABLE.
-> Fase 1 sudah memiliki entitas `TeacherLeave` dengan kolom: `teacherId`, `campusId`, `dateFrom`, `dateTo`, `position`, `department`, `leaveType`, `reason`, `attachmentFileId`, `activeStatus`.
+> Status: DRAFT — **EXTEND** schema fase 1 (`form-leave/schema.md`); tabel `leave` ditambah kolom status approval via ALTER TABLE.
+> Fase 1 sudah memiliki entitas `Leave` (class `Leave` extends `BaseEntityWithDates`) dengan kolom: `employeeId`, `campusId`, `dateFrom`, `dateTo`, `position`, `department`, `leaveType`, `reason`, `attachmentFileId`, `activeStatus`.
 > Fase 2 menambahkan kolom berikut tanpa mengubah kolom existing.
 
-## Modified Entity: `TeacherLeave` (table `teacher_leave`)
+## Modified Entity: `Leave` (table `leave`)
 
-### Enum Baru: `TeacherLeaveStatusEnum`
+### Enum Baru: `LeaveStatusEnum`
+
+File ditempatkan di `src/types/enums/leave-status.ts` (mengikuti pola `LeaveTypeEnum` di `src/types/enums/leave-type.ts` — bukan di entities folder).
 
 ```ts
-// src/modules/teacher-leave/entities/teacher-leave-status.enum.ts
-export enum TeacherLeaveStatusEnum {
+// src/types/enums/leave-status.ts
+export enum LeaveStatusEnum {
   PENDING = 'PENDING',
   APPROVED_BY_ADMIN = 'APPROVED_BY_ADMIN',
   APPROVED_BY_PRINCIPAL = 'APPROVED_BY_PRINCIPAL',
@@ -18,7 +20,7 @@ export enum TeacherLeaveStatusEnum {
 }
 ```
 
-### Kolom Tambahan (ALTER TABLE)
+### Kolom Tambahan (ALTER TABLE `leave`)
 
 | Column | Type | Null | Default | Notes |
 |--------|------|------|---------|-------|
@@ -31,16 +33,18 @@ export enum TeacherLeaveStatusEnum {
 ### Entity TypeScript (extend fase 1)
 
 ```ts
-// src/modules/teacher-leave/entities/teacher-leave.entity.ts
+// src/modules/teacher-leave/entities/leave.entity.ts
 // — TAMBAHKAN properti berikut ke entity yang sudah ada dari fase 1 —
+
+import { LeaveStatusEnum } from 'src/types/enums/leave-status';
 
 @Column({
   name: 'leave_status',
   type: 'enum',
-  enum: TeacherLeaveStatusEnum,
-  default: TeacherLeaveStatusEnum.PENDING,
+  enum: LeaveStatusEnum,
+  default: LeaveStatusEnum.PENDING,
 })
-leaveStatus: TeacherLeaveStatusEnum;
+leaveStatus: LeaveStatusEnum;
 
 @Column({ name: 'admin_comment', type: 'text', nullable: true })
 adminComment: string | null;
@@ -62,23 +66,23 @@ statusChangedAt: string | null;
 
 ### Constraints & Index (tambahan)
 
-- **INDEX** `idx_teacher_leave_status` pada `(leave_status)` — filter/pencarian by status.
-- **INDEX** `idx_teacher_leave_status_changed_by` pada `(status_changed_by)` — audit/reporting.
+- **INDEX** via `@Index()` pada `(leave_status)` — filter/pencarian by status (mengikuti pola existing entity, nama index auto-generated).
+- **INDEX** via `@Index()` pada `(status_changed_by)` — audit/reporting.
 
 ### Diagram Entity (lengkap dengan fase 1)
 
 ```
-teacher_leave
+leave
 ├── id (PK, autoincrement)                    ← fase 1
-├── teacher_id (FK → employee.id, indexed)    ← fase 1
+├── employee_id (FK → employee.id, indexed)   ← fase 1
 ├── campus_id (FK → campus.id, indexed)       ← fase 1
 ├── date_from (date)                          ← fase 1
 ├── date_to (date)                            ← fase 1
 ├── position (varchar 100)                    ← fase 1
 ├── department (varchar 100, nullable)        ← fase 1
-├── leave_type (enum)                         ← fase 1
+├── leave_type (enum, numeric)                ← fase 1
 ├── reason (text)                             ← fase 1
-├── attachment_file_id (FK → file.id, nullable, indexed) ← fase 1
+├── attachment_file_id (uuid, FK → file.id, nullable, indexed) ← fase 1
 ├── active_status (enum ACTIVE/INACTIVE)      ← fase 1
 ├── leave_status (enum, default PENDING)      ← fase 2 [NEW]
 ├── admin_comment (text, nullable)            ← fase 2 [NEW]
@@ -92,14 +96,14 @@ teacher_leave
 
 ## Migrations
 
-- Generate: `npm run migration:generate --name=add-teacher-leave-status` (di `api_nest`, pakai `migration-source.ts`).
+- Generate: `npm run migration:generate --name=add-leave-status` (di `api_nest`, pakai `migration-source.ts`).
 - File migration ditaruh di `src/database/migrations/`.
-- Migrasi data: `UPDATE teacher_leave SET leave_status = 'PENDING' WHERE leave_status IS NULL;` (backfill untuk record existing dari fase 1).
+- Migrasi data: `UPDATE leave SET leave_status = 'PENDING' WHERE leave_status IS NULL;` (backfill untuk record existing dari fase 1).
 
 ## Catatan Desain
 
-1. **ALTER TABLE vs new table** — kolom ditambahkan ke tabel `teacher_leave` existing karena relasi 1:1 (satu leave punya satu status). Tidak perlu tabel status terpisah di fase 2.
+1. **ALTER TABLE vs new table** — kolom ditambahkan ke tabel `leave` existing karena relasi 1:1 (satu leave punya satu status). Tidak perlu tabel status terpisah di fase 2.
 2. **Status default PENDING** — record baru dari fase 1 (create) otomatis mendapat `PENDING` tanpa perlu ubah kode create. Record existing fase 1 juga backfill ke `PENDING`.
 3. **Komentar terpisah per role** — `adminComment` dan `principalComment` dipisahkan untuk mempertahankan jejak siapa berkata apa (mengikuti pola legacy `commentsleave` vs `comments_principal`).
-4. **Tidak ada history table** — hanya `statusChangedBy/At` terakhir. Jika diperlukan riwayat transisi, itu enhancement dengan tabel `teacher_leave_status_log` terpisah.
+4. **Tidak ada history table** — hanya `statusChangedBy/At` terakhir. Jika diperlukan riwayat transisi, itu enhancement dengan tabel `leave_status_log` terpisah.
 5. **Relasi status_changed_by** — opsional (nullable) karena record existing dari fase 1 belum punya `statusChangedBy`.
