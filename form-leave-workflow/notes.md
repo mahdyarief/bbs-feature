@@ -1,172 +1,66 @@
-# Notes — Form Leave Workflow (Status Approval)
+# Notes — Form Leave Workflow (Approval & Teacher Leave Management)
 
-> Status: DRAFT — open questions, decisions, discussion notes.
+> Status: APPROVED — diselaraskan langsung dengan fungsionalitas Principal Portal (`https://zone.binabangsaschool.com/ais/principals/home.php?vmenu=form_leave_teacher&vname=Form%20Leave%20Teacher`), capture `ais_legacy/principals_tool`, dan codebase `smartbag` (`api_nest` & `bbs`).
 
-## Open Questions
+---
 
-### NQ-03: Apakah perlu approval workflow (HOD/Principal)? — **TERJAWAB (ADA, dari analisis ais_legacy)**
+## Ringkasan Investigasi & Keputusan Kunci
 
-**Pertanyaan dari `form-leave/notes.md`:** Nama endpoint `savestatusLeave` (save **status** leave) + field `HOD`/`as_code` di varian Admin mengindikasikan ada konsep status/approval.
+### 1. Sumber dan Alur Modul Legacy
+- **Sumber Utama:** `https://zone.binabangsaschool.com/ais/principals/home.php?vmenu=form_leave_teacher&vname=Form%20Leave%20Teacher`
+- **Capture File:** `ais_legacy/principals_tool/leaves/approval_iframe.html` (100KB) dan `home_vmenu_form_leave_teacher.html` (52KB).
+- **Akses Role:** Di legacy berada pada Principal tools (misal akun `bbs_linawati`). Di arsitektur baru, diimplementasikan di **Teacher Portal (`client-teacher`)** pada menu **\"Form Leave Teacher\"** yang diproteksi menggunakan hook `usePrincipalOrHod` (`isPrincipalOrVp === true`).
+- **Akses Admin Portal (`client`):** Di Admin Portal modul ini disediakan sebagai **View Only** berdasarkan RBAC (`ModulesTypeEnum.LEAVE`, `ACLTypeEnum.READ`). Admin tidak melakukan perubahan status.
 
-**Jawaban dari analisis `ais_legacy`:**
+### 2. Nilai Dropdown Status (Sesuai `approval_iframe.html`)
+Pilihan status pada legacy dropdown (`select#changestatusReqLeave_[id]`):
+- `0` → `Pending` (`PENDING`)
+- `1` → `Approve ( unpaid leave )` (`APPROVED_UNPAID`)
+- `2` → `Approve ( paid leave )` (`APPROVED_PAID`)
+- `3` → `Decline` (`DECLINED`)
+- `6` → `Cancel` (`CANCELED`)
 
-| Bukti | Lokasi | Detail |
-|-------|--------|--------|
-| Dropdown status per record di daftar pengajuan | `bbs_tools/leave_form.html:836` (iframe `vmenu/form_leave_teacher.php`) | Setiap baris pengajuan punya dropdown status |
-| POST ke `savestatusLeave.php` dengan `{status, rec, tipe: '1'}` | `leave_form.html:1194-1212` | Handler JS ganti status |
-| POST ke `savestatusLeave.php` dengan `{comment, status, rec, tipe: '1'}` | `leave_form.html:1214-1231` | Handler `#submitcommentleave` — simpan komentar + status |
-| Blok di-comment out: `dataMap['field'] = 'comments_principal'; tipe: '2'` | `leave_form.html:1233-1246` | Indikasi komentar Principal terpisah |
-| `form_param` base64: `user_id`, `fullname`, `campus` | `leave_form.html:1275-1279` | Konteks reviewer |
-| Endpoint `savestatusLeave.php` dan `save_form_teacher_leave.php` | `principals_tool/endpoint_analysis.json` + `bbs_tools/endpoint_analysis.json` | Kedua endpoint terkonfirmasi ada |
+### 3. Aturan Pembatalan & Ordering Khusus (Cancel Behavior & Query Order)
+- Saat permohonan dibatalkan (Cancel Request), **data TIDAK DIHAPUS** (baik soft delete maupun hard delete, `activeStatus` tetap `ACTIVE = 1`).
+- Status permohonan diubah menjadi `CANCELED`.
+- Data permohonan dengan status `CANCELED` **selalu berada di urutan paling bawah (order paling bawah)** pada tabel frontend dan query backend.
+- Implementasi query SQL / TypeORM:
+  ```sql
+  ORDER BY (CASE WHEN leave.leave_status = 'CANCELED' THEN 1 ELSE 0 END) ASC, leave.created_at DESC
+  ```
 
-**Implikasi:** Approval workflow **harus ada** sebagai fitur lanjutan (`form-leave-workflow`). Fase 1 tetap create/list/soft delete tanpa ubah status. Fase 2 (feature ini) menambahkan status approval + komentar.
+### 4. Notifikasi Email Otomatis (Queue Bull `mailer` via AWS SES)
+- **Saat Pengiriman Baru (Submission):** Sistem mengirimkan notifikasi email dari pengirim (guru) ke alamat email Principal unit/campus terkait (`employee.email`).
+- **Saat Pergantian Status (Status Transition):** Setiap kali status diubah oleh Principal (Pending → Approve Paid/Unpaid, Decline, Cancel), notifikasi email otomatis dikirim ke guru pemohon memuat status baru dan catatan komentar peninjau.
+- Menggunakan Bull Queue `SEND_EMAIL` di `api_nest/src/modules/mailer/` dengan exponential backoff dan retry 3x.
 
-### NQ-05: Nilai status legacy di dropdown `vmenu/form_leave_teacher.php`? — **TERJAWAB (dari capture Principal POV `bbs_linawati`)**
+---
 
-**Sumber:** `principals_tool/leaves/approval_iframe.html` (100KB) — konten iframe `vmenu/form_leave_teacher.php` yang sebelumnya tidak tertangkap, kini berhasil di-capture dengan login Principal `bbs_linawati`.
+## Log Keputusan Desain
 
-**Nilai status legacy:**
+| # | Keputusan | Deskripsi & Justifikasi |
+|---|-----------|-------------------------|
+| D-01 | **Portal Peninjauan** | Menu peninjauan status ditempatkan di Teacher Portal (`client-teacher`) dengan hak akses Principal/VP (`usePrincipalOrHod`), bukan guru biasa. |
+| D-02 | **Admin Portal Mode** | Admin Portal (`client/`) beroperasi dalam mode **View Only** berbasis RBAC (`ModulesTypeEnum.LEAVE`, `ACLTypeEnum.READ`). |
+| D-03 | **Status Approval Enum** | Mengadopsi 5 status legacy: `PENDING`, `APPROVED_UNPAID`, `APPROVED_PAID`, `DECLINED`, `CANCELED`. |
+| D-04 | **Penanganan Pembatalan** | Pembatalan (`CANCELED`) tidak menghapus baris data. Data tetap disimpan utuh untuk kepentingan audit trail. |
+| D-05 | **Urutan Record Canceled** | Record dengan status `CANCELED` dipaksa selalu berada di bagian bawah list query (`ORDER BY CASE WHEN status='CANCELED' THEN 1 ELSE 0 END ASC, createdAt DESC`). |
+| D-06 | **Notifikasi Email 2 Arah** | Integrasi asinkron dengan modul mailer: Guru → Email Principal saat submit, Principal → Email Guru saat status berubah. |
+| D-07 | **Mandatory Comment** | Komentar/alasan wajib diisi saat peninjau memilih status `DECLINED` atau `CANCELED`. |
 
-| Value | Filter Label (baris 90) | Per-record Dropdown (baris 139–144) |
-|-------|------------------------|-------------------------------------|
-| `0` | Pending | Pending |
-| `1` | Approved (unpaid leave) by Principal | Approve (unpaid leave) |
-| `2` | Approved (paid leave) by Principal | Approve (paid leave) |
-| `3` | Decline by Principal | Decline |
-| `4` | Decline by AB | _(tidak ada di per-record dropdown)_ |
-| `5` | Approved by AB | _(tidak ada di per-record dropdown)_ |
-| `6` | Cancel Request | Cancel |
-| `7` | Unique Cases | _(tidak ada di per-record dropdown)_ |
+---
 
-**Nilai leave type legacy (baris 96):**
+## Referensi File Terkait di Codebase Smartbag
 
-| Value | Label |
-|-------|-------|
-| `1` | Sick L (病假) |
-| `3` | Maternity L (产假) |
-| `4` | Paternity L (陪产假) |
-| `5` | Unpaid L (无薪假) |
-| `6` | Other (其他) |
+### Backend (`api_nest`)
+- `src/modules/teacher-leave/leave.controller.ts` (Controller REST API)
+- `src/modules/teacher-leave/leave.service.ts` (Business logic, custom ordering, status mutation)
+- `src/modules/teacher-leave/entities/leave.entity.ts` (Entity TypeORM)
+- `src/types/enums/leave-status.ts` (Enum status permohonan cuti)
+- `src/modules/mailer/mailer.service.ts` & `mailer-queue.processor.ts` (Queue Bull email notification)
 
-**Implikasi untuk fase 2:**
-- Legacy punya **8 status** vs brief kita 4 (`PENDING`, `APPROVED_BY_ADMIN`, `APPROVED_BY_PRINCIPAL`, `REJECTED`). Perbedaan utama:
-  - Legacy membedakan **paid vs unpaid leave** dalam approval (`value 1` vs `2`) — brief kita tidak. Ini bisa jadi enhancement.
-  - Legacy punya **Cancel Request** (`value 6`) — brief kita tidak punya status cancel. Ini bisa jadi enhancement.
-  - Legacy punya **Unique Cases** (`value 7`) — tidak di-map ke brief kita.
-  - Legacy punya **Decline by Principal** (`3`) dan **Decline by AB** (`4`) terpisah — brief kita gabung jadi `REJECTED`. Ini sudah cukup karena `statusChangedBy` mencatat siapa yang reject.
-  - Legacy punya **Approved by AB** (`5`) — brief kita memakai `APPROVED_BY_ADMIN` (sama artinya, AB = Admin Besar / ASD).
-- **Rekomendasi tetap:** Fase 2 memakai 4-status enum (`PENDING`, `APPROVED_BY_ADMIN`, `APPROVED_BY_PRINCIPAL`, `REJECTED`). Paid/unpaid distinction, Cancel, dan Unique Cases sebagai enhancement di kemudian hari jika stakeholder butuh.
-- **Leave type values legacy** cocok dengan smartbag `LeaveTypeEnum` (SICK=1, MATERNITY=3→2 di smartbag, PATERNITY=4→3, UNPAID=5→4, OTHER=6→15). Mapping tidak 1:1 — perlu perhatian saat migrasi data legacy.
-
-### NQ-06: Siapa yang bisa mengubah status? Admin vs Principal vs HOD?
-
-Legacy menunjukkan dua role:
-- **Admin** (`tipe: '1'`, field `commentsleave`) — bisa ubah status + komentar Admin.
-- **Principal** (`tipe: '2'`, field `comments_principal` — di-comment out di legacy) — komentar Principal terpisah.
-
-**Yang belum jelas:**
-- Apakah HOD (Head of Department) juga punya wewenang? Legacy tidak menunjukkan HOD-specific handler.
-- Apakah Principal harus approve setelah Admin? Atau bisa langsung?
-- Apakah ada urutan wajib (Admin → Principal) atau bisa langsung Principal?
-
-**Rekomendasi:** Fase 2 mengadopsi urutan 2-step: `PENDING → APPROVED_BY_ADMIN → APPROVED_BY_PRINCIPAL` (dengan opsi reject di setiap tahap). Urutan ini bisa disesuaikan dengan konfirmasi stakeholder. Role HOD bisa ditambahkan di enhancement jika diperlukan.
-
-### NQ-07: Screenshot UI approval legacy — **TERJAWAB (capture sukses via login admin `bbs_mng`)**
-
-Capture awal halaman Admin `home.php?vmenu=form_leave_teacher&vname=Form Leave Teacher` **redirect ke halaman login** (file PNG 110KB = halaman login, bukan "View All Request") karena sesi tidak ter-autentikasi.
-
-**Koreksi:** Setelah login fresh dengan akun admin **`bbs_mng` / `NewBBS2025!`** (dari `bbs_tools/01_login_test.py:7-8` dan `06_probe_menu_leave.py:8-9`), halaman `home.php?vmenu=form_leave_teacher` **berhasil di-capture** dan menampilkan **UI approval asli**:
-
-- File: `ais_legacy/bbs_tools/approval_form_leave_teacher.png` (152KB) + `approval_form_leave_teacher.html` (98KB).
-- Isi: tabel daftar SEMUA pengajuan leave dengan kolom No, Campus, Date, Teacher, Position, Department, Type, Reason, Comment + filter "All Campus / All Status / All Type" + aksi View per row.
-- Data riil: Maria Tiarani (SMG-S, Mathematics), Narlita Garcia (SMG-PS, Preschool), Linawati Lauw (PIK-P, Principal), Stewart James Spiessens (HOD), Rashid Imran (BDG-S, Academics), Tri Afringgasari (SMG-S), dst.
-- Script: `capture_leave_approval.py` (login `POST /ais/asd/index.php` {user, pass}, lalu navigate ke `home.php?vmenu=form_leave_teacher`).
-- Screenshot ini sudah di-copy ke `features/form-leave-workflow/screenshots/admin-view-all-request.png` sebagai referensi engineer.
-
-**Koreksi lanjutan — modal komentar berhasil di-capture via interaksi:** Script `capture_comment_modal.py` login ulang, navigate ke `home.php?vmenu=form_leave_teacher`, lalu memicu `$('#ModalComments').modal('show')` via JS. Capture sukses:
-
-- File: `ais_legacy/bbs_tools/interact_modal_comments.png` (153KB) — modal "Comments" tampil di atas tabel approval, dengan label "Comments:" + textarea `commentsleave` (placeholder "Type Comment AB Here") + tombol Cancel/Submit.
-- File: `ais_legacy/bbs_tools/interact_iframe.html` (1.1MB) — konten iframe `vmenu/form_leave_teacher.php` (halaman daftar pengajuan lengkap) + `interact_shell.png` (shell dashboard).
-- Keduanya sudah di-copy ke `features/form-leave-workflow/screenshots/admin-comment-modal.png` + `admin-submission-list.html` sebagai referensi engineer.
-
-**Kesimpulan:** UI approval legacy kini punya referensi visual lengkap: (1) tabel daftar pengajuan + filter (admin-view-all-request.png), (2) modal komentar ASD/Admin `#ModalComments` + `commentsleave` (admin-comment-modal.png). Khusus **komentar Principal** (`comments_principal`, tipe '2') tetap hanya ada sebagai blok di-comment out di `leave_form.html:1233-1246` — belum di-capture visual karena di legacy di-nonaktifkan.
-
-## Keputusan yang Perlu Di-review
-
-| # | Keputusan | Status |
-|---|-----------|--------|
-| D-06 | Approval workflow sebagai feature terpisah (`form-leave-workflow`), bukan digabung dengan `form-leave` | Disetujui — lihat spec.md dan scope pemisahan fase 1 vs fase 2 |
-| D-07 | Scope campus: Admin/Principal hanya bisa ubah status leave guru di campus yang sama | TBD — lihat EC-11 |
-| D-08 | State machine: `PENDING → APPROVED_BY_ADMIN → APPROVED_BY_PRINCIPAL` + `PENDING/APPROVED_BY_ADMIN → REJECTED` | TBD — lihat EC-09 |
-| D-09 | Reject wajib komentar (EC-10) | TBD |
-| D-10 | `adminComment` vs `principalComment` terpisah (mengikuti legacy `commentsleave` vs `comments_principal`) | Disetujui — berdasarkan bukti legacy `leave_form.html:1233-1246` |
-| D-11 | Record soft-delete tidak bisa diubah statusnya (EC-12) | TBD |
-| D-12 | Penamaan modul diselaraskan dengan implementasi smartbag existing (`/v1/leaves`, entity `Leave`, `employeeId`, `ModulesTypeEnum.LEAVE`, `LeaveStatusEnum`, `attachmentFileId` uuid, `LeaveTypeEnum` numeric). DRAFT spec fase 1/2 memakai nama konseptual `TeacherLeave`; brief fase 2 kini memakai nama aktual smartbag. | Disetujui — hasil audit smartbag (Sep 1) |
-
-## Analisis Varian Form (dari ais_legacy — tambahan untuk fase 2)
-
-| POV | Temuan | Implikasi untuk fase 2 |
-|-----|--------|----------------------|
-| Admin POV (status) | `leave_form.html:1194-1212` — dropdown status per record, POST `{status, rec, tipe: '1'}` ke `savestatusLeave.php` | Frontend Admin Portal: tambah dropdown status + textarea komentar per record |
-| Admin POV (komentar) | `leave_form.html:1214-1231` — `#submitcommentleave` POST `{comment, status, rec, tipe: '1'}` | Komentar Admin disimpan di `adminComment` (tipe '1') |
-| Principal POV | `leave_form.html:1233-1246` — di-comment out, `tipe: '2'` untuk `comments_principal` | Komentar Principal disimpan di `principalComment` (tipe '2') — perlu di-uncomment di frontend baru |
-| Reviewer context | `leave_form.html:1275-1279` — `form_param` base64 `user_id`, `fullname`, `campus` | `statusChangedBy` diisi dari `req.user.id` — lebih bersih dari base64 |
-
-## Enhancement Ideas (di luar scope fase 2)
-
-- **Notifikasi** ke guru saat status berubah (email/push/in-app) — priority tinggi setelah fase 2.
-- **Auto-integrasi ke Attendance** — cuti `APPROVED_BY_PRINCIPAL` otomatis menandai hari absen guru sebagai "Leave" (bukan absent tanpa keterangan).
-- **History table** (`leave_status_log`) — riwayat lengkap setiap perubahan status (siapa, dari status apa, ke status apa, kapan, komentar).
-- **Bulk action** — approve/reject multiple records sekaligus.
-- **Role HOD** — tambahan layer approval di Departemen (setelah Admin, sebelum Principal).
-- **Restore soft-deleted record** — Admin bisa mengembalikan record yang dihapus oleh guru.
-- **Filter by status** di Admin Portal — filter Submission List berdasarkan status (Pending/Approved/Rejected).
-
-## Referensi Legacy (savestatusLeave.php)
-
-### Payload dari `leave_form.html:1194-1212` (ganti status)
-
-```javascript
-$.post('services/savestatusLeave.php', {
-  status: selectedStatus,  // nilai dari dropdown (belum diketahui)
-  rec: recordId,           // ID record leave
-  tipe: '1'                // '1' = Admin commentsleave
-});
-```
-
-### Payload dari `leave_form.html:1214-1231` (submit komentar + status)
-
-```javascript
-$.post('services/savestatusLeave.php', {
-  comment: commentText,    // isi textarea commentsleave
-  status: selectedStatus,  // nilai dari dropdown
-  rec: recordId,           // ID record leave
-  tipe: '1'                // '1' = Admin commentsleave
-});
-```
-
-### Blok Principal (di-comment out) `leave_form.html:1233-1246`
-
-```javascript
-// dataMap['field'] = 'comments_principal';
-// tipe: '2'
-```
-
-### form_param (base64) `leave_form.html:1275-1279`
-
-```html
-<form id="form_param">
-  <input name="user_id" value="NTg2">  <!-- base64 dari 586 -->
-  <input name="fullname" value="">
-  <input name="campus" value="">
-  <input name="campus_name" value="">
-</form>
-```
-
-## Referensi Konvensi Codebase
-
-Sama dengan fase 1 (`form-leave/notes.md`):
-- Backend: `api_nest` — `src/modules/teacher-leave/` (extend).
-- Frontend: `bbs/client` (Admin) + `bbs/client-teacher` (Teacher).
-- API: `makeApiRequestThunk` + `fromApi.js` + `useFromApi` — BUKAN axios.
-- UI: `bbs-client-common` + `@coreui/react` CDataTable.
+### Frontend (`bbs`)
+- `client-teacher/src/hooks/usePrincipalOrHod.js` (Guard role Principal & VP)
+- `client-teacher/src/containers/_nav.jsx` (Sub-menu \"Form Leave Teacher\")
+- `client-teacher/src/views/formLeaveTeacher/` (Halaman persetujuan & modal komentar Principal)
+- `client/src/views/formLeave/` (Halaman Admin View-Only dengan RBAC)

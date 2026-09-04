@@ -1,109 +1,193 @@
-# Schema — Form Leave Workflow (Status Approval)
+# Schema — Form Leave Workflow (Approval & Teacher Leave Management)
 
-> Status: DRAFT — **EXTEND** schema fase 1 (`form-leave/schema.md`); tabel `leave` ditambah kolom status approval via ALTER TABLE.
-> Fase 1 sudah memiliki entitas `Leave` (class `Leave` extends `BaseEntityWithDates`) dengan kolom: `employeeId`, `campusId`, `dateFrom`, `dateTo`, `position`, `department`, `leaveType`, `reason`, `attachmentFileId`, `activeStatus`.
-> Fase 2 menambahkan kolom berikut tanpa mengubah kolom existing.
+> Status: APPROVED — diselaraskan langsung dengan entitas eksisting di `api_nest/src/modules/teacher-leave/entities/leave.entity.ts`, alur Principal Portal (`ais_legacy/principals_tool`), dan modul mailer Bull Queue (`api_nest/src/modules/mailer/`).
+> Base entity `src/common/base.entity` menyediakan `id`, `createdAt`, `updatedAt`, `deletedAt` (soft delete).
 
 ## Modified Entity: `Leave` (table `leave`)
 
-### Enum Baru: `LeaveStatusEnum`
+Entitas utama permohonan izin/cuti guru. Pada fase workflow ini, kolom status, komentar review, dan audit trail peninjau ditambahkan ke tabel `leave`.
 
-File ditempatkan di `src/types/enums/leave-status.ts` (mengikuti pola `LeaveTypeEnum` di `src/types/enums/leave-type.ts` — bukan di entities folder).
+### Enum Status: `LeaveStatusEnum`
+
+Disimpan di `src/types/enums/leave-status.ts` (mengikuti konvensi penempatan enum smartbag).  
+Nilai enum merefleksikan dropdown status pada `ais_legacy/principals_tool/leaves/approval_iframe.html`:
+- `0` → `PENDING` (Pending)
+- `1` → `APPROVED_UNPAID` (Approve unpaid leave)
+- `2` → `APPROVED_PAID` (Approve paid leave)
+- `3` → `DECLINED` (Decline)
+- `6` → `CANCELED` (Cancel Request)
 
 ```ts
 // src/types/enums/leave-status.ts
 export enum LeaveStatusEnum {
   PENDING = 'PENDING',
-  APPROVED_BY_ADMIN = 'APPROVED_BY_ADMIN',
-  APPROVED_BY_PRINCIPAL = 'APPROVED_BY_PRINCIPAL',
-  REJECTED = 'REJECTED',
+  APPROVED_UNPAID = 'APPROVED_UNPAID',
+  APPROVED_PAID = 'APPROVED_PAID',
+  DECLINED = 'DECLINED',
+  CANCELED = 'CANCELED',
 }
 ```
 
-### Kolom Tambahan (ALTER TABLE `leave`)
+### Kolom Tabel `leave` (Schema Update)
 
-| Column | Type | Null | Default | Notes |
-|--------|------|------|---------|-------|
-| `leave_status` | enum(PENDING, APPROVED_BY_ADMIN, APPROVED_BY_PRINCIPAL, REJECTED) | no | `PENDING` | Default untuk record baru dan existing (backfill) |
-| `admin_comment` | text | yes | null | Komentar Admin (tipe '1' analog `commentsleave`) |
-| `principal_comment` | text | yes | null | Komentar Principal (tipe '2' analog `comments_principal`) |
-| `status_changed_by` | int FK → employee.id | yes | null | User id yang terakhir mengubah status |
-| `status_changed_at` | timestamptz | yes | null | Timestamp terakhir status diubah |
+| Column | Type | Null | Default | Deskripsi |
+|--------|------|------|---------|-----------|
+| `id` | int PK | no | autoincrement | Primary key |
+| `employee_id` | int FK → employee.id | no | | ID guru pemohon (indexed) |
+| `campus_id` | int FK → campus.id | no | | ID campus sekolah (indexed) |
+| `date_from` | date | no | | Tanggal mulai cuti |
+| `date_to` | date | no | | Tanggal selesai cuti |
+| `position` | varchar(100) | no | | Posisi/jabatan guru |
+| `department` | varchar(100) | yes | null | Departemen akademik guru |
+| `leave_type` | enum(LeaveTypeEnum) | no | | Jenis cuti (SICK=1, MATERNITY=2, PATERNITY=3, UNPAID=4, OTHER=15) |
+| `reason` | text | no | | Alasan pengajuan cuti |
+| `attachment_file_id` | uuid FK → file.id | yes | null | ID UUID dokumen lampiran (surat dokter/bukti) |
+| `active_status` | enum(StatusTypeEnum) | no | ACTIVE (1) | Status aktif record (tidak diubah saat CANCELED) |
+| `leave_status` | enum(LeaveStatusEnum) | no | PENDING | Status persetujuan cuti (`PENDING`, `APPROVED_UNPAID`, `APPROVED_PAID`, `DECLINED`, `CANCELED`) |
+| `reviewer_comment` | text | yes | null | Catatan feedback/komentar review dari Principal |
+| `status_changed_by` | int FK → employee.id | yes | null | ID pegawai (Principal) yang memperbarui status |
+| `status_changed_at` | timestamptz | yes | null | Waktu saat status diperbarui |
+| `created_at` / `updated_at` / `deleted_at` | timestamptz | | | Timestamps audit dari `BaseEntityWithDates` |
 
-### Entity TypeScript (extend fase 1)
+### Definisi Entity TypeScript (`leave.entity.ts`)
 
 ```ts
 // src/modules/teacher-leave/entities/leave.entity.ts
-// — TAMBAHKAN properti berikut ke entity yang sudah ada dari fase 1 —
-
+import { LeaveTypeEnum } from 'src/types/enums/leave-type';
 import { LeaveStatusEnum } from 'src/types/enums/leave-status';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  Relation,
+} from 'typeorm';
+import { BaseEntityWithDates } from '../../../common/base.entity';
+import { StatusTypeEnum } from '../../../types/enums';
+import { Campus } from '../../campus/entities/campus.entity';
+import { Employee } from '../../employee/entities/employee.entity';
+import { File } from '../../file/entities/file.entity';
 
-@Column({
-  name: 'leave_status',
-  type: 'enum',
-  enum: LeaveStatusEnum,
-  default: LeaveStatusEnum.PENDING,
+@Entity({
+  orderBy: {
+    createdAt: 'DESC',
+  },
 })
-leaveStatus: LeaveStatusEnum;
+export class Leave extends BaseEntityWithDates {
+  @Index()
+  @Column({ name: 'employee_id' })
+  employeeId: number;
 
-@Column({ name: 'admin_comment', type: 'text', nullable: true })
-adminComment: string | null;
+  @ManyToOne(() => Employee, (employee) => employee.leaves)
+  @JoinColumn({ name: 'employee_id' })
+  employee: Relation<Employee>;
 
-@Column({ name: 'principal_comment', type: 'text', nullable: true })
-principalComment: string | null;
+  @Index()
+  @Column({ name: 'campus_id' })
+  campusId: number;
 
-@Index()
-@Column({ name: 'status_changed_by', type: 'int', nullable: true })
-statusChangedBy: number | null;
+  @ManyToOne(() => Campus, (campus) => campus.leaves)
+  @JoinColumn({ name: 'campus_id' })
+  campus: Relation<Campus>;
 
-@ManyToOne(() => Employee, { nullable: true })
-@JoinColumn({ name: 'status_changed_by' })
-statusChangedByUser: Relation<Employee>;
+  @Column({ name: 'date_from', type: 'date' })
+  dateFrom: string;
 
-@Column({ name: 'status_changed_at', type: 'timestamptz', nullable: true })
-statusChangedAt: string | null;
+  @Column({ name: 'date_to', type: 'date' })
+  dateTo: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  position: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  department: string | null;
+
+  @Column({ name: 'leave_type', type: 'enum', enum: LeaveTypeEnum })
+  leaveType: LeaveTypeEnum;
+
+  @Column({ type: 'text' })
+  reason: string;
+
+  @Index()
+  @Column({ name: 'attachment_file_id', type: 'uuid', nullable: true })
+  attachmentFileId: string | null;
+
+  @ManyToOne(() => File, { nullable: true })
+  @JoinColumn({ name: 'attachment_file_id' })
+  attachmentFile: Relation<File>;
+
+  @Column({
+    name: 'active_status',
+    type: 'enum',
+    enum: StatusTypeEnum,
+    default: StatusTypeEnum.ACTIVE,
+  })
+  activeStatus: StatusTypeEnum;
+
+  @Index()
+  @Column({
+    name: 'leave_status',
+    type: 'enum',
+    enum: LeaveStatusEnum,
+    default: LeaveStatusEnum.PENDING,
+  })
+  leaveStatus: LeaveStatusEnum;
+
+  @Column({ name: 'reviewer_comment', type: 'text', nullable: true })
+  reviewerComment: string | null;
+
+  @Index()
+  @Column({ name: 'status_changed_by', type: 'int', nullable: true })
+  statusChangedBy: number | null;
+
+  @ManyToOne(() => Employee, { nullable: true })
+  @JoinColumn({ name: 'status_changed_by' })
+  statusChangedByUser: Relation<Employee>;
+
+  @Column({ name: 'status_changed_at', type: 'timestamptz', nullable: true })
+  statusChangedAt: string | null;
+}
 ```
 
-### Constraints & Index (tambahan)
+---
 
-- **INDEX** via `@Index()` pada `(leave_status)` — filter/pencarian by status (mengikuti pola existing entity, nama index auto-generated).
-- **INDEX** via `@Index()` pada `(status_changed_by)` — audit/reporting.
+## Aturan Query Ordering Khusus (Record Canceled Paling Bawah)
 
-### Diagram Entity (lengkap dengan fase 1)
+Sesuai requirement bisnis: record yang dibatalkan (`CANCELED`) **tidak dihapus** dari database, melainkan tetap tersimpan dan selalu berada pada **urutan paling bawah (order paling bawah)** dalam daftar tampilan dan response endpoint `findAll`.
 
+### Implementasi QueryBuilder pada `LeaveService`:
+
+```ts
+const queryBuilder = Leave.createQueryBuilder('leave')
+  .leftJoinAndSelect('leave.employee', 'employee')
+  .leftJoinAndSelect('leave.attachmentFile', 'attachmentFile')
+  .leftJoinAndSelect('leave.statusChangedByUser', 'statusChangedByUser')
+  .where('leave.activeStatus = :activeStatus', { activeStatus: StatusTypeEnum.ACTIVE })
+  .orderBy(`CASE WHEN leave.leave_status = '${LeaveStatusEnum.CANCELED}' THEN 1 ELSE 0 END`, 'ASC')
+  .addOrderBy('leave.createdAt', 'DESC');
 ```
-leave
-├── id (PK, autoincrement)                    ← fase 1
-├── employee_id (FK → employee.id, indexed)   ← fase 1
-├── campus_id (FK → campus.id, indexed)       ← fase 1
-├── date_from (date)                          ← fase 1
-├── date_to (date)                            ← fase 1
-├── position (varchar 100)                    ← fase 1
-├── department (varchar 100, nullable)        ← fase 1
-├── leave_type (enum, numeric)                ← fase 1
-├── reason (text)                             ← fase 1
-├── attachment_file_id (uuid, FK → file.id, nullable, indexed) ← fase 1
-├── active_status (enum ACTIVE/INACTIVE)      ← fase 1
-├── leave_status (enum, default PENDING)      ← fase 2 [NEW]
-├── admin_comment (text, nullable)            ← fase 2 [NEW]
-├── principal_comment (text, nullable)        ← fase 2 [NEW]
-├── status_changed_by (FK → employee.id, nullable, indexed) ← fase 2 [NEW]
-├── status_changed_at (timestamptz, nullable) ← fase 2 [NEW]
-├── created_at (timestamptz)                  ← BaseEntityWithDates
-├── updated_at (timestamptz)                  ← BaseEntityWithDates
-└── deleted_at (timestamptz, nullable)        ← BaseEntityWithDates
-```
+
+---
+
+## Integrasi Email Notification Schema & Types
+
+Terhubung langsung dengan Bull Queue processor di `api_nest/src/modules/mailer/`:
+
+1. **Queue Name:** `SEND_EMAIL`
+2. **Process Types Baru:**
+   - `LEAVE_SUBMITTED_NOTIFICATION`:
+     - Recipient: Email Principal/VP unit bersangkutan (`employee.email`)
+     - Subject: `[AIS Leave Notification] New Teacher Leave Request - {Teacher Name}`
+     - Body Context: Nama guru, unit/campus, tanggal cuti, jenis cuti, alasan.
+   - `LEAVE_STATUS_CHANGED_NOTIFICATION`:
+     - Recipient: Email guru pemohon (`employee.email`)
+     - Subject: `[AIS Leave Notification] Teacher Leave Request Status Updated - {Status}`
+     - Body Context: Nama guru, tanggal cuti, jenis cuti, status baru (`Approved Paid / Unpaid / Declined / Canceled`), catatan reviewer/Principal.
+
+---
 
 ## Migrations
 
-- Generate: `npm run migration:generate --name=add-leave-status` (di `api_nest`, pakai `migration-source.ts`).
-- File migration ditaruh di `src/database/migrations/`.
-- Migrasi data: `UPDATE leave SET leave_status = 'PENDING' WHERE leave_status IS NULL;` (backfill untuk record existing dari fase 1).
-
-## Catatan Desain
-
-1. **ALTER TABLE vs new table** — kolom ditambahkan ke tabel `leave` existing karena relasi 1:1 (satu leave punya satu status). Tidak perlu tabel status terpisah di fase 2.
-2. **Status default PENDING** — record baru dari fase 1 (create) otomatis mendapat `PENDING` tanpa perlu ubah kode create. Record existing fase 1 juga backfill ke `PENDING`.
-3. **Komentar terpisah per role** — `adminComment` dan `principalComment` dipisahkan untuk mempertahankan jejak siapa berkata apa (mengikuti pola legacy `commentsleave` vs `comments_principal`).
-4. **Tidak ada history table** — hanya `statusChangedBy/At` terakhir. Jika diperlukan riwayat transisi, itu enhancement dengan tabel `leave_status_log` terpisah.
-5. **Relasi status_changed_by** — opsional (nullable) karena record existing dari fase 1 belum punya `statusChangedBy`.
+- Generate: `npm run migration:generate --name=add-leave-status-workflow`
+- Data backfill: `UPDATE leave SET leave_status = 'PENDING' WHERE leave_status IS NULL;`
