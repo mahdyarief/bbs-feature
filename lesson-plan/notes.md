@@ -26,6 +26,8 @@ Modul baru butuh entri baru di `src/types/enums` (`ModulesTypeEnum.LESSON_PLAN`)
 | D-03 | Soft delete via `activeStatus` (bukan `deletedAt`) | Mengikuti pola modul `lesson` |
 | D-04 | Nama modul `lesson-plan` (hyphen) untuk membedakan dari `lesson` (LESSON_BUILDER) | Disetujui |
 | D-05 | **Dual portal**: implementasi di Teacher Portal (`client-teacher`, pengguna utama) + Admin Portal (`client/`, mirroring — admin bantu perubahan atas nama guru, permission `LESSON_PLAN_MANAGE`) | Disetujui — lihat spec.md "Dual Portal (Mirroring)" |
+| D-06 | **Sub-Menu Lesson Plan Viewer**: Terdedikasi di Teacher Portal (`client-teacher`), akses terbatas via `usePrincipalOrHod` untuk HOD & Principal memberikan review comments (mengadopsi flow Principal Portal) | Disetujui |
+| D-07 | **Multi-File Upload & Auto-Renaming**: Format baku `[CATEGORY] - [Topic] - Term [Term] - Week [Week] - [Counter].[ext]` untuk PPT, PDF, dan Video | Disetujui |
 
 ## Enhancement Ideas (di luar scope fase 1)
 

@@ -105,3 +105,68 @@
 | (B) Blokir edit jika ada komentar | Guru harus minta HOD hapus komentar dulu — terlalu restriktif. |
 
 **Decision:** _TBD_ — rekomendasi: **(A)**. Komentar melekat pada `lesson_plan_id`, bukan pada nilai header; edit header tidak memutus relasi.
+
+---
+
+## EC-09: Upload file materi melebihi ukuran atau ekstensi tidak didukung
+
+**Scenario:** Guru mengunggah file materi pada bagian Material / Resources (Power Point, PDF, Video) dengan ukuran melebihi batas atau ekstensi di luar format yang diizinkan (misal `.exe`, `.zip`).
+
+| Opsi | Behavior |
+|------|----------|
+| (A) Tolak dengan 400 Validation Error | Filter pada Multer & Service menolak file sebelum diproses, kembalikan pesan: "File size exceeds limit" atau "Unsupported file format. Allowed formats: PDF (.pdf), PPT (.ppt, .pptx, .key), Video (.mp4, .3gp, .avi, .flv)". |
+| (B) Kompresi otomatis di backend | Mencoba kompres file secara asinkron — membutuhkan resource komputasi tinggi dan kompleksitas transcode video. |
+
+**Decision:** _TBD_ — rekomendasi: **(A)**. Konsisten dengan batasan teknis upload file BBS dan keamanan server.
+
+---
+
+## EC-10: Pengisian Video Material (File Upload vs Link URL)
+
+**Scenario:** Di bagian Material / Resources untuk Video, form menyediakan opsi upload file (`video_material[]`) ATAU tautan URL (`videolink_material`). Guru mengisi keduanya atau hanya salah satunya.
+
+| Opsi | Behavior |
+|------|----------|
+| (A) Izinkan keduanya tersimpan | URL tersimpan di field teks/serialized array dan file tersimpan sebagai lampiran materi — guru fleksibel melampirkan video lokal sekaligus tautan YouTube/eksternal. |
+| (B) Paksa salah satu (mutually exclusive) | Jika file diunggah, input link dikosongkan/dinonaktifkan dan sebaliknya. |
+
+**Decision:** _TBD_ — rekomendasi: **(A)**. Mengikuti perilaku form legacy di mana input file dan input teks URL tidak saling mengunci.
+
+---
+
+## EC-11: Multiple files pada kategori material yang sama
+
+**Scenario:** Guru mengunggah lebih dari 1 file pada field material yang sama (misal memilih 2 file PDF lembar kerja via input `pdf_material[]`).
+
+| Opsi | Behavior |
+|------|----------|
+| (A) Izinkan multiple files | Form legacy menggunakan `<input name="...[]" type="file" multiple>`, sehingga mendukung pengunggahan banyak file sekaligus untuk kategori materi yang sama. |
+| (B) Batasi hanya 1 file per kategori | Hanya menerima single file per kategori material — membatasi guru yang memiliki lebih dari satu slide/handout. |
+
+**Decision:** _TBD_ — rekomendasi: **(A)**. Sesuai langsung dengan markup legacy `create2.html` yang menggunakan input file array `multiple`.
+
+---
+
+## EC-12: Akses Sub-Menu Lesson Plan Viewer oleh Guru Biasa
+
+**Scenario:** Guru biasa (non-HOD dan non-Principal) mencoba mengakses sub-menu Lesson Plan Viewer melalui URL langsung `/lesson-plan-viewer`.
+
+| Opsi | Behavior |
+|------|----------|
+| (A) Tolak dengan 403 Forbidden / Redirect 404 | Frontend menggunakan guard hook `usePrincipalOrHod`. Jika false, redirect ke `/dashboard` atau `/lesson-plan`. Backend endpoint `/v1/lesson-plans/viewer` memvalidasi role reviewer HOD/Principal dan mengembalikan error 403 jika user tidak berhak. |
+| (B) Izinkan tapi hanya lihat lesson plan sendiri | Menu tetap terbuka tapi hanya menampilkan data guru tersebut — membingungkan karena fungsi menu viewer adalah supervisi tim. |
+
+**Decision:** _TBD_ — rekomendasi: **(A)**. Sub-menu Lesson Plan Viewer ditujukan khusus untuk supervisi kepala departemen dan kepala sekolah, sehingga harus diproteksi ketat baik di frontend UI/navigasi maupun di backend guard.
+
+---
+
+## EC-13: Penomoran Counter Auto-Rename File saat Upload Bertahap
+
+**Scenario:** Guru mengunggah 2 file PPT pertama (Counter 01, 02), kemudian di lain waktu mengunggah 1 file PPT tambahan pada lesson plan yang sama.
+
+| Opsi | Behavior |
+|------|----------|
+| (A) Hitung counter berdasarkan file eksisting | Server menghitung `MAX(counter_number)` untuk `(lesson_plan_id, category)` terkait, sehingga file baru otomatis mendapatkan counter berikutnya (`03`), menghasilkan `PPT - [Topic] - Term [Term] - Week [Week] - 03.pptx`. |
+| (B) Reset counter ke 01 dan timpa file lama | Menimpa file lama dengan counter sama — menyebabkan risiko hilangnya dokumen terdahulu. |
+
+**Decision:** _TBD_ — rekomendasi: **(A)**. Konsisten dengan format penamaan multi-file `PPT/PDF/VIDEO - [Topic] - Term [Term] - Week [Week] - [Counter]` tanpa risiko overwrite file yang sudah tersimpan.

@@ -1,206 +1,426 @@
 # API Contract — Lesson Plan
 
-> Status: DRAFT — mengikuti konvensi `api_nest` (NestJS 10, `@Controller({ version: '1' })`, response wrapper `{ data }`).
-> Semua endpoint memerlukan JWT Bearer token (global `JwtAuthGuard`). Permission di-enforce via `@CheckPermissions` dengan subject `ModulesTypeEnum.LESSON_PLAN` (baru, perlu ditambahkan ke `src/types/enums` + ability di `src/modules/casl/casl-ability.factory.ts`).
+> Status: APPROVED — diselaraskan langsung dengan implementasi backend `api_nest` (`src/modules/lesson-plan/`, NestJS 10, `@Controller({ version: '1', path: 'lesson-plans' })`, response wrapper `{ data }`).
+> Semua endpoint memerlukan JWT Bearer token (global `JwtAuthGuard`). Permission di-enforce via `@CheckPermissions` dengan subject `ModulesTypeEnum.LESSON_PLAN`.
 > **Base path:** global prefix `api` → URL lengkap `/api/v1/lesson-plans`.
-> **Dual portal:** endpoint yang sama dikonsumsi dua portal — Teacher Portal (scope `req.user.id`, milik guru) dan Admin Portal (scope campus, admin punya permission `LESSON_PLAN_MANAGE` untuk perbantuan perubahan atas nama guru).
+> **Dual portal:** endpoint yang sama dikonsumsi dua portal — Teacher Portal (`client-teacher`) dan Admin Portal (`client`).
 
-## Konvensi Response
+---
 
-- Sukses (single): `{ "data": {...} }`
-- Sukses (list): `{ "data": [...], "count": number, "meta": PageMetaDto }` — `PageMetaDto` dari `src/common/dto/page-meta.dto`; query filter extends `PageOptionsDto` (`page`, `pageSize`, `order`, `sortBy`, `relations`, `query`).
-- Error: `HttpException` standar NestJS (`src/errors` / `src/filters`).
+## Ringkasan Endpoint
 
-## Endpoint Detail
+| Method | Endpoint | Deskripsi | Permission |
+|--------|----------|-----------|------------|
+| `GET` | `/v1/lesson-plans` | List lesson plan milik guru (paginated + filter AY, class, term, week) | `READ` |
+| `POST` | `/v1/lesson-plans` | Create lesson plan baru (header + detail form) | `CREATE` |
+| `GET` | `/v1/lesson-plans/:id` | Detail lengkap lesson plan (termasuk detail, material files, dan review comments) | `READ` |
+| `PUT` | `/v1/lesson-plans/:id` | Update seluruh isi lesson plan (header & detail form) | `UPDATE` |
+| `PATCH` | `/v1/lesson-plans/:id/header` | Update cepat header saja (topic, term, week, classSubjectId) | `UPDATE` |
+| `DELETE` | `/v1/lesson-plans/:id` | Soft delete lesson plan (ubah activeStatus ke 0) | `DELETE` |
+| `POST` | `/v1/lesson-plans/:id/files` | Multi-file upload materi pembelajaran (PPT, PDF, VIDEO) dengan auto-renaming | `UPDATE` |
+| `DELETE` | `/v1/lesson-plans/:id/files/:fileId` | Hapus file lampiran materi pembelajaran | `DELETE` |
+| `POST` | `/v1/lesson-plans/:id/copy` | Copy lesson plan ke target AY dan Class (`SubjectYear`) | `CREATE` |
+| `GET` | `/v1/lesson-plans/library` | Lesson Plan Library (semua guru per campus, filter AY, subject, classroom, term, week) | `READ` |
+| `GET` | `/v1/lesson-plans/library/classrooms` | Dropdown classroom filter untuk library | `READ` |
+| `GET` | `/v1/lesson-plans/library/subjects` | Dropdown subject filter untuk library | `READ` |
+| `GET` | `/v1/lesson-plans/viewer` | Sub-menu Lesson Plan Viewer khusus HOD & Principal (list rencana ajar guru lintas kelas/campus) | `READ` |
+| `POST` | `/v1/lesson-plans/:id/comments` | Tambah / update catatan review komentar HOD atau Principal | `CREATE` / `UPDATE` |
+| `GET` | `/v1/lesson-plans/no-submission` | Monitoring daftar guru yang belum submit lesson plan per term & week | `READ` |
 
-### 1. GET /v1/lesson-plans — List lesson plan milik guru (paginated)
+---
 
-**Query params (GetLessonPlansDto):**
+## 1. POST /v1/lesson-plans — Create Lesson Plan
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `ay` | int | no | Academic year id (contoh: 27 = 2026/2027) |
-| `classSubjectId` | int | no | Filter kelas/subject yang diampu |
-| `term` | int | no | 1-4 |
-| `week` | int | no | 1-40 |
-| `page` | int | no | Default 1 |
-| `pageSize` | int | no | Default 10 (dari `PageOptionsDto`) |
+Menyimpan rencana pembelajaran baru beserta seluruh komponen form `create2.php`.
 
-**Response 200:**
-```json
-{
-  "data": [
-    {
-      "id": 102260,
-      "topic": "Rate of Reactions",
-      "term": 1,
-      "week": 3,
-      "teacherId": 21046,
-      "teacherName": "Herlina Susanti",
-      "classSubjectId": 38103,
-      "className": "Sec 4 Unity",
-      "subjectName": "Chemistry",
-      "levelName": "Sec 4",
-      "academicYearId": 27,
-      "createdAt": "2026-08-26T09:00:00.000Z",
-      "updatedAt": "2026-08-26T09:00:00.000Z"
-    }
-  ],
-  "count": 12,
-  "meta": { "page": 1, "pageSize": 10, "itemCount": 10, "pageCount": 2, "hasPreviousPage": false, "hasNextPage": true }
-}
-```
-
-### 2. POST /v1/lesson-plans — Buat lesson plan
-
-**Body (CreateLessonPlanDto):**
+### Request Body (`CreateLessonPlanDto`):
 
 ```json
 {
-  "classSubjectId": 38103,
   "academicYearId": 27,
+  "classSubjectId": 38103,
   "term": 1,
   "week": 3,
-  "topic": "Rate of Reactions",
-  "mainObjectives": "Understand factors affecting rate of reaction (from SOW)",
-  "higherOrderObjectives": "Evaluate collision theory in real scenarios",
-  "pedagogy": ["lecture", "Group Discussion"],
-  "materialResources": ["Textbook Ch.7", "Worksheet 7.2", "Video: collision theory"],
-  "activities": "2 periods (Monday) / 20 min intro / 40 min experiment demo",
-  "assessmentBefore": ["Questioning"],
-  "assessmentDuring": ["Observation", "Questioning", "Discussion"],
-  "assessmentAfter": ["Short quiz", "Discussion", "Peer/self assessment"],
-  "assignment": "Worksheet 7.3 due next week",
-  "reflection": ""
+  "topic": "Chemical Reactions & Rates",
+  "teacherId": 21046,
+  "mainObjectives": "Students will understand reaction rates and collision theory as outlined in SOW Unit 4.",
+  "higherOrderObjectives": "Evaluate experimental data to deduce the rate law and activation energy.",
+  "pedagogy": [
+    "lecture",
+    "Group Discussion",
+    "Problem based learning",
+    "Kagan Cooperative Learning"
+  ],
+  "materialResources": [
+    "Power Point",
+    "Pdf",
+    "Video",
+    "videolink: https://www.youtube.com/watch?v=example123",
+    "Teachers demo",
+    "Models ( Hands on material )",
+    "website: https://chemguide.co.uk/physical/basicrates.html",
+    "others: Lab glassware: 50ml burettes and HCl 0.1M"
+  ],
+  "activities": "<p>1. Starter (10 min): Short quiz on previous stoichiometry topic.<br>2. Main (50 min): Lab demonstration of magnesium ribbon in HCl.<br>3. Plenary (20 min): Group discussion and exit ticket.</p>",
+  "assessmentBefore": [
+    "Short Quiz",
+    "Questioning"
+  ],
+  "assessmentDuring": [
+    "Observation",
+    "Questioning",
+    "Discussion",
+    "Peer / self assessment",
+    "Individual whiteboard"
+  ],
+  "assessmentAfter": [
+    "Short quiz",
+    "Games",
+    "Discussion",
+    "Peer / self assessment",
+    "Test"
+  ],
+  "assignment": "{\"classwork\":\"Worksheet 4.1 Questions 1 to 5\",\"homework\":\"Read textbook pages 102-108 and answer summary review\",\"labReport\":\"Full formal lab report on Reaction Kinetics\",\"project\":\"\"}",
+  "reflection": "Strategy was engaging; students grasped collision theory well. Next session will incorporate more time for student calculations."
 }
 ```
 
-**Catatan:** `teacherId` TIDAK boleh ada di body — diambil dari `req.user.id`. Validasi: kombinasi unik `(teacherId, classSubjectId, academicYearId, term, week)`; `classSubjectId` harus ∈ kelas yang diampu guru; `week` harus valid untuk `term` pada AY tersebut. `mainObjectives` diisi **manual** oleh guru (mengacu dokumen SOW) — modul SOW (`/v1/sow`) hanya menyediakan link dokumen referensi, bukan data objectives terstruktur (lihat `notes.md` NQ-02).
+### Response 201 Created:
 
-**Response 201:** `{ "data": { "id": 102260, ... } }` (LessonPlanDto lengkap + detail).
-
-### 3. GET /v1/lesson-plans/:id — Detail lesson plan
-
-**Response 200:**
 ```json
 {
   "data": {
-    "id": 102260,
-    "topic": "Rate of Reactions",
+    "id": 103581,
+    "academicYearId": 27,
+    "classSubjectId": 38103,
+    "teacherId": 21046,
+    "term": 1,
+    "week": 3,
+    "topic": "Chemical Reactions & Rates",
+    "sourceLessonPlanId": null,
+    "activeStatus": "1",
+    "createdAt": "2026-09-04T08:30:00.000Z",
+    "updatedAt": "2026-09-04T08:30:00.000Z",
+    "teacherName": "Herlina Susanti",
+    "className": "Sec 3-1",
+    "subjectName": "Chemistry",
+    "levelName": "Secondary 3",
+    "academicYearLabel": "2026/2027",
+    "detail": {
+      "id": 501,
+      "lessonPlanId": 103581,
+      "mainObjectives": "Students will understand reaction rates and collision theory as outlined in SOW Unit 4.",
+      "higherOrderObjectives": "Evaluate experimental data to deduce the rate law and activation energy.",
+      "pedagogy": [
+        "lecture",
+        "Group Discussion",
+        "Problem based learning",
+        "Kagan Cooperative Learning"
+      ],
+      "materialResources": [
+        "Power Point",
+        "Pdf",
+        "Video",
+        "videolink: https://www.youtube.com/watch?v=example123",
+        "Teachers demo",
+        "Models ( Hands on material )",
+        "website: https://chemguide.co.uk/physical/basicrates.html",
+        "others: Lab glassware: 50ml burettes and HCl 0.1M"
+      ],
+      "activities": "<p>1. Starter (10 min)...</p>",
+      "assessmentBefore": [
+        "Short Quiz",
+        "Questioning"
+      ],
+      "assessmentDuring": [
+        "Observation",
+        "Questioning",
+        "Discussion",
+        "Peer / self assessment",
+        "Individual whiteboard"
+      ],
+      "assessmentAfter": [
+        "Short quiz",
+        "Games",
+        "Discussion",
+        "Peer / self assessment",
+        "Test"
+      ],
+      "assignment": "{\"classwork\":\"Worksheet 4.1 Questions 1 to 5\",\"homework\":\"Read textbook pages 102-108 and answer summary review\",\"labReport\":\"Full formal lab report on Reaction Kinetics\",\"project\":\"\"}",
+      "reflection": "Strategy was engaging..."
+    }
+  }
+}
+```
+
+---
+
+## 2. GET /v1/lesson-plans/:id — Get Detail
+
+Mengambil detail penuh lesson plan untuk form viewer / edit, termasuk detail konten dan riwayat komentar review dari HOD dan Principal.
+
+### Response 200 OK:
+
+```json
+{
+  "data": {
+    "id": 103581,
+    "topic": "Chemical Reactions & Rates",
     "term": 1,
     "week": 3,
     "teacherId": 21046,
     "teacherName": "Herlina Susanti",
     "classSubjectId": 38103,
-    "className": "Sec 4 Unity",
+    "className": "Sec 3-1",
     "subjectName": "Chemistry",
-    "levelName": "Sec 4",
+    "levelName": "Secondary 3",
     "academicYearId": 27,
+    "academicYearLabel": "2026/2027",
+    "activeStatus": "1",
+    "createdAt": "2026-09-04T08:30:00.000Z",
+    "updatedAt": "2026-09-04T08:30:00.000Z",
     "detail": {
-      "mainObjectives": "...",
-      "higherOrderObjectives": "...",
+      "id": 501,
+      "mainObjectives": "Students will understand reaction rates...",
+      "higherOrderObjectives": "Evaluate experimental data...",
       "pedagogy": ["lecture", "Group Discussion"],
-      "materialResources": ["Textbook Ch.7"],
+      "materialResources": ["Power Point", "Pdf", "Video", "Teachers demo"],
       "activities": "...",
-      "assessmentBefore": ["Questioning"],
-      "assessmentDuring": ["Observation"],
-      "assessmentAfter": ["Short quiz"],
-      "assignment": "...",
+      "assessmentBefore": ["Short Quiz", "Questioning"],
+      "assessmentDuring": ["Observation", "Questioning"],
+      "assessmentAfter": ["Short quiz", "Discussion"],
+      "assignment": "{\"classwork\":\"Exercise 1\",\"homework\":\"\",\"labReport\":\"\",\"project\":\"\"}",
       "reflection": "..."
     },
-    "comments": [
+    "materialFiles": [
       {
-        "id": 5,
-        "commentType": "HOD",
-        "comment": "Good structure, please add differentiation",
-        "commenterId": 40,
-        "commenterName": "Ibu HOD",
-        "createdAt": "2026-08-26T10:00:00.000Z"
+        "id": 12,
+        "category": "PPT",
+        "fileId": "6c2cfb4d-1a2b-4c3d-8e9f-0a1b2c3d4e5f",
+        "fileName": "PPT - Chemical Reactions - Term 1 - Week 3 - 01.pptx",
+        "fileUrl": "https://storage.binabangsaschool.com/files/PPT - Chemical Reactions - Term 1 - Week 3 - 01.pptx",
+        "counterNumber": 1
+      },
+      {
+        "id": 13,
+        "category": "PDF",
+        "fileId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+        "fileName": "PDF - Chemical Reactions - Term 1 - Week 3 - 01.pdf",
+        "fileUrl": "https://storage.binabangsaschool.com/files/PDF - Chemical Reactions - Term 1 - Week 3 - 01.pdf",
+        "counterNumber": 1
       }
     ],
-    "sourceLessonPlanId": null,
-    "createdAt": "...",
-    "updatedAt": "..."
+    "comments": [
+      {
+        "id": 7,
+        "commentType": "HOD",
+        "commenterId": 401,
+        "commenter": {
+          "id": 401,
+          "fullName": "Stewart James Spiessens"
+        },
+        "comment": "Well structured lab plan. Ensure safety goggles are emphasized.",
+        "createdAt": "2026-09-04T10:00:00.000Z"
+      },
+      {
+        "id": 8,
+        "commentType": "PRINCIPAL",
+        "commenterId": 502,
+        "commenter": {
+          "id": 502,
+          "fullName": "Linawati Lauw"
+        },
+        "comment": "Good integration of cooperative learning strategies.",
+        "createdAt": "2026-09-04T11:15:00.000Z"
+      }
+    ]
   }
 }
 ```
 
-### 4. PUT /v1/lesson-plans/:id — Update penuh (header + detail)
+---
 
-**Body (UpdateLessonPlanDto):** sama dengan CreateLessonPlanDto, semua opsional (PartialType). Hanya owner yang bisa (service check `req.user.id == lessonPlan.teacherId`).
+## 3. PATCH /v1/lesson-plans/:id/header — Update Header Only
 
-### 5. PATCH /v1/lesson-plans/:id — Update status / header-only
+Mereplikasi interaksi tombol `edithead` dan `saveupdate` di `create2.php` (update cepat topik/term/week/kelas tanpa harus mengirim ulang seluruh detail body).
 
-**Body:** subset `{ topic?, term?, week?, classSubjectId?, activeStatus? }`. Hanya owner.
+### Request Body (`UpdateLessonPlanHeaderDto`):
 
-### 6. DELETE /v1/lesson-plans/:id — Soft delete
-
-Hanya owner. Set `activeStatus = INACTIVE`.
-
-### 7. POST /v1/lesson-plans/:id/copy — Copy lesson plan
-
-**Body (CopyLessonPlanDto):**
-```json
-{ "academicYearCopyId": 26, "classSubjectCopyId": 38105 }
-```
-
-**Behavior:** salin header + detail (tanpa comments); `sourceLessonPlanId` = id sumber. Jika kombinasi target sudah ada → 409.
-
-### 8. GET /v1/lesson-plans/library — Library viewer (semua guru di campus)
-
-**Query params:**
-
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `ay` | int | yes | Academic year id |
-| `campusId` | int | yes | Diambil dari `req.user` (campus teacher) jika tidak dikirim |
-| `classSubjectId` | int | no | Filter kelas/subject (dari dropdown Subject) |
-| `term` | int | no | 1-4 |
-| `week` | int | no | 1-40 |
-| `page`, `pageSize` | int | no | Pagination |
-
-**Response 200:** sama seperti list, tapi kolom tambahan `teacherName` wajib (karena menampilkan guru lain).
-
-### 9. GET /v1/lesson-plans/library/classrooms — Daftar kelas untuk filter
-
-**Query:** `ay` (required).
-**Response:** `{ "data": [{ "id": 38103, "name": "Sec 4 Unity", "levelName": "Sec 4" }] }`
-
-### 10. GET /v1/lesson-plans/library/subjects — Daftar subject untuk filter
-
-**Query:** `ay` (required), `classroomId` (optional — filter subject per kelas).
-**Response:** `{ "data": [{ "id": 270, "name": "CHEM" }] }`
-
-### 11. GET /v1/lesson-plans/no-submission — Guru yang belum submit
-
-**Query:** `ay` (required), `term` (required), `week` (required).
-**Permission:** `@CheckPermissions([{ action: READ, subject: LESSON_PLAN }])` + role check HOD/Principal.
-**Response:**
 ```json
 {
-  "data": [
-    { "teacherId": 100, "teacherName": "Budi", "classSubjectId": 38103, "className": "Sec 4 Unity", "subjectName": "Chemistry", "submitted": false }
-  ],
-  "count": 3
+  "topic": "Chemical Reactions & Catalysts Updated",
+  "term": 1,
+  "week": 3,
+  "classSubjectId": 38103
 }
 ```
 
-### 12. POST /v1/lesson-plans/:id/comments — Simpan comment
+### Response 200 OK:
 
-**Body (CreateLessonPlanCommentDto):**
 ```json
-{ "comment": "Good structure, please add differentiation", "commentType": "HOD" }
+{
+  "data": {
+    "id": 103581,
+    "topic": "Chemical Reactions & Catalysts Updated",
+    "term": 1,
+    "week": 3,
+    "classSubjectId": 38103,
+    "updatedAt": "2026-09-04T09:15:00.000Z"
+  }
+}
 ```
-**Permission:** `commentType=HOD` → user harus HOD; `commentType=PRINCIPAL` → user harus Principal. Role mismatch → 403.
-**Response 201:** `{ "data": { "id": 5, "commentType": "HOD", "comment": "...", "commenterId": 40, "createdAt": "..." } }`
 
-### 13. GET /v1/lesson-plans/:id/comments — List comments
+---
 
-**Response 200:** `{ "data": [ { "id": 5, "commentType": "HOD", "comment": "...", "commenterId": 40, "commenterName": "...", "createdAt": "..." } ] }`
+## 4. POST /v1/lesson-plans/:id/files — Upload Material Files (Multi-File with Auto-Rename)
 
-## Referensi Implementasi (contoh pola dari modul existing)
+Mengunggah file materi pembelajaran (Power Point, PDF, atau Video) dengan dukungan multiple file upload.
+Setiap file yang berhasil diunggah akan otomatis di-rename pada backend storage dengan format:
+`[CATEGORY] - [Topic] - Term [Term] - Week [Week] - [Counter].[ext]`
 
-- Controller pattern: `src/modules/lesson/lesson.controller.ts` — `@Controller({ version: '1', path: 'lessons' })`, `@CheckPermissions`, `@Req() req: Request`, `ParseIntPipe`, `{ data }` wrapper.
-- Entity pattern: `src/modules/lesson/entities/lesson.entity.ts` — `BaseEntityWithDates`, `@Index()` FK, `@ManyToOne` + `@JoinColumn`, `Relation<T>`, `StatusTypeEnum`.
-- Pagination: `src/common/dto/page-meta.dto` (`PageMetaDto`).
-- Enums: `src/types/enums` — `ACLTypeEnum`, `ModulesTypeEnum` (tambah `LESSON_PLAN`), `StatusTypeEnum`.
+- **Content-Type:** `multipart/form-data`
+- **Form fields:**
+  - `category`: string (`PPT`, `PDF`, atau `VIDEO`)
+  - `files`: multiple binary files (Max 20MB per file)
+    * Format PPT: `.ppt`, `.pptx`, `.key`
+    * Format PDF: `.pdf`
+    * Format Video: `.mp4`, `.3gp`, `.avi`, `.flv`
+
+### Response 201 Created:
+
+```json
+{
+  "data": [
+    {
+      "id": 12,
+      "lessonPlanId": 103581,
+      "category": "PPT",
+      "fileId": "6c2cfb4d-1a2b-4c3d-8e9f-0a1b2c3d4e5f",
+      "fileName": "PPT - Chemical Reactions - Term 1 - Week 3 - 01.pptx",
+      "fileUrl": "https://storage.binabangsaschool.com/files/PPT - Chemical Reactions - Term 1 - Week 3 - 01.pptx",
+      "counterNumber": 1
+    },
+    {
+      "id": 13,
+      "lessonPlanId": 103581,
+      "category": "PPT",
+      "fileId": "7d3efa4e-2b3c-5d4e-9f0a-1b2c3d4e5f6a",
+      "fileName": "PPT - Chemical Reactions - Term 1 - Week 3 - 02.pptx",
+      "fileUrl": "https://storage.binabangsaschool.com/files/PPT - Chemical Reactions - Term 1 - Week 3 - 02.pptx",
+      "counterNumber": 2
+    }
+  ]
+}
+```
+
+---
+
+## 5. DELETE /v1/lesson-plans/:id/files/:fileId — Remove Material File
+
+Menghapus file lampiran materi pembelajaran yang terhubung ke lesson plan.
+
+### Response 200 OK:
+
+```json
+{
+  "data": {
+    "success": true,
+    "message": "Lesson plan material file deleted successfully"
+  }
+}
+```
+
+---
+
+## 6. GET /v1/lesson-plans/viewer — Sub-Menu Lesson Plan Viewer (HOD & Principal Only)
+
+Endpoint khusus untuk sub-menu Lesson Plan Viewer pada Teacher Portal (`client-teacher`), hanya dapat diakses oleh user ber-role **HOD** atau **Principal** (`usePrincipalOrHod === true`). Menampilkan daftar rencana ajar seluruh guru untuk departemen/campus terkait.
+
+- **Query Parameters:**
+  - `academicYearId`: int (opsional, default AY aktif)
+  - `term`: int (opsional)
+  - `week`: int (opsional)
+  - `subjectId`: int (opsional)
+  - `teacherId`: int (opsional)
+  - `page`: int (default 1)
+  - `limit`: int (default 10)
+
+### Response 200 OK:
+
+```json
+{
+  "data": [
+    {
+      "id": 103581,
+      "topic": "Chemical Reactions & Rates",
+      "term": 1,
+      "week": 3,
+      "teacherId": 21046,
+      "teacherName": "Herlina Susanti",
+      "className": "Sec 3-1",
+      "subjectName": "Chemistry",
+      "academicYearLabel": "2026/2027",
+      "hasComments": true,
+      "commentsCount": 2,
+      "createdAt": "2026-09-04T08:30:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 5
+  }
+}
+```
+
+---
+
+## 7. POST /v1/lesson-plans/:id/comments — Add / Update Review Comment
+
+HOD atau Principal memberikan catatan review pada rencana pembelajaran guru (alur komentar review terintegrasi seperti form comment approval di Principal Portal).
+
+### Request Body (`CreateLessonPlanCommentDto`):
+
+```json
+{
+  "commentType": "HOD",
+  "comment": "Please specify the rubrics used for evaluating the lab report."
+}
+```
+
+### Response 201 Created:
+
+```json
+{
+  "data": {
+    "id": 9,
+    "lessonPlanId": 103581,
+    "commentType": "HOD",
+    "commenterId": 401,
+    "comment": "Please specify the rubrics used for evaluating the lab report.",
+    "createdAt": "2026-09-04T12:00:00.000Z"
+  }
+}
+```
+
+---
+
+## 8. POST /v1/lesson-plans/:id/copy — Copy Lesson Plan
+
+Menduplikasi seluruh isi rencana pembelajaran ke target Academic Year dan Class Subject (`SubjectYear`) baru.
+
+### Request Body (`CopyLessonPlanDto`):
+
+```json
+{
+  "targetAcademicYearId": 28,
+  "targetClassSubjectId": 38204
+}
+```
+
+### Response 201 Created:
+
+Mengembalikan data objek `LessonPlan` baru yang terbentuk dengan `sourceLessonPlanId` menunjuk ke lesson plan asal.
+Komentar review dan refleksi guru lama tidak ikut disalin ke target baru.
+

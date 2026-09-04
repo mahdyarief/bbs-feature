@@ -1,0 +1,433 @@
+<html><head>
+	
+ 
+
+ <link rel="stylesheet" href="../../../../library/assets/bootstrap/css/bootstrap.css">
+ 
+	<link rel="stylesheet" href="css/style.css?version=1788514232">
+
+<script src="../../../../library/jquery/jquery.js"></script>
+<script src="../../../../library/assets/bootstrap/js/bootstrap.js"></script>
+		<script src="js/selectterm.js" type="text/javascript"></script>
+	<script src="js/allinput_insert2.js?version=1788514232" type="text/javascript"></script>
+	
+ <script>
+ $(function(){
+	
+	
+	$(document).on('click','[id="edithead"]',function(e){
+		
+		var kon = $(this).attr('kon');
+		if(kon=='1'){
+		$('#topic').prop('disabled', false);
+		$('#term').prop('disabled', false);
+		$('#ls_week').prop('disabled', false);
+		$('#class').prop('disabled', false);
+		
+		$("#editbutton").html('<input class="btn btn-primary" name="upload" id="edithead" value="Back" type="button" kon="0" align="center"/>  <input class="btn btn-success" id="saveupdate" name="upload" value="Save Edit" type="button" align="center"/>');
+	
+		}else{
+			
+		$('#topic').prop('disabled', true);
+		$('#term').prop('disabled', true);
+		$('#ls_week').prop('disabled', true);
+		$('#class').prop('disabled', true);
+		
+		$("#editbutton").html('<input class="btn btn-primary" name="upload" id="edithead" value="Edit" type="button" kon="1" align="center"/>    ');
+		
+		}
+	
+	});
+	 
+	 });
+ 
+ </script>
+	
+<style>.cke{visibility:hidden;}</style></head><body>
+<input type="hidden" id="user_id" value="21046">
+<input type="hidden" id="camp_id" value="4">
+<div class="container">
+	
+ 
+
+<form enctype="multipart/form-data" method="post" action="lesson_form2.php"> 
+
+<input type="hidden" name="ay" value="27">
+	<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <th style="text-align: center;vertical-align:middle;">TOPIC </th>
+      <td colspan="3"> <input class="form-control" type="text" name="topic" id="topic" value="aasd" disabled=""></td>
+    </tr>
+    <tr>
+      <th style="text-align: center;vertical-align:middle;">Term</th>
+      <td>
+	  <select class="form-control" name="term" onchange="myFunction()" id="term" disabled="">
+	  <option value="" selected="">Please Choose</option>
+      <option value="1" selected="">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select></td>
+	 <th style="text-align: center;vertical-align:middle;">Week </th>
+      <td>
+	  <select id="ls_week" name="week" class="form-control" disabled="">
+	    				
+			<option value="1" selected="">Week 1</option>
+						</select>
+	</td>
+	    </tr>
+    <tr>
+      <th style="text-align: center;vertical-align:middle;">Teacher</th>
+      <td><input class="form-control" type="text" name="teacher_name" value="Test Teacher 2026" disabled=""></td>
+      <th style="text-align: center;vertical-align:middle;">Class</th>
+      <td>
+	  
+	  <select name="class" id="class" disabled="">
+	  	 <option value="38103" selected="">SAMPLE - CHE </option>
+		 <option value="39944">SAMPLE - EL </option>
+		 <option value="39945">SAMPLE - PHY </option>
+		  	</select>
+	</td>
+    </tr>
+	</tbody>
+	
+	 <tbody><tr>
+	<td colspan="4" style="text-align:center;">
+	<div id="editbutton">
+	<input class="btn btn-primary" name="upload" id="edithead" value="Edit" type="button" kon="1" align="center">		</div>
+	</td>
+    </tr>
+	</tbody></table>
+
+	
+		<script src="//teachers.binabangsaschool.com/new_lesson_plan/ckeditor/ckeditor.js?version=1788514233"></script>
+	<input type="hidden" id="recid" name="recid" value="103581">
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	        <h4 class="modal-title" id="exampleModalLabel">HBL Resources</h4>
+	      </div>
+	      <div class="modal-body" id="ls_hbl_resources" style="max-height: 500px; overflow-y: auto;">
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Choose</button>
+	      </div>
+	    </div>
+	  </div>
+	</div><table class="table table-bordered">
+	  <tbody>
+    <tr>
+      <td colspan="2"><textarea id="main_objectives" class="form-control" name="main_objectives" rows="10" placeholder="MAIN OBJECTIVES (SOW)"></textarea></td>
+      <td colspan="2"><textarea id="higher_objectives" class="form-control" name="higher_objectives" rows="10" placeholder="HIGHER ORDER THINKING SKILLS OBJECTIVES"></textarea></td>
+    </tr>
+	<tr>
+      <td colspan="4">
+	  <div class="form-group">
+  <label class="custom-control custom-checkbox" style="font-weight:bold;">
+  Pedagogy (Pick the Following Strategies) : 
+  </label>
+</div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="lecture" id="lecture"> Lecture</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Group Discussion" id="Group Discussion"> Group Discussion</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Problem based learning" id="Problem based learning"> Problem based learning</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Kagan Cooperative Learning" id="Kagan Cooperative Learning"> Kagan Cooperative Learning ( Think Pair share, Round Robbins, etc )</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Discovery learning" id="Discovery learning"> Discovery learning</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Case Studies" id="Case Studies"> Case Studies</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Peer teaching" id="Peer teaching"> Peer teaching</label></div>
+<div class="form-inline">
+		<label class="form-check-label">
+		<input class="pedagogy custom-control-input" type="checkbox" field="pedagogy" name="pedagogy[]" value="Others" id="Others"> Others (describe ) : 
+		</label>
+		<input placeholder="Describe" class="form-control" id="other_pedagogy" name="other_pedagogy" value="" type="text">
+</div>
+
+</td>
+    </tr>
+	<tr>
+      <td colspan="4">
+	  <div class="form-group">
+  <label class="custom-control custom-checkbox" style="font-weight:bold;">
+  Material / Resources used to help students make sense of the topic (Pick the Following Resources) : 
+  </label>
+</div>
+<div class="form-inline">
+	<label class="form-check-label">
+	<input class="custom-control-input" type="checkbox" name="material[]" value="Power Point"> Power Point 
+	</label>
+	<!--<input name="ppt_material" type="file" id="file" class="custom-file-input">-->
+	<input name="ppt_material[]" id="file" type="file" class="custom-file-input" multiple="">
+	<ul>
+</ul>
+</div>
+<div class="form-inline">
+	<label class="form-check-label">
+	<input class="custom-control-input" type="checkbox" name="material[]" value="Pdf"> PDF 
+	</label>
+	<!--<input name="ppt_material" type="file" id="file" class="custom-file-input">-->
+	<input name="pdf_material[]" id="file" type="file" class="custom-file-input" multiple="">
+	<br>
+<ul>
+</ul>
+</div>
+<div class="form-inline" style="font-size:14px;">
+<label class="form-check-label"><input class="custom-control-input" type="checkbox" name="material[]" value="Video"> Video </label>
+<input name="video_material[]" type="file" id="file" class="custom-file-input" multiple="">
+OR <input value="" placeholder="Link of the Video" id="videolink_material" class="form-control" name="videolink_material" type="text">
+<br>
+<ul>
+</ul>
+
+ </div>
+ <div class="form-check form-check-inline" style="display: flex;">
+ 	<label class="form-check-label"><input class="custom-control-input" type="checkbox" name="material[]" value="HBL Resources" id="check_hbl_resources"> HBL Resources</label>
+ 	<div id="browse_hbl_resources" class="btn btn-default" refresh="1" style="margin-left: 30px;  display:unset;" lp_id="">Browse</div>
+ </div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="material custom-control-input" type="checkbox" field="material" name="material[]" id="Teachers demo" value="Teachers demo"> Teachers' demo</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="material custom-control-input" type="checkbox" field="material" name="material[]" id="Models ( Hands on material )" value="Models ( Hands on material )"> Models ( Hands on material )</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="material custom-control-input" type="checkbox" field="material" name="material[]" id="Practical Activities" value="Practical Activities"> Practical Activities</label></div>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="material[]" value="Website"> Website : </label><input placeholder="Website Link" class="form-control" name="website_material" id="website_material" type="text" value=""></div>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="material[]" value="Others"> Others (describe ) : </label><input class="form-control" placeholder="Describe" id="other_material" name="other_material" type="text" value=""></div>
+</td>
+    </tr>
+	
+<tr>
+ <td colspan="4">
+  <div class="form-group">
+	 <div class="form-inline"><label class="form-check-label"><input class="learning_device custom-control-input" type="checkbox" name="learning_device[]" id="1" value="1"> Use Learning Device    </label> </div>
+	 <div class="form-inline"><label class="form-check-label"><input class="elearning custom-control-input" type="checkbox" name="elearning[]" id="1" value="1"> Use E-learning    </label> </div>
+  </div>
+
+</td>
+</tr>	
+	
+<tr>
+ <td colspan="4">
+  <div class="form-group">
+    <label class="custom-control custom-checkbox" style="font-weight: bold;">
+  Values Integration : </label> 
+		   
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Integrity" value="Integrity"> Integrity</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Compassion" value="Compassion">Compassion</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Dedication" value="Dedication"> Dedication </label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Passion" value="Passion"> Passion </label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Teamwork" value="Teamwork"> Teamwork </label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="integrated_value custom-control-input" field="integrated_value" type="checkbox" name="value_integrated[]" id="Inspiring" value="Inspiring"> Inspiring </label></div>
+</div>
+
+</td>
+</tr>	
+	
+	
+	<tr>
+      <td colspan="4">
+	   <div class="form-group">
+	   <label class="custom-control custom-checkbox" style="font-weight: bold;">
+  Activities : </label> <label class="custom-control custom-checkbox"> List down the detail activities that you plan to provide opportunities for : <br>
+								a. Real life application <br>
+								b. Making relevant connection to other content disciplines (inter-disciplinary)<br>
+								c. Making relevant connection to students' previous experiences and knowledge<br>
+								<br>
+								Include the duration of each activity 
+								<br>
+  </label>
+  <textarea class="form-control" name="activities" rows="10" id="activities"></textarea>
+  </div>
+	  </td>
+	</tr>
+	<tr>
+      <td colspan="4">
+	  
+	   <label class="custom-control custom-checkbox" style="font-weight: bold;">
+  Assessment :</label><label class="custom-control custom-checkbox">
+	Pick The Following Assessment types 
+	<br>
+	</label>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<label class="custom-control custom-checkbox" style="font-weight: bold;">Before Lesson : 
+	</label>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_before custom-control-input" type="checkbox" field="assessment_before" name="assesment_before[]" id="Short Quiz" value="Short Quiz"> Short Quiz</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_before custom-control-input" type="checkbox" field="assessment_before" name="assesment_before[]" id="Questioning" value="Questioning"> Questioning</label></div>
+</td>
+<td>
+	<label class="custom-control custom-checkbox" style="font-weight: bold;">
+	During Lesson : 
+	</label>
+  <div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_during custom-control-input" type="checkbox" field="assessment_during" name="assesment_during[]" id="Observation" value="Observation"> Observation</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_during custom-control-input" type="checkbox" field="assessment_during" name="assesment_during[]" id="Questioning" value="Questioning"> Questioning</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_during custom-control-input" type="checkbox" field="assessment_during" name="assesment_during[]" id="Discussion" value="Discussion"> Discussion</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_during custom-control-input" type="checkbox" field="assessment_during" name="assesment_during[]" id="Peer / self assessment" value="Peer / self assessment"> Peer / self assessment</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_during custom-control-input" type="checkbox" field="assessment_during" name="assesment_during[]" id="Individual whiteboard" value="Individual whiteboard"> Individual whiteboard</label></div>
+ </td>
+ <td>
+ <label class="custom-control custom-checkbox" style="font-weight: bold;">
+	After Lesson : 
+	
+	</label>
+ <div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Short quiz" value="Short quiz"> Short quiz</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Games" value="Games"> Games</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Discussion" value="Discussion"> Discussion</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Peer / self assessment" value="Peer / self assessment"> Peer / self assessment</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Test" value="Test"> Test</label></div>
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="assessment_after custom-control-input" type="checkbox" field="assessment_after" name="assesment_after[]" id="Project" value="Project"> Project</label></div>
+ </td>
+ <td>
+ </td>
+  
+	 
+	</tr>
+	<tr>
+      <td colspan="4">
+	   <div class="form-group">
+	   <label class="custom-control custom-checkbox" style="font-weight:bold;">
+  Assignment :
+  </label>
+							<label class="custom-control custom-checkbox">
+	Pick The Following type of assignment
+	</label>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="assignment[]" value="Classwork"> Classwork : <input placeholder="Classwork" class="form-control" id="classwork_assignment" name="classwork_assignment" value="" type="text"></label></div>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="assignment[]" value="Homework"> Homework : <input placeholder="Homework" class="form-control" id="homework_assignment" name="homework_assignment" value="" type="text"></label></div>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="assignment[]" value="Laboratory report"> Laboratory report : <input placeholder="Laboratory report" class="form-control" id="lab_assignment" name="lab_assignment" value="" type="text"></label></div>
+<div class="form-inline"><label class="form-check-label"><input class="custom-control-input" type="checkbox" name="assignment[]" value="Project"> Project : <input placeholder="Project" class="form-control" id="project_assignment" name="project_assignment" value="" type="text"></label></div>
+		
+ 
+  </div>
+	  </td>
+	</tr>
+	<tr>
+      <td colspan="4">
+	   <div class="form-group">
+	    <label class="custom-control custom-checkbox" style="font-weight:bold;">
+  Reflection : </label>
+<label class="custom-control custom-checkbox">  1. Is the strategy chosen effective for students' learning ? <br>
+						2. Do the activities chosen support and achieve the learning objectives ? <br>
+						3. How will you modify the strategy and activities to improve the learning process in the future ? <br>
+  </label>
+  <textarea class="form-control" name="reflection" id="reflection" rows="10"></textarea>
+  </div>
+	  </td>
+	</tr>
+	
+	
+	<tr>
+	<td colspan="4">
+	
+	   <table width="100%"><tbody><tr><td>
+   <label class="custom-control custom-checkbox" style="font-weight:bold;">
+  HOD Comments   : </label>
+	 <textarea class="form-control" name="hodcommment" rows="10" disabled=""> </textarea>
+	 </td> <td>
+	  <label class="custom-control custom-checkbox" style="font-weight:bold;">
+	Principal Comments  : </label>
+	<textarea class="form-control" name="principalcomment" rows="10" disabled=""> </textarea>
+	 </td></tr>
+	 </tbody></table>
+ 
+  
+	</td>
+	</tr>
+	
+ 
+	
+	<!--
+	<tr>
+	<td colspan="4" >
+	<p>
+	In order to determine if technology is having a positive impact on student learning goals, the following
+	measurement tool can be used to analyze a lesson or unit that integrates technology in the classroom.
+	The results give you a guide as to how well the technology is meeting student learning goals.
+	<br><br>Please indicate type of technologies adopted in your lessons:
+	</p>
+	<table width="100%">
+	<tr><td width="10%"> <label class="form-check-label"> Specific Apps:</label></td><td><textarea placeholder="Specific Apps" class="form-control" name="specific_apps"  ></textarea> </td></tr>
+	<tr><td width="10%"><label class="form-check-label"> Website information:</label></td><td><textarea placeholder="Website information" class="form-control" name="website_information"  ></textarea> </td></tr>
+	<tr><td width="10%"><label class="form-check-label">  Video:</label></td><td><textarea placeholder="Videos" class="form-control" name="video_techno" > </textarea> </td></tr>
+	<tr><td width="10%"><label class="form-check-label">  Apple classroom : </label></td><td><textarea placeholder="Apple classroom" class="form-control" name="apple_classroom" ></textarea> </td></tr>
+	<tr><td width="10%"><label class="form-check-label"> Others (describe ) : </label></td><td><textarea class="form-control" placeholder="Describe" name="other_techno"  ></textarea> </td></tr>
+	</table>
+	</td>
+   	</tr>
+	
+	
+		<tr>
+	<td colspan="4" >
+	
+	<h4><b>Engagement</b></h4>
+	<table width="100%">
+	<tr><td colspan="3" > Q1 Engagement: Does the technology tool help students focus on the learning goals (content) with less distraction(s)? </td> </tr>
+	<tr><td><input type="radio" name="engagement1" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="engagement1" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="engagement1" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q2 Engagement: Does the technology tool help to motivate students to begin the learning processes? </td> </tr>
+	<tr><td><input type="radio" name="engagement2" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="engagement2" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="engagement2" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q3 Engagement: Does the technology cause a shift in the behavior of the students, where they move from passive to active social learners (co-use)? </td> </tr>
+	<tr><td><input type="radio" name="engagement3" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="engagement3" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="engagement3" value="never">&nbsp;never</td></tr>
+ 	</td>
+	</table>
+	<hr>
+	<h4><b>Enhancement</b></h4>
+	<table width="100%">
+	<tr><td colspan="3" > Q1 Enhancement: Does the technology tool help students focus on the learning goals (content) with less distraction(s)? </td> </tr>
+	<tr><td><input type="radio" name="enhancement1" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="enhancement1" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="enhancement1" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q2 Enhancement: Does the technology tool help to motivate students to begin the learning processes? </td> </tr>
+	<tr><td><input type="radio" name="enhancement2" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="enhancement2" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="enhancement2" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q3 Enhancement: Does the technology cause a shift in the behavior of the students, where they move from passive to active social learners (co-use)? </td> </tr>
+	<tr><td><input type="radio" name="enhancement3" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="enhancement3" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="enhancement3" value="never">&nbsp;never</td></tr>
+ 	</td>
+	</table>
+	<hr>
+	<h4><b>Extension</b></h4>
+	<table width="100%">
+	<tr><td colspan="3" > Q1 Extension: Does the technology tool help students focus on the learning goals (content) with less distraction(s)? </td> </tr>
+	<tr><td><input type="radio" name="extension1" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="extension1" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="extension1" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q2 Extension: Does the technology tool help to motivate students to begin the learning processes? </td> </tr>
+	<tr><td><input type="radio" name="extension2" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="extension2" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="extension2" value="never">&nbsp;never</td></tr>
+	<tr><td colspan="3" > Q3 Extension: Does the technology cause a shift in the behavior of the students, where they move from passive to active social learners (co-use)? </td> </tr>
+	<tr><td><input type="radio" name="extension3" value="absolutely">&nbsp;absolutely</td><td><input type="radio" name="extension3" value="to a certain extend">&nbsp;to a certain extend</td> <td><input type="radio" name="extension3" value="never">&nbsp;never</td></tr>
+ 	</td>
+	</table>
+	
+	
+   	</tr>
+	
+	-->
+		<tr>
+	
+	<td colspan="4" style="text-align:center;"><input class="btn btn-primary" name="upload" value="Save" type="submit" align="center"></td>
+	</tr>
+  </tbody>
+</table>
+</form>
+</div>
+
+<script type="text/javascript">
+	$(document).on('click', '[id=browse_hbl_resources]', function(){
+		$('#exampleModal').modal('show');
+		dataMap={}
+		if($(this).attr('refresh') == 1){
+	        $.post('list_HBLresources.php', dataMap, function(data){
+	        	$('#ls_hbl_resources').html(data);
+	        })
+	        $('#browse_hbl_resources').removeAttr('refresh')
+			$('#browse_hbl_resources').attr('refresh', 0)
+		}
+	})
+	$(document).on('click', '[id=check_hbl_resources]', function(){
+		//check check or uncheck
+		if($(this).prop("checked") == true){
+            //console.log("Checkbox is checked.");
+			$('#browse_hbl_resources').show()
+        }
+        else if($(this).prop("checked") == false){
+            //console.log("Checkbox is unchecked.");
+			$('#browse_hbl_resources').hide()
+            return;
+        }
+	})
+</script>
+
+</body></html>
