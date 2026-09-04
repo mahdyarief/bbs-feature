@@ -21,15 +21,42 @@
 
 **Implikasi:** Approval workflow **harus ada** sebagai fitur lanjutan (`form-leave-workflow`). Fase 1 tetap create/list/soft delete tanpa ubah status. Fase 2 (feature ini) menambahkan status approval + komentar.
 
-### NQ-05: Nilai status legacy di dropdown `vmenu/form_leave_teacher.php`?
+### NQ-05: Nilai status legacy di dropdown `vmenu/form_leave_teacher.php`? — **TERJAWAB (dari capture Principal POV `bbs_linawati`)**
 
-**Belum terverifikasi.** Halaman iframe `vmenu/form_leave_teacher.php` tidak tertangkap di `ais_legacy` — hanya shell dashboard-nya (`leave_form.html`). Nilai-nilai dropdown status legacy (misal: 0/1/2 untuk Pending/Approved/Rejected atau string lain) **tidak diketahui**. Yang pasti:
+**Sumber:** `principals_tool/leaves/approval_iframe.html` (100KB) — konten iframe `vmenu/form_leave_teacher.php` yang sebelumnya tidak tertangkap, kini berhasil di-capture dengan login Principal `bbs_linawati`.
 
-- Ada dropdown status per record (dari referensi HTML).
-- Endpoint `savestatusLeave.php` menerima parameter `status` (nilai belum diketahui).
-- Ada field `tipe: '1'` (Admin) dan `tipe: '2'` (Principal) — menunjukkan komentar per role.
+**Nilai status legacy:**
 
-**Rekomendasi:** Saat implementasi, konfirmasi ke stakeholder nilai status yang dipakai di legacy. Fase 2 menggunakan enum baru (`PENDING`, `APPROVED_BY_ADMIN`, `APPROVED_BY_PRINCIPAL`, `REJECTED`) — tidak perlu mapping 1:1 ke legacy.
+| Value | Filter Label (baris 90) | Per-record Dropdown (baris 139–144) |
+|-------|------------------------|-------------------------------------|
+| `0` | Pending | Pending |
+| `1` | Approved (unpaid leave) by Principal | Approve (unpaid leave) |
+| `2` | Approved (paid leave) by Principal | Approve (paid leave) |
+| `3` | Decline by Principal | Decline |
+| `4` | Decline by AB | _(tidak ada di per-record dropdown)_ |
+| `5` | Approved by AB | _(tidak ada di per-record dropdown)_ |
+| `6` | Cancel Request | Cancel |
+| `7` | Unique Cases | _(tidak ada di per-record dropdown)_ |
+
+**Nilai leave type legacy (baris 96):**
+
+| Value | Label |
+|-------|-------|
+| `1` | Sick L (病假) |
+| `3` | Maternity L (产假) |
+| `4` | Paternity L (陪产假) |
+| `5` | Unpaid L (无薪假) |
+| `6` | Other (其他) |
+
+**Implikasi untuk fase 2:**
+- Legacy punya **8 status** vs brief kita 4 (`PENDING`, `APPROVED_BY_ADMIN`, `APPROVED_BY_PRINCIPAL`, `REJECTED`). Perbedaan utama:
+  - Legacy membedakan **paid vs unpaid leave** dalam approval (`value 1` vs `2`) — brief kita tidak. Ini bisa jadi enhancement.
+  - Legacy punya **Cancel Request** (`value 6`) — brief kita tidak punya status cancel. Ini bisa jadi enhancement.
+  - Legacy punya **Unique Cases** (`value 7`) — tidak di-map ke brief kita.
+  - Legacy punya **Decline by Principal** (`3`) dan **Decline by AB** (`4`) terpisah — brief kita gabung jadi `REJECTED`. Ini sudah cukup karena `statusChangedBy` mencatat siapa yang reject.
+  - Legacy punya **Approved by AB** (`5`) — brief kita memakai `APPROVED_BY_ADMIN` (sama artinya, AB = Admin Besar / ASD).
+- **Rekomendasi tetap:** Fase 2 memakai 4-status enum (`PENDING`, `APPROVED_BY_ADMIN`, `APPROVED_BY_PRINCIPAL`, `REJECTED`). Paid/unpaid distinction, Cancel, dan Unique Cases sebagai enhancement di kemudian hari jika stakeholder butuh.
+- **Leave type values legacy** cocok dengan smartbag `LeaveTypeEnum` (SICK=1, MATERNITY=3→2 di smartbag, PATERNITY=4→3, UNPAID=5→4, OTHER=6→15). Mapping tidak 1:1 — perlu perhatian saat migrasi data legacy.
 
 ### NQ-06: Siapa yang bisa mengubah status? Admin vs Principal vs HOD?
 
