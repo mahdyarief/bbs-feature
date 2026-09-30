@@ -58,6 +58,16 @@ Temuan dari eksekusi test case read-only di `../operate-smartbag/test-cases/`
 | Topics list eager-load berat → 502 konsisten | `topics-list-eager-loading-timeout/` | TC-009 | open |
 | Banding enrollment delta class 100024 (42 vs 48) — **DECIDED: keep (unenroll via UI, LIG ikut bersih)** | `banding-enrollment-reconciliation/` (spec + edgecases) | TC-010 | decided |
 | Wiki basi: OTP toggle hilang, teacher-leave ada, pageSize CCA (spec + edgecases) | `wiki-catalog-stale-flags/` | TC-019 | draft |
+| ccaYearCoordinators 500 — method findAll dikosongkan (scaffold rusak) | `cca-year-coordinators-empty-500/` | TC-039 | open |
+| transfer-audit: 500 tanpa `?page=1&limit=10` (default param tidak diterapkan) + statistics body rusak | `transfer-audit-default-param-500/` | TC-039/040 | open |
+| securityDeposits/:studentId → 500 untuk siswa tanpa deposit (harusnya 404) | `security-deposit-no-deposit-500/` | TC-039 | open |
+
+Catatan sweep TC-039/TC-040 (2026-09-30): coverage path API **100%** (216/216
+@Controller path terverifikasi di produksi). Temuan kecil tambahan tanpa file
+sendiri (terdokumentasi di `TC-039-full-controller-path-sweep/result.md`):
+`sveStudentGrades` 400 tanpa `page` (quirk DTO), `billingReports` 502 (keluarga
+list-endpoint), 2 dead scaffold tanpa route (`cca-grade`, `ftp-evaluation-setting`),
+dual-version sebenarnya 3 modul (parents/students/payments). |
 
 ---
 
