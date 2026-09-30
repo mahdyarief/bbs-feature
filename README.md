@@ -62,6 +62,18 @@ Temuan dari eksekusi test case read-only di `../operate-smartbag/test-cases/`
 | transfer-audit: 500 tanpa `?page=1&limit=10` (default param tidak diterapkan) + statistics body rusak | `transfer-audit-default-param-500/` | TC-039/040 | open |
 | securityDeposits/:studentId → 500 untuk siswa tanpa deposit (harusnya 404) | `security-deposit-no-deposit-500/` | TC-039 | open |
 
+### Fix Briefs (spesifikasi perbaikan untuk tim backend — bukan bug report)
+
+Brief kode hasil temuan sweep 2026-09-30. **AI operate TIDAK mengubah kode
+api_nest** — implementasi oleh engineer di repo `smartbag/api_nest`, verifikasi
+pasca-deploy dengan re-run probe TC-039/TC-040.
+
+| Brief | Folder | Cakupan | Status |
+|-------|--------|---------|--------|
+| Bersihkan 4 scaffold setengah jadi (student-billing, ccaYearCoordinators, cca-grade, ftp-evaluation-setting) — implement atau un-expose | `api-nest-scaffold-cleanup/` (spec + edgecases) | 4 modul; menghapus 2× 500 + 2 dead-scaffold 404 dari produksi | draft |
+| transfer-audit: default pagination (4 route 500) + serialisasi `/statistics` | `transfer-audit-pagination-fix/` (spec + edgecases) | 5 route; plus keputusan migrasi ke `/v1` | draft |
+| securityDeposits: 404 (bukan 500) untuk siswa tanpa deposit | `security-deposit-no-deposit-500/` (spec + edgecases) | 1 route + audit sibling & ResourceError | draft |
+
 Catatan sweep TC-039/TC-040 (2026-09-30): coverage path API **100%** (216/216
 @Controller path terverifikasi di produksi). Temuan kecil tambahan tanpa file
 sendiri (terdokumentasi di `TC-039-full-controller-path-sweep/result.md`):
