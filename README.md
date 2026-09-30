@@ -75,6 +75,8 @@ pasca-deploy dengan re-run probe TC-039/TC-040.
 | securityDeposits: 404 (bukan 500) untuk siswa tanpa deposit | `security-deposit-no-deposit-500/` (spec + edgecases) | 1 route + audit sibling & ResourceError | draft |
 | sveStudentGrades: page-base mismatch (DTO 0-based vs service 1-based) → 400 OFFSET negative | `pagination-page-base-mismatch/` (spec + edgecases) | 1 route + panduan basis page global | draft |
 | billingReports: 502 karena eager-load semua billing per masterProduct | `billing-reports-eager-load-502/` (spec + edgecases) | 1 route; keluarga list-endpoint (anggota ke-3) | draft |
+| Keamanan route publik: ±18 sync* @Public tanpa guard + static token attendance hardcoded di source | `public-route-security/` (spec + edgecases) | ±20 route; rotasi secret + cron password guard | draft |
+| Obj-params (relationsObj/wheresObj/orderObj) input buruk → 500 + pesan TypeORM bocor | `obj-params-invalid-500/` (spec + edgecases) | global PageOptionsDto; satu keluarga sortBy-500 | draft |
 
 Catatan sweep TC-039/TC-040 (2026-09-30): coverage path API **100%** (216/216
 @Controller path terverifikasi di produksi). Temuan kecil tambahan tanpa file
