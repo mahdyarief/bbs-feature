@@ -53,6 +53,7 @@ Temuan dari eksekusi test case read-only di `../operate-smartbag/test-cases/`
 | Student Billing endpoint rusak (500, service kosong + tanpa version URI) | `student-billing-endpoint-broken/` | TC-015 | open |
 | sortBy invalid → 500 di semua list endpoint (`findOptionsHelper`) | `list-sortby-invalid-500/` | TC-034 | open |
 | Impersonate portalType mismatch → 500 (seharusnya 400) | `impersonate-portal-mismatch-500/` | TC-038 | open |
+| Audit `throw new Error` lintas api_nest: 37 lokasi, 24 user-error → seharusnya 4xx | `generic-error-throw-audit/audit.md` | audit TC-038 | open |
 | Student list tanpa filter campus → 502 konsisten | `student-list-no-filter-timeout/` | TC-006 | open |
 | Topics list eager-load berat → 502 konsisten | `topics-list-eager-loading-timeout/` | TC-009 | open |
 | Banding enrollment delta class 100024 (42 vs 48) — **DECIDED: keep (unenroll via UI, LIG ikut bersih)** | `banding-enrollment-reconciliation/` (spec + edgecases) | TC-010 | decided |
