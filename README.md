@@ -43,6 +43,21 @@ Optional files (create if needed):
 | GPA Threshold Config Fix | Draft | `gpa-threshold-config/spec.md` |
 | External Attendance Integration | Draft | `external-attendance-integration/spec.md` |
 
+## Bug Reports (AI Operate Test, 2026-09-30)
+
+Temuan dari eksekusi test case read-only di `../operate-smartbag/test-cases/`
+(TC-001 s/d TC-019, semua fitur Smartbag). Laporan lengkap di tiap folder.
+
+| Bug / Brief | Folder | Sumber Test | Status |
+|-------------|--------|-------------|--------|
+| Student Billing endpoint rusak (500, service kosong + tanpa version URI) | `student-billing-endpoint-broken/` | TC-015 | open |
+| sortBy invalid → 500 di semua list endpoint (`findOptionsHelper`) | `list-sortby-invalid-500/` | TC-034 | open |
+| Impersonate portalType mismatch → 500 (seharusnya 400) | `impersonate-portal-mismatch-500/` | TC-038 | open |
+| Student list tanpa filter campus → 502 konsisten | `student-list-no-filter-timeout/` | TC-006 | open |
+| Topics list eager-load berat → 502 konsisten | `topics-list-eager-loading-timeout/` | TC-009 | open |
+| Banding enrollment delta class 100024 (42 vs 48) — **DECIDED: keep (unenroll via UI, LIG ikut bersih)** | `banding-enrollment-reconciliation/` (spec + edgecases) | TC-010 | decided |
+| Wiki basi: OTP toggle hilang, teacher-leave ada, pageSize CCA (spec + edgecases) | `wiki-catalog-stale-flags/` | TC-019 | draft |
+
 ---
 
 ## How to Use
