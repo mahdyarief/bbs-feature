@@ -39,7 +39,9 @@ Dua bug menyebabkan ini:
 **Ekspektasi:** sesuai spec `features/form-leave/spec.md` (User Story "I want
 to cancel/delete a leave request I created", BR-7, AC-6), owner dapat
 membatalkan leave request miliknya sendiri (status PENDING) dari Teacher
-Portal — dengan feedback sukses/gagal yang jelas ke user.
+Portal — dengan mekanisme **soft-cancel: data TIDAK hilang/dihapus, baris
+tetap tampil di Submission List dengan status berubah menjadi CANCELED** —
+disertai feedback sukses/gagal yang jelas ke user.
 
 ---
 
