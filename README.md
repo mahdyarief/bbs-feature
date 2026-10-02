@@ -61,6 +61,7 @@ Temuan dari eksekusi test case read-only di `../operate-smartbag/test-cases/`
 | ccaYearCoordinators 500 — method findAll dikosongkan (scaffold rusak) | `cca-year-coordinators-empty-500/` | TC-039 | open |
 | transfer-audit: 500 tanpa `?page=1&limit=10` (default param tidak diterapkan) + statistics body rusak | `transfer-audit-default-param-500/` | TC-039/040 | open |
 | securityDeposits/:studentId → 500 untuk siswa tanpa deposit (harusnya 404) | `security-deposit-no-deposit-500/` | TC-039 | open |
+| Form Leave — teacher tak bisa cancel request sendiri (403 silently swallowed) | `form-leave-cancel-owner-403/` | Jam 48dfc13f | open |
 
 ### Fix Briefs (spesifikasi perbaikan untuk tim backend — bukan bug report)
 
