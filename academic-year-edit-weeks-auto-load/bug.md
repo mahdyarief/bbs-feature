@@ -114,10 +114,19 @@ fields
   .sort((a, b) => a?.weekNumber - b?.weekNumber)
 ```
 
-`undefined - number = NaN` → comparator tidak valid → urutan week baru tidak
-terjamin (terlihat "Week 1 tetap di atas", week baru tidak jatuh di bawah).
-Input nomor (`FINAControlledNumberInput`, lines 424-434) menampilkan
-`watch(...) || 0`, jadi week baru tampil sebagai "0"/kosong, bukan N+1.
+`undefined - number = NaN` → comparator tidak valid (spec: NaN diperlakukan
+sebagai 0, jadi week baru dianggap "sama dengan" semua baris). Karena
+`Array.prototype.sort` modern bersifat stabil dan week baru di-`append` paling
+akhir, dalam praktik ia **tetap jatuh di baris terakhir (last row)** — tetapi
+secara kebetulan, bukan jaminan: comparator yang inkonsisten membuat posisinya
+rapuh (bisa berubah antar engine / jumlah data). Yang pasti rusak adalah
+**nomornya**: input nomor (`FINAControlledNumberInput`, lines 424-434)
+menampilkan `watch(...) || 0`, jadi week baru tampil sebagai "0"/kosong,
+bukan N+1 — terlihat seperti "Week 1 tetap di atas, week baru numpuk".
+
+**Fix yang diminta:** saat Add Week, isi `weekNumber` dengan `max+1` dari
+week-week term tersebut (bukan `undefined`), sehingga week baru **dijamin
+muncul sebagai last row** dengan nomor berurutan.
 
 ### RC-3 (pendukung): `shouldUnregister: true` (line 75)
 
