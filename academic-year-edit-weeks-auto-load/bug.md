@@ -25,6 +25,26 @@ komponen `bbs/client/src/views/academicYears/AcademicYearForm.jsx`):
 3. **Refresh menghilangkan semua tanggal.** Setelah refresh browser di halaman
    edit, semua tanggal weeks yang sudah diisi hilang / ter-reset ke kosong.
 
+## Requirement Tambahan (2026-10-13)
+
+Konteks: bug di atas membuat data seolah-olah "hilang" bahkan padahal sudah
+pernah di-save — user melihat weeks ter-reset dan mengira work-nya raib.
+Diperjelas batasannya:
+
+- **Data yang sudah di-Save TIDAK BOLEH pernah hilang.** Setelah user klik
+  Save, saat form dibuka lagi — termasuk dari sesi/browser/perangkat lain,
+  atau setelah refresh — seluruh weeks + tanggal harus muncul utuh persis
+  seperti terakhir disimpan. Jaminan "tidak pernah hilang" ini berlaku untuk
+  semua data yang sudah masuk server, tanpa terkecuali.
+- **Perubahan BELUM di-Save memang boleh dibuang.** Kalau guru mengedit lalu
+  meninggalkan halaman tanpa klik Save (lupa save, tab ditutup, refresh),
+  perubahan tersebut dibuang — form kembali menampilkan data terakhir yang
+  tersimpan di server. Ini perilaku yang diinginkan, bukan bug.
+- **Ringkasnya:** satu-satunya reset yang sah adalah reset akibat lupa klik
+  Save, dan reset itu hanya membuang perubahan *belum* disave — data lama
+  yang sudah disave harus tetap kembali tampil utuh, jangan sampai ikut
+  ter-reset seperti pada bug di atas.
+
 ## Expected Result
 
 - Buka halaman edit Academic Year → seluruh weeks tersimpan (mis. week 1-10
@@ -152,6 +172,10 @@ kehilangan value-nya — memperkuat efek "tanggal hilang" dari RC-1.
   (atau fetch single `GET /academicYears/:id` saat edit).
 
 ### Out of Scope
+- Auto-save/draft otomatis atau peringatan "unsaved changes" — TIDAK diminta;
+  kehilangan perubahan yang belum di-Save adalah perilaku yang disepakati
+  (lihat Requirement Tambahan). Yang wajib dijamin hanyalah data yang sudah
+  tersimpan di server tidak pernah hilang/ter-reset saat dibuka ulang.
 - Perubahan backend (`api_nest` `academic-year` module) — `findAll` sudah
   include relasi `academicYearWeeks`, `findOne` tersedia; kemungkinan tidak
   diperlukan.
