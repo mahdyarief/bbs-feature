@@ -1,12 +1,12 @@
 ---
-title: Attendance — Scan gate kedua membuat baris duplikat & menimpa status (PIKP, laporan Ms Lina 2/11/2026)
+title: "Attendance — Scan gate kedua membuat baris duplikat & menimpa status (PIKP, laporan Ms Lina 2/11/2026)"
 status: open
 severity: critical
 product: BBS LMS
-portal: Admin | Teacher
+portal: "Admin | Teacher"
 author: OpenClaude
 date: 2026-11-04
-jam: -
+jam: ""
 ---
 
 # Attendance — Scan gate kedua membuat baris duplikat & menimpa status kehadiran
