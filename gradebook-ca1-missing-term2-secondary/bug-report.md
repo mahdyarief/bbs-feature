@@ -65,9 +65,18 @@ Grade row CA1 dengan `term = 2, order = 1` juga sudah ditulis, sehingga CA1 ters
 3. Pilih **Term 2**.
 4. Amati header kolom gradebook.
 
-**Actual Result:** Hanya `CAT2` (dan `MYE`/`SA1` bila `gradeWeight.mye > 0`). Tidak ada `CA1`.
+**Actual Result:** Kolom calculated Term 2 hanya `CAT2` (plus `MYE`/`SA1` bila `gradeWeight.mye > 0`). Tidak ada `CA1`.
 
-**Expected Result:** Kolom `CA1` tampil.
+**Actual Result setelah fix CA1 di `develop` (commit `131946432`):** Kolom `CAT2` hilang, tergantikan oleh `CA1`. Murid dengan `gradeWeight.mye > 0` juga kehilangan `CAT2` meski `SA1` masih tampil.
+
+**Expected Result:** `CAT2` **tetap tampil** dan `CA1` **ditambahkan** di ujung kanan.
+
+| Kondisi | Kolom calculated Term 2 yang harus tampil (urutan kiri → kanan) |
+|---------|------------------------------------------------------------------|
+| `gradeWeight.mye > 0` | `CAT 2` → `MYE` → `SA 1` → `CA 1` |
+| `gradeWeight.mye = 0` | `CAT 2` → `CA 1` |
+
+Catatan: `CA1` harus tetap tampil walau `hasMye` false, karena perhitungannya hanya memakai `cat1` + komponen Term 2.
 
 ---
 
