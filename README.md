@@ -41,6 +41,7 @@ Optional files (create if needed):
 | Feature | Status | Spec Path |
 |---------|--------|-----------|
 | GPA Threshold Config Fix | Draft | `gpa-threshold-config/spec.md` |
+| Threshold & Syllabus — threshold salah/kosong saat ganti AY | Draft | `threshold-syllabus-ay-scoping-bug/spec.md` |
 | External Attendance Integration | Draft | `external-attendance-integration/spec.md` |
 
 ## Bug Reports (AI Operate Test, 2026-09-30)
