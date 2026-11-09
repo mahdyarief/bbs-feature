@@ -24,7 +24,7 @@ Pembagian tier yang dipakai codebase dan wiki **berbeda**:
 
 Akibatnya ada dua perilaku berbeda di Term 2:
 
-- **Sec 1-2**: cabang `isSec1To2` mengembalikan `CAT2` saja (plus `SA1` bila ada MYE). **CA1 tidak pernah dibuat maupun ditampilkan.**
+- **Sec 1-2**: cabang `isSec1To2` mengembalikan `CAT2` saja (plus `MYE`/`SA1` bila `hasMye`). **CA1 tidak pernah dibuat maupun ditampilkan.**
 - **Sec 3-4**: `getCalculatedColumns` mengembalikan `["CA1", "SA1"]`, jadi CA1 tampil.
 
 Karena wiki mendefinisikan tier sebagai **Sec1-3**, Sec 3 seharusnya ikut aturan lower secondary. Yang benar-benar hilang CA1-nya adalah **Sec 1 dan Sec 2**.
@@ -193,7 +193,8 @@ if (isSec1To2) {
 
 - `CA1` adalah hasil akhir (`T1 + T2`), sehingga posisinya di **ujung kanan**, sejajar dengan `SA1` — bukan di kiri menggantikan `CAT2`.
 - `CAT2` adalah rollup komponen Term 2 (`Test 2` 18.75% + `Test 3` 18.75% + `DCA T2` 12.5% = 50%) dan harus tetap ada agar guru bisa memantau nilai T2 sebagai unit mandiri.
-- Munculnya `CAT2` **tidak bergantung pada `hasMye`**. Di kode lama, `hasMye` hanya menentukan apakah `SA1` ikut dirender. `hasMye` sendiri adalah `termNum === 2 && gradeWeight?.mye > 0` (line 179), yaitu soal konfigurasi bobot MYE, bukan soal ada-tidaknya nilai.
+- **Logika MYE tidak diubah oleh fix ini dan tidak perlu diubah.** `hasMye` (`termNum === 2 && gradeWeight?.mye > 0`, line 179) tetap memakai definisi yang sama. Bug ini murni soal `CAT2` yang tertimpa `CA1`; perilaku MYE/`SA1` tetap seperti sebelumnya.
+- Munculnya `CAT2` **tidak bergantung pada `hasMye`**. Di kode lama, `hasMye` hanya menentukan apakah `MYE` dan `SA1` ikut dirender; `CAT2` selalu muncul lewat fallback `return t <= 3 ? [`CAT${t}`] : ...`.
 
 ### Perilaku yang benar per kondisi
 
@@ -240,7 +241,7 @@ function getDisplayColumns(t) {
 ### Masih perlu keputusan Product
 
 1. **Apakah `isSec1To2` perlu diganti jadi `isSec1To3`** agar sesuai wiki (Sec 1-3 satu tier)? Ini mempengaruhi Sec 3 juga, jadi harus diputuskan bersamaan dengan patch ini.
-2. **`SA1`**: saat `hasMye` false, `SA1` tidak dirender. Apakah `SA1` perlu selalu tampil? Menurut kode saat ini `CA1` tetap bisa dihitung tanpa MYE (`computeSemesterAverage(studentId, 1)` hanya membaca `cat1` + komponen Term 2), jadi `CA1` harus tetap tampil saat `hasMye` false.
+2. **`SA1`/`MYE` — di luar scope.** Keduanya **tidak diubah** oleh fix ini; patch di atas memakai kondisi `hasMye` yang persis sama seperti kode lama. Yang perlu dipastikan hanya bahwa `CA1` tetap tampil saat `hasMye` false, karena `computeSemesterAverage(studentId, 1)` hanya membaca `cat1` + komponen Term 2 dan tidak butuh MYE. Apakah `SA1` perlu selalu tampil adalah pertanyaan terpisah, bukan bagian dari bug CA1.
 
 ---
 
